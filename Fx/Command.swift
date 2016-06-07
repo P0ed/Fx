@@ -6,12 +6,12 @@ public final class Command<A, B> {
 
 	public let results: Stream<B>
 
-	init(_ action: A -> B) {
+	public init(_ action: A -> B) {
 		f = action
 		(results, resulitsPipe) = Stream<B>.pipe()
 	}
 
-	func execute(x: A) -> B {
+	public func execute(x: A) -> B {
 		let result = f(x)
 		resulitsPipe(result)
 		return result
