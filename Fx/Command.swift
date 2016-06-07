@@ -1,18 +1,20 @@
 import Foundation
 
-final class Command<A, B> {
+public final class Command<A, B> {
 
 	private let f: A -> B
+	private let resulitsPipe: B -> ()
 
-	var didExecute: (B -> ())?
+	public let results: Stream<B>
 
-	init(_ f: A -> B) {
-		self.f = f
+	init(_ action: A -> B) {
+		f = action
+		(results, resulitsPipe) = Stream<B>.pipe()
 	}
 
 	func execute(x: A) -> B {
 		let result = f(x)
-		didExecute?(result)
+		resulitsPipe(result)
 		return result
 	}
 }

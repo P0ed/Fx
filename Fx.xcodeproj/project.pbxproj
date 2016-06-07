@@ -22,6 +22,7 @@
 		5F796E911D05CB4D00B8A7AC /* Optional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E831D05CB4D00B8A7AC /* Optional.swift */; };
 		5F796E931D05CB4D00B8A7AC /* Throttle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E851D05CB4D00B8A7AC /* Throttle.swift */; };
 		5F796E951D05CB4D00B8A7AC /* Weakify.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E871D05CB4D00B8A7AC /* Weakify.swift */; };
+		5FC468931D06B4E900862F59 /* Weak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC468921D06B4E900862F59 /* Weak.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		5F796E831D05CB4D00B8A7AC /* Optional.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Optional.swift; sourceTree = "<group>"; };
 		5F796E851D05CB4D00B8A7AC /* Throttle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Throttle.swift; sourceTree = "<group>"; };
 		5F796E871D05CB4D00B8A7AC /* Weakify.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Weakify.swift; sourceTree = "<group>"; };
+		5FC468921D06B4E900862F59 /* Weak.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Weak.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,11 +78,11 @@
 			children = (
 				5F796E971D05D29900B8A7AC /* Functions */,
 				5F796E961D05CB7400B8A7AC /* Operators */,
+				5FC468941D06BB4800862F59 /* Structs */,
 				5F796E791D05CA2900B8A7AC /* RAC Structs */,
 				5F796E731D05C51800B8A7AC /* Stream.swift */,
 				5F796E7C1D05CB4D00B8A7AC /* Command.swift */,
 				5F796E811D05CB4D00B8A7AC /* Observable.swift */,
-				5F796E801D05CB4D00B8A7AC /* Shared.swift */,
 				5F796E671D05C4D900B8A7AC /* Fx.h */,
 				5F796E691D05C4D900B8A7AC /* Info.plist */,
 			);
@@ -116,6 +118,15 @@
 				5F796E871D05CB4D00B8A7AC /* Weakify.swift */,
 			);
 			name = Functions;
+			sourceTree = "<group>";
+		};
+		5FC468941D06BB4800862F59 /* Structs */ = {
+			isa = PBXGroup;
+			children = (
+				5F796E801D05CB4D00B8A7AC /* Shared.swift */,
+				5FC468921D06B4E900862F59 /* Weak.swift */,
+			);
+			name = Structs;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -156,6 +167,7 @@
 		5F796E5B1D05C4D900B8A7AC /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = P0ed;
 				TargetAttributes = {
@@ -198,6 +210,7 @@
 			files = (
 				5F796E8F1D05CB4D00B8A7AC /* Observable.swift in Sources */,
 				5F796E881D05CB4D00B8A7AC /* Application+Composition.swift in Sources */,
+				5FC468931D06B4E900862F59 /* Weak.swift in Sources */,
 				5F796E751D05C51800B8A7AC /* Bag.swift in Sources */,
 				5F796E771D05C51800B8A7AC /* Disposable.swift in Sources */,
 				5F796E741D05C51800B8A7AC /* Atomic.swift in Sources */,

@@ -56,7 +56,7 @@ public final class Stream<A>: StreamType {
 
 	public static func pipe() -> (Stream, Sink) {
 		var sink: Sink!
-		let stream = self.init {
+		let stream = Stream {
 			sink = $0
 			return nil
 		}

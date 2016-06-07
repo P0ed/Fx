@@ -1,20 +1,28 @@
 import Foundation
 
 /// Converts value type semantics to reference type
-final class Shared<A> {
-	var value: A
+public struct Shared<A> {
 
-	init(value: A) {
-		self.value = value
+	private var storage: Ref<A>
+
+	public var value: A {
+		get {
+			return storage.value
+		}
+		set {
+			storage.value = newValue
+		}
+	}
+
+	public init(_ value: A) {
+		storage = Ref(value)
 	}
 }
 
-/// Converts value type semantics to reference type
-/// and forbids mutation
-final class SharedConst<A> {
-	let value: A
+private final class Ref<A> {
+	var value: A
 
-	init(value: A) {
+	init(_ value: A) {
 		self.value = value
 	}
 }

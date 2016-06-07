@@ -21,6 +21,7 @@ public func |> <A, B> (x: A, @noescape f: A -> B) -> B {
 	return f(x)
 }
 
+/// Function application
 public func <| <A, B> (@noescape f: A -> B, x: A) -> B {
 	return f(x)
 }
