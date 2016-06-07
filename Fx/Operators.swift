@@ -1,7 +1,7 @@
 
 /// Function application
 infix operator § { associativity right precedence 0 }
-infix operator <| { associativity left precedence 130 }
+//infix operator <| { associativity left precedence 130 }
 infix operator |> { associativity left precedence 130 }
 
 /// Function composition
