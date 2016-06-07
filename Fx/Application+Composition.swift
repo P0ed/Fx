@@ -1,4 +1,3 @@
-import Foundation
 
 /// Function application
 public func § <A, B> (f: A -> B, x: A) -> B {

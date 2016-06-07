@@ -1,4 +1,3 @@
-import Foundation
 
 /// Function application
 infix operator § { associativity right precedence 0 }

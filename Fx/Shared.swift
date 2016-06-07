@@ -1,4 +1,3 @@
-import Foundation
 
 /// Converts value type semantics to reference type
 public struct Shared<A> {

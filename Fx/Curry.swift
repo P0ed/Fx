@@ -1,4 +1,3 @@
-import Foundation
 
 public func curry<A, B>(function: (A) -> B) -> A -> B {
 	return { (`a`: A) -> B in function(`a`) }

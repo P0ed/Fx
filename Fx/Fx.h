@@ -1,4 +1,4 @@
-#import <UIKit/UIKit.h>
+@import Foundation;
 
 //! Project version number for Fx.
 FOUNDATION_EXPORT double FxVersionNumber;

@@ -1,4 +1,8 @@
-import Foundation
+
+/// pure
+public func pure<A>(x: A) -> A? {
+	return Optional<A>(x)
+}
 
 /// map
 public func map<A, B>(f: A -> B) -> A? -> B? {

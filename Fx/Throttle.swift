@@ -1,4 +1,3 @@
-//import Foundation
 //import BrightFutures
 //
 //public func throttle<A>(interval: NSTimeInterval, on context: ExecutionContext = Queue.main.context, function f: A -> ()) -> (A -> ()) {

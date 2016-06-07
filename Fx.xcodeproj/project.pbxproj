@@ -17,7 +17,7 @@
 		5F796E8B1D05CB4D00B8A7AC /* Curry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E7D1D05CB4D00B8A7AC /* Curry.swift */; };
 		5F796E8C1D05CB4D00B8A7AC /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E7E1D05CB4D00B8A7AC /* Functions.swift */; };
 		5F796E8E1D05CB4D00B8A7AC /* Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E801D05CB4D00B8A7AC /* Shared.swift */; };
-		5F796E8F1D05CB4D00B8A7AC /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E811D05CB4D00B8A7AC /* Observable.swift */; };
+		5F796E8F1D05CB4D00B8A7AC /* Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E811D05CB4D00B8A7AC /* Property.swift */; };
 		5F796E901D05CB4D00B8A7AC /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E821D05CB4D00B8A7AC /* Operators.swift */; };
 		5F796E911D05CB4D00B8A7AC /* Optional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E831D05CB4D00B8A7AC /* Optional.swift */; };
 		5F796E931D05CB4D00B8A7AC /* Throttle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E851D05CB4D00B8A7AC /* Throttle.swift */; };
@@ -38,7 +38,7 @@
 		5F796E7D1D05CB4D00B8A7AC /* Curry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Curry.swift; sourceTree = "<group>"; };
 		5F796E7E1D05CB4D00B8A7AC /* Functions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
 		5F796E801D05CB4D00B8A7AC /* Shared.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shared.swift; sourceTree = "<group>"; };
-		5F796E811D05CB4D00B8A7AC /* Observable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
+		5F796E811D05CB4D00B8A7AC /* Property.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Property.swift; sourceTree = "<group>"; };
 		5F796E821D05CB4D00B8A7AC /* Operators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
 		5F796E831D05CB4D00B8A7AC /* Optional.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Optional.swift; sourceTree = "<group>"; };
 		5F796E851D05CB4D00B8A7AC /* Throttle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Throttle.swift; sourceTree = "<group>"; };
@@ -82,7 +82,7 @@
 				5F796E791D05CA2900B8A7AC /* RAC Structs */,
 				5F796E731D05C51800B8A7AC /* Stream.swift */,
 				5F796E7C1D05CB4D00B8A7AC /* Command.swift */,
-				5F796E811D05CB4D00B8A7AC /* Observable.swift */,
+				5F796E811D05CB4D00B8A7AC /* Property.swift */,
 				5F796E671D05C4D900B8A7AC /* Fx.h */,
 				5F796E691D05C4D900B8A7AC /* Info.plist */,
 			);
@@ -208,7 +208,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5F796E8F1D05CB4D00B8A7AC /* Observable.swift in Sources */,
+				5F796E8F1D05CB4D00B8A7AC /* Property.swift in Sources */,
 				5F796E881D05CB4D00B8A7AC /* Application+Composition.swift in Sources */,
 				5FC468931D06B4E900862F59 /* Weak.swift in Sources */,
 				5F796E751D05C51800B8A7AC /* Bag.swift in Sources */,

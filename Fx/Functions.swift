@@ -1,4 +1,3 @@
-import Foundation
 
 /// The identity function; returns its argument.
 public func id<A>(x: A) -> A {

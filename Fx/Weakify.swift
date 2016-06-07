@@ -1,4 +1,3 @@
-import Foundation
 
 // MARK: Weakify
 /// Curried, returns C?

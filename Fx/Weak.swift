@@ -1,4 +1,3 @@
-import Foundation
 
 /// Weak reference container
 public struct Weak<A: AnyObject> {

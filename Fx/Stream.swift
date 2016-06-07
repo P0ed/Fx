@@ -1,4 +1,4 @@
-import Foundation
+import Foundation.NSLock
 
 public typealias Signal = Stream<Void>
 
@@ -13,6 +13,7 @@ public final class Stream<A>: StreamType {
 	public typealias Sink = A -> ()
 
 	private let atomicSinks: Atomic<Bag<Sink>> = Atomic(Bag())
+	private let disposable: ScopedDisposable
 
 	public init(@noescape generator: Sink -> Disposable?) {
 
@@ -20,11 +21,12 @@ public final class Stream<A>: StreamType {
 		sendLock.name = "com.github.P0ed.Fx"
 
 		let generatorDisposable = SerialDisposable()
+		disposable = ScopedDisposable(generatorDisposable)
 
-		let sink: Sink = { value in
+		let sink: Sink = weakify(self) { welf, value in
 
 			sendLock.lock()
-			for sink in self.atomicSinks.value {
+			for sink in welf.atomicSinks.value {
 				sink(value)
 			}
 			sendLock.unlock()
@@ -45,8 +47,8 @@ public final class Stream<A>: StreamType {
 			return sinks
 		}
 
-		return ActionDisposable { [weak self] in
-			self?.atomicSinks.modify {
+		return ActionDisposable {
+			self.atomicSinks.modify {
 				var sinks = $0
 				sinks.removeValueForToken(token)
 				return sinks
@@ -69,15 +71,13 @@ public extension StreamType {
 
 	public func map<B>(f: A -> B) -> Stream<B> {
 		return Stream<B> { sink in
-			return self.observe { value in
-				sink(f(value))
-			}
+			observe § sink • f
 		}
 	}
 
 	public func filter(f: A -> Bool) -> Stream<A> {
 		return Stream<A> { sink in
-			return self.observe { value in
+			observe { value in
 				if f(value) {
 					sink(value)
 				}
@@ -90,7 +90,7 @@ public extension StreamType where A: StreamType {
 
 	public func flatten() -> Stream<A.A> {
 		return Stream { sink in
-			self.observe { value in
+			observe { value in
 				value.observe(sink)
 			}
 		}
