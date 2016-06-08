@@ -56,7 +56,8 @@ scopedExample("Stream memory mgmt") {
 	p1 <*> 8
 	p1 = nil
 	s4 = nil
-	d4?.dispose()
+//	d4?.dispose()
+	d4 = nil
 
 	log § [w1, w2, w3, w4]
 }
