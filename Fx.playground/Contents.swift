@@ -61,3 +61,39 @@ scopedExample("Stream memory mgmt") {
 
 	log § [w1, w2, w3, w4]
 }
+
+func collect<A>(stream: Stream<A>, _ record: () -> ()) -> [A] {
+	var array: [A] = []
+	let disposable = stream.observe { array.append($0) }
+	record()
+	disposable.dispose()
+
+	return array
+}
+
+scopedExample("Stream collect() test") {
+
+	let (stream, pipe) = Stream<Int>.pipe()
+
+	let input = [1, 2, 3]
+	let expected = [1, 2, 3]
+	let output = collect(stream) {
+		input.forEach(pipe)
+	}
+
+	output == expected
+}
+
+scopedExample("Stream.map() test") {
+
+	let (stream, pipe) = Stream<Int>.pipe()
+	let mapped = stream.map { $0 * 2 }
+
+	let input = [1, 2, 3]
+	let expected = [2, 4, 6]
+	let output = collect(mapped) {
+		input.forEach(pipe)
+	}
+
+	output == expected
+}
