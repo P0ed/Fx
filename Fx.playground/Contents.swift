@@ -97,3 +97,30 @@ scopedExample("Stream.map() test") {
 
 	output == expected
 }
+
+scopedExample("Mutable Property test") {
+
+	let (stream, pipe) = Stream<Int>.pipe()
+
+	var p1 = MutableProperty(0)
+	let p2 = p1
+
+	p1.value
+	p2.value
+
+	p1.value = 1
+
+	p1.value
+	p2.value
+
+	p1.bind(stream)
+	pipe(2)
+
+	p1.value
+	p2.value
+
+	let p3 = p2.map {
+		$0 + 1
+	}
+	p3.value
+}
