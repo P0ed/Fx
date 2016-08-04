@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5F0E2AC01D107BC5005EA377 /* OptionalType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0E2ABF1D107BC5005EA377 /* OptionalType.swift */; };
+		5F2D896E1D534263000DC80A /* Bool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2D896D1D534263000DC80A /* Bool.swift */; };
 		5F796E681D05C4D900B8A7AC /* Fx.h in Headers */ = {isa = PBXBuildFile; fileRef = 5F796E671D05C4D900B8A7AC /* Fx.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5F796E741D05C51800B8A7AC /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E6F1D05C51800B8A7AC /* Atomic.swift */; };
 		5F796E751D05C51800B8A7AC /* Bag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E701D05C51800B8A7AC /* Bag.swift */; };
@@ -26,6 +28,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5F0E2ABF1D107BC5005EA377 /* OptionalType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionalType.swift; sourceTree = "<group>"; };
+		5F2D896D1D534263000DC80A /* Bool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bool.swift; sourceTree = "<group>"; };
 		5F796E641D05C4D900B8A7AC /* Fx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F796E671D05C4D900B8A7AC /* Fx.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Fx.h; sourceTree = "<group>"; };
 		5F796E691D05C4D900B8A7AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -83,6 +87,8 @@
 				5F796E731D05C51800B8A7AC /* Stream.swift */,
 				5F796E7C1D05CB4D00B8A7AC /* Command.swift */,
 				5F796E811D05CB4D00B8A7AC /* Property.swift */,
+				5F0E2ABF1D107BC5005EA377 /* OptionalType.swift */,
+				5F2D896D1D534263000DC80A /* Bool.swift */,
 				5F796E671D05C4D900B8A7AC /* Fx.h */,
 				5F796E691D05C4D900B8A7AC /* Info.plist */,
 			);
@@ -213,10 +219,12 @@
 				5FC468931D06B4E900862F59 /* Weak.swift in Sources */,
 				5F796E751D05C51800B8A7AC /* Bag.swift in Sources */,
 				5F796E771D05C51800B8A7AC /* Disposable.swift in Sources */,
+				5F0E2AC01D107BC5005EA377 /* OptionalType.swift in Sources */,
 				5F796E741D05C51800B8A7AC /* Atomic.swift in Sources */,
 				5F796E931D05CB4D00B8A7AC /* Throttle.swift in Sources */,
 				5F796E781D05C51800B8A7AC /* Stream.swift in Sources */,
 				5F796E8B1D05CB4D00B8A7AC /* Curry.swift in Sources */,
+				5F2D896E1D534263000DC80A /* Bool.swift in Sources */,
 				5F796E901D05CB4D00B8A7AC /* Operators.swift in Sources */,
 				5F796E911D05CB4D00B8A7AC /* Optional.swift in Sources */,
 				5F796E8C1D05CB4D00B8A7AC /* Functions.swift in Sources */,
