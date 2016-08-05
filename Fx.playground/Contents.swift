@@ -97,13 +97,3 @@ scopedExample("Stream.map() test") {
 
 	output == expected
 }
-
-var i: Int? = 0
-
-false.map(ifTrue: 2, ifFalse: 21)
-
-let x = [1, 2, 3]
-let c = 4
-
-let a = (2 < 3).flatMap(ifFalse: x.indexOf(c))
-let b = (2 < 3).map(ifTrue: 2, ifFalse: x.indexOf(c))

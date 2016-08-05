@@ -1,6 +1,0 @@
-use_frameworks!
-target 'Fx_Tests' do
-  pod 'Fx', :path => '../'
-  
-  
-end
