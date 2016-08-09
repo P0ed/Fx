@@ -23,7 +23,8 @@ public final class Stream<A>: StreamType {
 		let generatorDisposable = SerialDisposable()
 		disposable = ScopedDisposable(generatorDisposable)
 
-		let sink: Sink = weakify(self) { welf, value in
+		let sink: Sink = { [weak self] value in
+			guard let welf = self else { return }
 
 			sendLock.lock()
 			for sink in welf.atomicSinks.value {
