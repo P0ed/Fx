@@ -14,8 +14,7 @@
 		5FD28AA11D5B27C100BAFC0F /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E821D05CB4D00B8A7AC /* Operators.swift */; };
 		5FD28AA21D5B27C100BAFC0F /* Application+Composition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E7A1D05CB4D00B8A7AC /* Application+Composition.swift */; };
 		5FD28AA31D5B27C100BAFC0F /* Optional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E831D05CB4D00B8A7AC /* Optional.swift */; };
-		5FD28AA41D5B27C100BAFC0F /* Weak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC468921D06B4E900862F59 /* Weak.swift */; };
-		5FD28AA51D5B27C100BAFC0F /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD28A581D5B26A400BAFC0F /* Box.swift */; };
+		5FD28AA51D5B27C100BAFC0F /* Containers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD28A581D5B26A400BAFC0F /* Containers.swift */; };
 		5FD28AA61D5B27C100BAFC0F /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E6F1D05C51800B8A7AC /* Atomic.swift */; };
 		5FD28AA71D5B27C100BAFC0F /* Bag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E701D05C51800B8A7AC /* Bag.swift */; };
 		5FD28AA81D5B27C100BAFC0F /* Disposable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E721D05C51800B8A7AC /* Disposable.swift */; };
@@ -30,8 +29,7 @@
 		5FD28AB11D5B27C200BAFC0F /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E821D05CB4D00B8A7AC /* Operators.swift */; };
 		5FD28AB21D5B27C200BAFC0F /* Application+Composition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E7A1D05CB4D00B8A7AC /* Application+Composition.swift */; };
 		5FD28AB31D5B27C200BAFC0F /* Optional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E831D05CB4D00B8A7AC /* Optional.swift */; };
-		5FD28AB41D5B27C200BAFC0F /* Weak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC468921D06B4E900862F59 /* Weak.swift */; };
-		5FD28AB51D5B27C200BAFC0F /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD28A581D5B26A400BAFC0F /* Box.swift */; };
+		5FD28AB51D5B27C200BAFC0F /* Containers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD28A581D5B26A400BAFC0F /* Containers.swift */; };
 		5FD28AB61D5B27C200BAFC0F /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E6F1D05C51800B8A7AC /* Atomic.swift */; };
 		5FD28AB71D5B27C200BAFC0F /* Bag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E701D05C51800B8A7AC /* Bag.swift */; };
 		5FD28AB81D5B27C200BAFC0F /* Disposable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E721D05C51800B8A7AC /* Disposable.swift */; };
@@ -46,8 +44,7 @@
 		5FD28AC11D5B27C200BAFC0F /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E821D05CB4D00B8A7AC /* Operators.swift */; };
 		5FD28AC21D5B27C200BAFC0F /* Application+Composition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E7A1D05CB4D00B8A7AC /* Application+Composition.swift */; };
 		5FD28AC31D5B27C200BAFC0F /* Optional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E831D05CB4D00B8A7AC /* Optional.swift */; };
-		5FD28AC41D5B27C200BAFC0F /* Weak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC468921D06B4E900862F59 /* Weak.swift */; };
-		5FD28AC51D5B27C200BAFC0F /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD28A581D5B26A400BAFC0F /* Box.swift */; };
+		5FD28AC51D5B27C200BAFC0F /* Containers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD28A581D5B26A400BAFC0F /* Containers.swift */; };
 		5FD28AC61D5B27C200BAFC0F /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E6F1D05C51800B8A7AC /* Atomic.swift */; };
 		5FD28AC71D5B27C200BAFC0F /* Bag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E701D05C51800B8A7AC /* Bag.swift */; };
 		5FD28AC81D5B27C200BAFC0F /* Disposable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E721D05C51800B8A7AC /* Disposable.swift */; };
@@ -81,8 +78,7 @@
 		5F796E831D05CB4D00B8A7AC /* Optional.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Optional.swift; sourceTree = "<group>"; };
 		5F796E851D05CB4D00B8A7AC /* Throttle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Throttle.swift; sourceTree = "<group>"; };
 		5F796E871D05CB4D00B8A7AC /* Weakify.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Weakify.swift; sourceTree = "<group>"; };
-		5FC468921D06B4E900862F59 /* Weak.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Weak.swift; sourceTree = "<group>"; };
-		5FD28A581D5B26A400BAFC0F /* Box.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Box.swift; sourceTree = "<group>"; };
+		5FD28A581D5B26A400BAFC0F /* Containers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Containers.swift; sourceTree = "<group>"; };
 		5FD28A5F1D5B271600BAFC0F /* Fx_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fx_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5FD28A6C1D5B272100BAFC0F /* Fx_tvOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fx_tvOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5FD28A951D5B275600BAFC0F /* Fx_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fx_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -190,8 +186,7 @@
 		5FC468941D06BB4800862F59 /* Structs */ = {
 			isa = PBXGroup;
 			children = (
-				5FC468921D06B4E900862F59 /* Weak.swift */,
-				5FD28A581D5B26A400BAFC0F /* Box.swift */,
+				5FD28A581D5B26A400BAFC0F /* Containers.swift */,
 			);
 			name = Structs;
 			sourceTree = "<group>";
@@ -387,7 +382,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5FD28AAB1D5B27C100BAFC0F /* Property.swift in Sources */,
-				5FD28AA51D5B27C100BAFC0F /* Box.swift in Sources */,
+				5FD28AA51D5B27C100BAFC0F /* Containers.swift in Sources */,
 				5FD28AA81D5B27C100BAFC0F /* Disposable.swift in Sources */,
 				5FD28AA01D5B27C100BAFC0F /* Weakify.swift in Sources */,
 				5FD28AA71D5B27C100BAFC0F /* Bag.swift in Sources */,
@@ -399,7 +394,6 @@
 				5FD28ACF1D5B27C800BAFC0F /* Bool.swift in Sources */,
 				5FD28A9F1D5B27C100BAFC0F /* Throttle.swift in Sources */,
 				5FD28AA91D5B27C100BAFC0F /* Stream.swift in Sources */,
-				5FD28AA41D5B27C100BAFC0F /* Weak.swift in Sources */,
 				5FD28AAA1D5B27C100BAFC0F /* Command.swift in Sources */,
 				5FD28A9E1D5B27C100BAFC0F /* Curry.swift in Sources */,
 				5FD28AA21D5B27C100BAFC0F /* Application+Composition.swift in Sources */,
@@ -411,7 +405,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5FD28ACB1D5B27C200BAFC0F /* Property.swift in Sources */,
-				5FD28AC51D5B27C200BAFC0F /* Box.swift in Sources */,
+				5FD28AC51D5B27C200BAFC0F /* Containers.swift in Sources */,
 				5FD28AC81D5B27C200BAFC0F /* Disposable.swift in Sources */,
 				5FD28AC01D5B27C200BAFC0F /* Weakify.swift in Sources */,
 				5FD28AC71D5B27C200BAFC0F /* Bag.swift in Sources */,
@@ -423,7 +417,6 @@
 				5FD28ACE1D5B27C700BAFC0F /* Bool.swift in Sources */,
 				5FD28ABF1D5B27C200BAFC0F /* Throttle.swift in Sources */,
 				5FD28AC91D5B27C200BAFC0F /* Stream.swift in Sources */,
-				5FD28AC41D5B27C200BAFC0F /* Weak.swift in Sources */,
 				5FD28ACA1D5B27C200BAFC0F /* Command.swift in Sources */,
 				5FD28ABE1D5B27C200BAFC0F /* Curry.swift in Sources */,
 				5FD28AC21D5B27C200BAFC0F /* Application+Composition.swift in Sources */,
@@ -435,7 +428,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5FD28ABB1D5B27C200BAFC0F /* Property.swift in Sources */,
-				5FD28AB51D5B27C200BAFC0F /* Box.swift in Sources */,
+				5FD28AB51D5B27C200BAFC0F /* Containers.swift in Sources */,
 				5FD28AB81D5B27C200BAFC0F /* Disposable.swift in Sources */,
 				5FD28AB01D5B27C200BAFC0F /* Weakify.swift in Sources */,
 				5FD28AB71D5B27C200BAFC0F /* Bag.swift in Sources */,
@@ -447,7 +440,6 @@
 				5FD28ACD1D5B27C700BAFC0F /* Bool.swift in Sources */,
 				5FD28AAF1D5B27C200BAFC0F /* Throttle.swift in Sources */,
 				5FD28AB91D5B27C200BAFC0F /* Stream.swift in Sources */,
-				5FD28AB41D5B27C200BAFC0F /* Weak.swift in Sources */,
 				5FD28ABA1D5B27C200BAFC0F /* Command.swift in Sources */,
 				5FD28AAE1D5B27C200BAFC0F /* Curry.swift in Sources */,
 				5FD28AB21D5B27C200BAFC0F /* Application+Composition.swift in Sources */,
