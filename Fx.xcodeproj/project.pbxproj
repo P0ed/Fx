@@ -79,9 +79,9 @@
 		5F796E851D05CB4D00B8A7AC /* Throttle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Throttle.swift; sourceTree = "<group>"; };
 		5F796E871D05CB4D00B8A7AC /* Weakify.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Weakify.swift; sourceTree = "<group>"; };
 		5FD28A581D5B26A400BAFC0F /* Containers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Containers.swift; sourceTree = "<group>"; };
-		5FD28A5F1D5B271600BAFC0F /* Fx_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fx_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		5FD28A6C1D5B272100BAFC0F /* Fx_tvOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fx_tvOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		5FD28A951D5B275600BAFC0F /* Fx_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fx_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5FD28A5F1D5B271600BAFC0F /* Fx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5FD28A6C1D5B272100BAFC0F /* Fx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5FD28A951D5B275600BAFC0F /* Fx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5FD28AD31D5B2E6300BAFC0F /* Fx iOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Fx iOS.h"; sourceTree = "<group>"; };
 		5FD28AD41D5B2E6300BAFC0F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5FD28AD61D5B2E6300BAFC0F /* Fx macOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Fx macOS.h"; sourceTree = "<group>"; };
@@ -129,9 +129,9 @@
 		5F796E651D05C4D900B8A7AC /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				5FD28A5F1D5B271600BAFC0F /* Fx_macOS.framework */,
-				5FD28A6C1D5B272100BAFC0F /* Fx_tvOS.framework */,
-				5FD28A951D5B275600BAFC0F /* Fx_iOS.framework */,
+				5FD28A5F1D5B271600BAFC0F /* Fx.framework */,
+				5FD28A6C1D5B272100BAFC0F /* Fx.framework */,
+				5FD28A951D5B275600BAFC0F /* Fx.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -273,7 +273,7 @@
 			);
 			name = Fx_macOS;
 			productName = "Fx macOS";
-			productReference = 5FD28A5F1D5B271600BAFC0F /* Fx_macOS.framework */;
+			productReference = 5FD28A5F1D5B271600BAFC0F /* Fx.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		5FD28A6B1D5B272100BAFC0F /* Fx_tvOS */ = {
@@ -291,7 +291,7 @@
 			);
 			name = Fx_tvOS;
 			productName = "Fx tvOS";
-			productReference = 5FD28A6C1D5B272100BAFC0F /* Fx_tvOS.framework */;
+			productReference = 5FD28A6C1D5B272100BAFC0F /* Fx.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		5FD28A941D5B275600BAFC0F /* Fx_iOS */ = {
@@ -309,7 +309,7 @@
 			);
 			name = Fx_iOS;
 			productName = "Fx iOS";
-			productReference = 5FD28A951D5B275600BAFC0F /* Fx_iOS.framework */;
+			productReference = 5FD28A951D5B275600BAFC0F /* Fx.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -554,8 +554,8 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.github.p0ed.Fx-macOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.p0ed.Fx;
+				PRODUCT_NAME = Fx;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 			};
@@ -575,8 +575,8 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.github.p0ed.Fx-macOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.p0ed.Fx;
+				PRODUCT_NAME = Fx;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 			};
@@ -592,8 +592,8 @@
 				INFOPLIST_FILE = "Meta/Fx tvOS/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.github.p0ed.Fx-tvOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.p0ed.Fx;
+				PRODUCT_NAME = Fx;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -611,8 +611,8 @@
 				INFOPLIST_FILE = "Meta/Fx tvOS/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.github.p0ed.Fx-tvOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.p0ed.Fx;
+				PRODUCT_NAME = Fx;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -631,8 +631,8 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.github.p0ed.Fx-iOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.p0ed.Fx;
+				PRODUCT_NAME = Fx;
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -648,8 +648,8 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.github.p0ed.Fx-iOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.p0ed.Fx;
+				PRODUCT_NAME = Fx;
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
