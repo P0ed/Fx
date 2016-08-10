@@ -1,4 +1,3 @@
-
 public protocol PropertyType {
 	associatedtype A
 	var value: A { get }
@@ -66,6 +65,11 @@ public struct MutableProperty<A>: PropertyType {
 }
 
 public extension PropertyType {
+
+	public func observe(sink: A -> ()) -> Disposable {
+		sink(value)
+		return stream.observe(sink)
+	}
 
 	public func map<B>(f: A -> B) -> Property<B> {
 		return Property(value: f(value), stream: stream.map(f))
