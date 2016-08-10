@@ -7,9 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5FD28A621D5B271600BAFC0F /* Fx macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 5FD28A611D5B271600BAFC0F /* Fx macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5FD28A6F1D5B272100BAFC0F /* Fx tvOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 5FD28A6E1D5B272100BAFC0F /* Fx tvOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5FD28A981D5B275600BAFC0F /* Fx iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 5FD28A971D5B275600BAFC0F /* Fx iOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5FD28A9D1D5B27C100BAFC0F /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E7E1D05CB4D00B8A7AC /* Functions.swift */; };
 		5FD28A9E1D5B27C100BAFC0F /* Curry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E7D1D05CB4D00B8A7AC /* Curry.swift */; };
 		5FD28A9F1D5B27C100BAFC0F /* Throttle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E851D05CB4D00B8A7AC /* Throttle.swift */; };
@@ -61,6 +58,9 @@
 		5FD28ACD1D5B27C700BAFC0F /* Bool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2D896D1D534263000DC80A /* Bool.swift */; };
 		5FD28ACE1D5B27C700BAFC0F /* Bool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2D896D1D534263000DC80A /* Bool.swift */; };
 		5FD28ACF1D5B27C800BAFC0F /* Bool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2D896D1D534263000DC80A /* Bool.swift */; };
+		5FD28ADD1D5B2E6300BAFC0F /* Fx macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 5FD28AD61D5B2E6300BAFC0F /* Fx macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5FD28AE11D5B2EE300BAFC0F /* Fx iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 5FD28AD31D5B2E6300BAFC0F /* Fx iOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5FD28AE31D5B2EEA00BAFC0F /* Fx tvOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 5FD28AD91D5B2E6300BAFC0F /* Fx tvOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -84,14 +84,14 @@
 		5FC468921D06B4E900862F59 /* Weak.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Weak.swift; sourceTree = "<group>"; };
 		5FD28A581D5B26A400BAFC0F /* Box.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Box.swift; sourceTree = "<group>"; };
 		5FD28A5F1D5B271600BAFC0F /* Fx_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fx_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		5FD28A611D5B271600BAFC0F /* Fx macOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Fx macOS.h"; sourceTree = "<group>"; };
-		5FD28A631D5B271600BAFC0F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5FD28A6C1D5B272100BAFC0F /* Fx_tvOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fx_tvOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		5FD28A6E1D5B272100BAFC0F /* Fx tvOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Fx tvOS.h"; sourceTree = "<group>"; };
-		5FD28A701D5B272100BAFC0F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5FD28A951D5B275600BAFC0F /* Fx_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fx_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		5FD28A971D5B275600BAFC0F /* Fx iOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Fx iOS.h"; sourceTree = "<group>"; };
-		5FD28A991D5B275600BAFC0F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5FD28AD31D5B2E6300BAFC0F /* Fx iOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Fx iOS.h"; sourceTree = "<group>"; };
+		5FD28AD41D5B2E6300BAFC0F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5FD28AD61D5B2E6300BAFC0F /* Fx macOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Fx macOS.h"; sourceTree = "<group>"; };
+		5FD28AD71D5B2E6300BAFC0F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5FD28AD91D5B2E6300BAFC0F /* Fx tvOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Fx tvOS.h"; sourceTree = "<group>"; };
+		5FD28ADA1D5B2E6300BAFC0F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,10 +124,8 @@
 			children = (
 				5F2D89711D534AF0000DC80A /* README.md */,
 				5F2D89731D534B1B000DC80A /* Fx.podspec */,
-				5F796E661D05C4D900B8A7AC /* Fx */,
-				5FD28A601D5B271600BAFC0F /* Fx macOS */,
-				5FD28A6D1D5B272100BAFC0F /* Fx tvOS */,
-				5FD28A961D5B275600BAFC0F /* Fx iOS */,
+				5F796E661D05C4D900B8A7AC /* Source */,
+				5FD28AD11D5B2E4700BAFC0F /* Meta */,
 				5F796E651D05C4D900B8A7AC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -142,7 +140,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		5F796E661D05C4D900B8A7AC /* Fx */ = {
+		5F796E661D05C4D900B8A7AC /* Source */ = {
 			isa = PBXGroup;
 			children = (
 				5F796E971D05D29900B8A7AC /* Functions */,
@@ -155,7 +153,7 @@
 				5F0E2ABF1D107BC5005EA377 /* OptionalType.swift */,
 				5F2D896D1D534263000DC80A /* Bool.swift */,
 			);
-			path = Fx;
+			path = Source;
 			sourceTree = "<group>";
 		};
 		5F796E791D05CA2900B8A7AC /* RAC Structs */ = {
@@ -198,31 +196,41 @@
 			name = Structs;
 			sourceTree = "<group>";
 		};
-		5FD28A601D5B271600BAFC0F /* Fx macOS */ = {
+		5FD28AD11D5B2E4700BAFC0F /* Meta */ = {
 			isa = PBXGroup;
 			children = (
-				5FD28A611D5B271600BAFC0F /* Fx macOS.h */,
-				5FD28A631D5B271600BAFC0F /* Info.plist */,
+				5FD28AD21D5B2E6300BAFC0F /* Fx iOS */,
+				5FD28AD51D5B2E6300BAFC0F /* Fx macOS */,
+				5FD28AD81D5B2E6300BAFC0F /* Fx tvOS */,
+			);
+			path = Meta;
+			sourceTree = "<group>";
+		};
+		5FD28AD21D5B2E6300BAFC0F /* Fx iOS */ = {
+			isa = PBXGroup;
+			children = (
+				5FD28AD31D5B2E6300BAFC0F /* Fx iOS.h */,
+				5FD28AD41D5B2E6300BAFC0F /* Info.plist */,
+			);
+			path = "Fx iOS";
+			sourceTree = "<group>";
+		};
+		5FD28AD51D5B2E6300BAFC0F /* Fx macOS */ = {
+			isa = PBXGroup;
+			children = (
+				5FD28AD61D5B2E6300BAFC0F /* Fx macOS.h */,
+				5FD28AD71D5B2E6300BAFC0F /* Info.plist */,
 			);
 			path = "Fx macOS";
 			sourceTree = "<group>";
 		};
-		5FD28A6D1D5B272100BAFC0F /* Fx tvOS */ = {
+		5FD28AD81D5B2E6300BAFC0F /* Fx tvOS */ = {
 			isa = PBXGroup;
 			children = (
-				5FD28A6E1D5B272100BAFC0F /* Fx tvOS.h */,
-				5FD28A701D5B272100BAFC0F /* Info.plist */,
+				5FD28AD91D5B2E6300BAFC0F /* Fx tvOS.h */,
+				5FD28ADA1D5B2E6300BAFC0F /* Info.plist */,
 			);
 			path = "Fx tvOS";
-			sourceTree = "<group>";
-		};
-		5FD28A961D5B275600BAFC0F /* Fx iOS */ = {
-			isa = PBXGroup;
-			children = (
-				5FD28A971D5B275600BAFC0F /* Fx iOS.h */,
-				5FD28A991D5B275600BAFC0F /* Info.plist */,
-			);
-			path = "Fx iOS";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -232,7 +240,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5FD28A621D5B271600BAFC0F /* Fx macOS.h in Headers */,
+				5FD28ADD1D5B2E6300BAFC0F /* Fx macOS.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -240,7 +248,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5FD28A6F1D5B272100BAFC0F /* Fx tvOS.h in Headers */,
+				5FD28AE31D5B2EEA00BAFC0F /* Fx tvOS.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -248,7 +256,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5FD28A981D5B275600BAFC0F /* Fx iOS.h in Headers */,
+				5FD28AE11D5B2EE300BAFC0F /* Fx iOS.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -550,7 +558,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = "Fx macOS/Info.plist";
+				INFOPLIST_FILE = "Meta/Fx macOS/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
@@ -571,7 +579,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = "Fx macOS/Info.plist";
+				INFOPLIST_FILE = "Meta/Fx macOS/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
@@ -589,7 +597,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Fx tvOS/Info.plist";
+				INFOPLIST_FILE = "Meta/Fx tvOS/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.github.p0ed.Fx-tvOS";
@@ -608,7 +616,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Fx tvOS/Info.plist";
+				INFOPLIST_FILE = "Meta/Fx tvOS/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.github.p0ed.Fx-tvOS";
@@ -627,7 +635,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Fx iOS/Info.plist";
+				INFOPLIST_FILE = "Meta/Fx iOS/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -644,7 +652,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Fx iOS/Info.plist";
+				INFOPLIST_FILE = "Meta/Fx iOS/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
