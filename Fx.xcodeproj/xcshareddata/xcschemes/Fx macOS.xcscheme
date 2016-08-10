@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "5F796E631D05C4D900B8A7AC"
-               BuildableName = "Fx.framework"
-               BlueprintName = "Fx"
+               BlueprintIdentifier = "5FD28A5E1D5B271600BAFC0F"
+               BuildableName = "Fx_macOS.framework"
+               BlueprintName = "Fx_macOS"
                ReferencedContainer = "container:Fx.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -45,9 +45,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5F796E631D05C4D900B8A7AC"
-            BuildableName = "Fx.framework"
-            BlueprintName = "Fx"
+            BlueprintIdentifier = "5FD28A5E1D5B271600BAFC0F"
+            BuildableName = "Fx_macOS.framework"
+            BlueprintName = "Fx_macOS"
             ReferencedContainer = "container:Fx.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -63,9 +63,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5F796E631D05C4D900B8A7AC"
-            BuildableName = "Fx.framework"
-            BlueprintName = "Fx"
+            BlueprintIdentifier = "5FD28A5E1D5B271600BAFC0F"
+            BuildableName = "Fx_macOS.framework"
+            BlueprintName = "Fx_macOS"
             ReferencedContainer = "container:Fx.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
