@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "5FD28A941D5B275600BAFC0F"
-               BuildableName = "Fx_iOS.framework"
+               BuildableName = "Fx.framework"
                BlueprintName = "Fx_iOS"
                ReferencedContainer = "container:Fx.xcodeproj">
             </BuildableReference>
@@ -46,7 +46,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "5FD28A941D5B275600BAFC0F"
-            BuildableName = "Fx_iOS.framework"
+            BuildableName = "Fx.framework"
             BlueprintName = "Fx_iOS"
             ReferencedContainer = "container:Fx.xcodeproj">
          </BuildableReference>
@@ -64,7 +64,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "5FD28A941D5B275600BAFC0F"
-            BuildableName = "Fx_iOS.framework"
+            BuildableName = "Fx.framework"
             BlueprintName = "Fx_iOS"
             ReferencedContainer = "container:Fx.xcodeproj">
          </BuildableReference>

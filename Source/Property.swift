@@ -42,7 +42,6 @@ public struct MutableProperty<A>: PropertyType {
 		}
 	}
 
-	private let pipe: A -> ()
 	public let stream: Stream<A>
 
 	public init(_ initialValue: A) {
@@ -50,7 +49,6 @@ public struct MutableProperty<A>: PropertyType {
 
 		let (stream, pipe) = Stream<A>.pipe()
 		self.stream = stream
-		self.pipe = pipe
 
 		getter = { value }
 		setter = { newValue in
