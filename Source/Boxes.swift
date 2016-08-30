@@ -62,6 +62,19 @@ public struct WeakBox<A> {
 	}
 }
 
+public struct UnsafeBox<A> {
+
+	private var store: Unmanaged<Ref<A>>
+
+	private init(ref: Ref<A>) {
+		store = .passUnretained(ref)
+	}
+
+	public var value: A {
+		return store.takeUnretainedValue().value
+	}
+}
+
 private final class Ref<A> {
 
 	var value: A
