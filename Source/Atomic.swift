@@ -10,8 +10,8 @@ import Foundation
 
 /// An atomic variable.
 public final class Atomic<Value> {
-	private var spinLock = OS_SPINLOCK_INIT
-	private var _value: Value
+	fileprivate var spinLock = OS_SPINLOCK_INIT
+	fileprivate var _value: Value
 	
 	/// Atomically gets or sets the value of the variable.
 	public var value: Value {
@@ -29,25 +29,26 @@ public final class Atomic<Value> {
 		_value = value
 	}
 	
-	private func lock() {
+	fileprivate func lock() {
 		OSSpinLockLock(&spinLock)
 	}
 	
-	private func unlock() {
+	fileprivate func unlock() {
 		OSSpinLockUnlock(&spinLock)
 	}
 	
 	/// Atomically replaces the contents of the variable.
 	///
 	/// Returns the old value.
-	public func swap(newValue: Value) -> Value {
+	public func swap(_ newValue: Value) -> Value {
 		return modify { _ in newValue }
 	}
 
 	/// Atomically modifies the variable.
 	///
 	/// Returns the old value.
-	public func modify(@noescape action: (Value) throws -> Value) rethrows -> Value {
+	@discardableResult
+	public func modify(action: (Value) throws -> Value) rethrows -> Value {
 		lock()
 		defer { unlock() }
 
@@ -60,7 +61,7 @@ public final class Atomic<Value> {
 	/// variable.
 	///
 	/// Returns the result of the action.
-	public func withValue<Result>(@noescape action: (Value) throws -> Result) rethrows -> Result {
+	public func withValue<Result>(action: (Value) throws -> Result) rethrows -> Result {
 		lock()
 		defer { unlock() }
 

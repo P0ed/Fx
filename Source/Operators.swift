@@ -1,17 +1,44 @@
 
+precedencegroup MonadicPrecedenceRight {
+    associativity: right
+    lowerThan: LogicalDisjunctionPrecedence
+    higherThan: AssignmentPrecedence
+}
+
+precedencegroup MonadicPrecedenceLeft {
+    associativity: left
+    lowerThan: LogicalDisjunctionPrecedence
+    higherThan: AssignmentPrecedence
+}
+
+precedencegroup ApplicativePrecedenceLeft {
+    associativity: left
+    higherThan: LogicalConjunctionPrecedence
+    lowerThan: NilCoalescingPrecedence
+}
+
+precedencegroup CompositionPrecedence {
+	associativity: right
+	higherThan: ApplicativePrecedenceLeft
+}
+
+precedencegroup ApplicativePrecedenceRight {
+	associativity: right
+	higherThan: AssignmentPrecedence
+	lowerThan: TernaryPrecedence
+}
+
 /// Function application
-infix operator § { associativity right precedence 95 }
-//infix operator <| { associativity left precedence 130 }
-infix operator |> { associativity left precedence 130 }
+infix operator § : ApplicativePrecedenceRight
 
 /// Function composition
-infix operator • { associativity right precedence 170 }
+infix operator • : CompositionPrecedence
 
 /// map
-infix operator <^> { associativity left precedence 130 }
+infix operator <^> : ApplicativePrecedenceLeft
 /// apply
-infix operator <*> { associativity left precedence 130 }
+infix operator <*> : ApplicativePrecedenceLeft
 
 /// flatMap
-infix operator -<< { associativity right precedence 100 }
-infix operator >>- { associativity left precedence 100 }
+infix operator -<< : MonadicPrecedenceRight
+infix operator >>- : MonadicPrecedenceLeft

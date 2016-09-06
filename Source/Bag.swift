@@ -9,24 +9,24 @@
 /// A uniquely identifying token for removing a value that was inserted into a
 /// Bag.
 public final class RemovalToken {
-	private var identifier: UInt?
+	fileprivate var identifier: UInt?
 
-	private init(identifier: UInt) {
+	fileprivate init(identifier: UInt) {
 		self.identifier = identifier
 	}
 }
 
 /// An unordered, non-unique collection of values of type `Element`.
 public struct Bag<Element> {
-	private var elements: [BagElement<Element>] = []
-	private var currentIdentifier: UInt = 0
+	fileprivate var elements: [BagElement<Element>] = []
+	fileprivate var currentIdentifier: UInt = 0
 
 	public init() {
 	}
 
 	/// Inserts the given value in the collection, and returns a token that can
 	/// later be passed to removeValueForToken().
-	public mutating func insert(value: Element) -> RemovalToken {
+	public mutating func insert(_ value: Element) -> RemovalToken {
 		let (nextIdentifier, overflow) = UInt.addWithOverflow(currentIdentifier, 1)
 		if overflow {
 			reindex()
@@ -44,12 +44,12 @@ public struct Bag<Element> {
 	/// Removes a value, given the token returned from insert().
 	///
 	/// If the value has already been removed, nothing happens.
-	public mutating func removeValueForToken(token: RemovalToken) {
+	public mutating func removeValueForToken(_ token: RemovalToken) {
 		if let identifier = token.identifier {
 			// Removal is more likely for recent objects than old ones.
-			for i in elements.indices.reverse() {
+			for i in elements.indices.reversed() {
 				if elements[i].identifier == identifier {
-					elements.removeAtIndex(i)
+					elements.remove(at: i)
 					token.identifier = nil
 					break
 				}
@@ -60,7 +60,7 @@ public struct Bag<Element> {
 	/// In the event of an identifier overflow (highly, highly unlikely), this
 	/// will reset all current identifiers to reclaim a contiguous set of
 	/// available identifiers for the future.
-	private mutating func reindex() {
+	fileprivate mutating func reindex() {
 		for i in elements.indices {
 			currentIdentifier = UInt(i)
 
@@ -70,13 +70,22 @@ public struct Bag<Element> {
 	}
 }
 
-extension Bag: CollectionType {
+extension Bag: Collection {
+	/// Returns the position immediately after the given index.
+	///
+	/// - Parameter i: A valid index of the collection. `i` must be less than
+	///   `endIndex`.
+	/// - Returns: The index value immediately after `i`.
+	public func index(after i: Int) -> Int {
+		return elements.index(after: i)
+	}
+
 	public typealias Index = Array<Element>.Index
 
 	public var startIndex: Index {
 		return elements.startIndex
 	}
-	
+
 	public var endIndex: Index {
 		return elements.endIndex
 	}

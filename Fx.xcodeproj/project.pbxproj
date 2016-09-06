@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5F98858A1D7EF8FE00748240 /* Weak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB5C45A1D5C6D9400BA78A3 /* Weak.swift */; };
+		5F98858B1D7EF8FF00748240 /* Weak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB5C45A1D5C6D9400BA78A3 /* Weak.swift */; };
 		5FB5C45B1D5C6D9400BA78A3 /* Weak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB5C45A1D5C6D9400BA78A3 /* Weak.swift */; };
 		5FD28A9D1D5B27C100BAFC0F /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E7E1D05CB4D00B8A7AC /* Functions.swift */; };
 		5FD28A9E1D5B27C100BAFC0F /* Curry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E7D1D05CB4D00B8A7AC /* Curry.swift */; };
@@ -322,7 +324,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = P0ed;
 				TargetAttributes = {
 					5FD28A5E1D5B271600BAFC0F = {
@@ -333,6 +335,7 @@
 					};
 					5FD28A941D5B275600BAFC0F = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -418,6 +421,7 @@
 				5FD28ABD1D5B27C200BAFC0F /* Functions.swift in Sources */,
 				5FD28AC61D5B27C200BAFC0F /* Atomic.swift in Sources */,
 				5FD28AC31D5B27C200BAFC0F /* Optional.swift in Sources */,
+				5F98858B1D7EF8FF00748240 /* Weak.swift in Sources */,
 				5FD28ACE1D5B27C700BAFC0F /* Bool.swift in Sources */,
 				5FD28ABF1D5B27C200BAFC0F /* Throttle.swift in Sources */,
 				5FD28AC91D5B27C200BAFC0F /* Stream.swift in Sources */,
@@ -441,6 +445,7 @@
 				5FD28AAD1D5B27C200BAFC0F /* Functions.swift in Sources */,
 				5FD28AB61D5B27C200BAFC0F /* Atomic.swift in Sources */,
 				5FD28AB31D5B27C200BAFC0F /* Optional.swift in Sources */,
+				5F98858A1D7EF8FE00748240 /* Weak.swift in Sources */,
 				5FD28ACD1D5B27C700BAFC0F /* Bool.swift in Sources */,
 				5FD28AAF1D5B27C200BAFC0F /* Throttle.swift in Sources */,
 				5FD28AB91D5B27C200BAFC0F /* Stream.swift in Sources */,
@@ -467,8 +472,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -516,8 +523,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -537,6 +546,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -547,7 +557,7 @@
 		5FD28A651D5B271600BAFC0F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -568,7 +578,7 @@
 		5FD28A661D5B271600BAFC0F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -589,6 +599,7 @@
 		5FD28A721D5B272100BAFC0F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -608,6 +619,7 @@
 		5FD28A731D5B272100BAFC0F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -627,6 +639,7 @@
 		5FD28A9B1D5B275600BAFC0F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -638,12 +651,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.p0ed.Fx;
 				PRODUCT_NAME = Fx;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
 		5FD28A9C1D5B275600BAFC0F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -655,6 +670,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.p0ed.Fx;
 				PRODUCT_NAME = Fx;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

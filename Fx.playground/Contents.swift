@@ -2,17 +2,16 @@ import Fx
 
 scopedExample("Shared") {
 
-	let inc: Shared<Int> -> () = {
-		var mutable = $0
-		mutable.value += 1
+	let inc: (MutableBox<Int>) -> () = {
+		$0.value += 1
 	}
 
-	var x = Shared<Int>(0)
+	var x = MutableBox<Int>(0)
 	x.value
 	inc(x)
 	x.value
 }
-
+/*
 scopedExample("Weak") {
 
 	class Klass {}
@@ -26,12 +25,12 @@ scopedExample("Weak") {
 	let x = f()
 	x.value == nil
 }
-
+*/
 scopedExample("Stream memory mgmt") {
 
-	let inc: Int -> Int = { $0 + 1 }
+	let inc: (Int) -> Int = { $0 + 1 }
 
-	var (s1, p1) = { () -> (Stream<Int>?, (Int -> ())?) in
+	var (s1, p1) = { () -> (Stream<Int>?, ((Int) -> ())?) in
 		let (s, p) = Stream<Int>.pipe()
 		return (Optional(s), Optional(p))
 	}()
@@ -56,13 +55,12 @@ scopedExample("Stream memory mgmt") {
 	p1 <*> 8
 	p1 = nil
 	s4 = nil
-//	d4?.dispose()
 	d4 = nil
 
 	log § [w1, w2, w3, w4]
 }
 
-func collect<A>(stream: Stream<A>, _ record: () -> ()) -> [A] {
+func collect<A>(_ stream: Stream<A>, _ record: () -> ()) -> [A] {
 	var array: [A] = []
 	let disposable = stream.observe { array.append($0) }
 	record()

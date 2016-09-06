@@ -6,8 +6,8 @@ public protocol PropertyType {
 
 public struct Property<A>: PropertyType {
 
-	private let _value: () -> A
-	private let _stream: () -> Stream<A>
+	fileprivate let _value: () -> A
+	fileprivate let _stream: () -> Stream<A>
 
 	public var value: A {
 		return _value()
@@ -16,22 +16,22 @@ public struct Property<A>: PropertyType {
 		return _stream()
 	}
 
-	init<P: PropertyType where P.A == A>(property: P) {
+	init<P: PropertyType>(property: P) where P.A == A {
 		_value = { property.value }
 		_stream = { property.stream }
 	}
 
 	init(value: A, stream: Stream<A>) {
 		let property = MutableProperty(value)
-		property.bind(stream)
+		_ = property.bind(stream)
 		self.init(property: property)
 	}
 }
 
 public struct MutableProperty<A>: PropertyType {
 
-	private let getter: () -> A
-	private let setter: A -> ()
+	fileprivate let getter: () -> A
+	fileprivate let setter: (A) -> ()
 
 	public var value: A {
 		get {
@@ -57,19 +57,19 @@ public struct MutableProperty<A>: PropertyType {
 		}
 	}
 
-	public func bind(stream: Stream<A>) -> Disposable {
+	public func bind(_ stream: Stream<A>) -> Disposable {
 		return stream.observe § setter
 	}
 }
 
 public extension PropertyType {
 
-	public func observe(sink: A -> ()) -> Disposable {
+	public func observe(_ sink: @escaping (A) -> ()) -> Disposable {
 		sink(value)
 		return stream.observe(sink)
 	}
 
-	public func map<B>(f: A -> B) -> Property<B> {
+	public func map<B>(_ f: @escaping (A) -> B) -> Property<B> {
 		return Property(value: f(value), stream: stream.map(f))
 	}
 }

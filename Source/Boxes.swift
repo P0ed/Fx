@@ -1,6 +1,6 @@
 public struct Box<A> {
 
-	private var store: Ref<A>
+	fileprivate var store: Ref<A>
 
 	public var value: A {
 		return store.value
@@ -10,7 +10,7 @@ public struct Box<A> {
 		return WeakBox(ref: store)
 	}
 
-	private init(ref: Ref<A>) {
+	fileprivate init(ref: Ref<A>) {
 		store = ref
 	}
 
@@ -21,7 +21,7 @@ public struct Box<A> {
 
 public struct MutableBox<A> {
 
-	private var store: Ref<A>
+	fileprivate var store: Ref<A>
 
 	public var value: A {
 		get {
@@ -47,7 +47,7 @@ public struct MutableBox<A> {
 
 public struct WeakBox<A> {
 
-	private weak var store: Ref<A>?
+	fileprivate weak var store: Ref<A>?
 
 	public var value: A? {
 		return store?.value
@@ -57,16 +57,16 @@ public struct WeakBox<A> {
 		return store.map(Box.init(ref:))
 	}
 
-	private init(ref: Ref<A>) {
-		store = .Some(ref)
+	fileprivate init(ref: Ref<A>) {
+		store = .some(ref)
 	}
 }
 
 public struct UnsafeBox<A> {
 
-	private var store: Unmanaged<Ref<A>>
+	fileprivate var store: Unmanaged<Ref<A>>
 
-	private init(ref: Ref<A>) {
+	fileprivate init(ref: Ref<A>) {
 		store = .passUnretained(ref)
 	}
 

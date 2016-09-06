@@ -1,35 +1,35 @@
 
 /// pure
-public func pure<A>(x: A) -> A? {
+public func pure<A>(_ x: A) -> A? {
 	return Optional<A>(x)
 }
 
 /// map
-public func map<A, B>(f: A -> B) -> A? -> B? {
+public func map<A, B>(_ f: @escaping (A) -> B) -> (A?) -> B? {
 	return { x in x.map(f) }
 }
 
 /// flatten • map
-public func flatMap<A, B>(f: A -> B?) -> A? -> B? {
+public func flatMap<A, B>(_ f: @escaping (A) -> B?) -> (A?) -> B? {
 	return { x in x.flatMap(f) }
 }
 
-/// fmap
-public func <^> <A, B>(@noescape f: A -> B, a: A?) -> B? {
+/// map
+public func <^> <A, B>(f: (A) -> B, a: A?) -> B? {
 	return a.map(f)
 }
 
 /// apply
-public func <*> <A, B>(f: (A -> B)?, a: A?) -> B? {
+public func <*> <A, B>(f: ((A) -> B)?, a: A?) -> B? {
 	return f.flatMap{a.map($0)}
 }
 
-/// left bind
-public func >>- <A, B>(a: A?, @noescape f: A -> B?) -> B? {
+/// left flatMap
+public func >>- <A, B>(a: A?, f: (A) -> B?) -> B? {
 	return a.flatMap(f)
 }
 
-/// right bind
-public func -<< <A, B>(@noescape f: A -> B?, a: A?) -> B? {
+/// right flatMap
+public func -<< <A, B>(f: (A) -> B?, a: A?) -> B? {
 	return a.flatMap(f)
 }

@@ -3,19 +3,19 @@ import Foundation.NSLock
 public typealias Signal = Stream<Void>
 
 public protocol StreamType {
-	associatedtype A
+	associatedtype Value
 
-	func observe(sink: A -> ()) -> Disposable
+	func observe(_ sink: @escaping (Value) -> ()) -> Disposable
 }
 
 public final class Stream<A>: StreamType {
-
-	public typealias Sink = A -> ()
+	public typealias Value = A
+	public typealias Sink = (A) -> ()
 
 	private let atomicSinks: Atomic<Bag<Sink>> = Atomic(Bag())
 	private let disposable: ScopedDisposable
 
-	public init(@noescape generator: Sink -> Disposable?) {
+	public init(generator: (Sink) -> Disposable?) {
 
 		let sendLock = NSLock()
 		sendLock.name = "com.github.P0ed.Fx"
@@ -40,16 +40,16 @@ public final class Stream<A>: StreamType {
 		get { return self.map(const()) }
 	}
 
-	public func observe(sink: Sink) -> Disposable {
+	public func observe(_ sink: @escaping (A) -> ()) -> Disposable {
 		var token: RemovalToken!
-		atomicSinks.modify {
+		_ = atomicSinks.modify {
 			var sinks = $0
 			token = sinks.insert(sink)
 			return sinks
 		}
 
 		return ActionDisposable {
-			self.atomicSinks.modify {
+			_ = self.atomicSinks.modify {
 				var sinks = $0
 				sinks.removeValueForToken(token)
 				return sinks
@@ -68,15 +68,15 @@ public final class Stream<A>: StreamType {
 	}
 }
 
-public extension StreamType {
+public extension Stream {
 
-	public func map<B>(f: A -> B) -> Stream<B> {
+	public func map<B>(_ f: @escaping (A) -> B) -> Stream<B> {
 		return Stream<B> { sink in
 			observe § sink • f
 		}
 	}
 
-	public func filter(f: A -> Bool) -> Stream<A> {
+	public func filter(_ f: @escaping (A) -> Bool) -> Stream<A> {
 		return Stream<A> { sink in
 			observe { value in
 				if f(value) {
@@ -86,7 +86,7 @@ public extension StreamType {
 		}
 	}
 
-	public func merge(stream: Stream<A>) -> Stream<A> {
+	public func merge(_ stream: Stream<Value>) -> Stream<Value> {
 		return Stream<A> { sink in
 			let disposable = CompositeDisposable()
 			disposable += observe(sink)
@@ -95,7 +95,7 @@ public extension StreamType {
 		}
 	}
 
-	public func combineLatest<B>(stream: Stream<B>) -> Stream<(A, B)> {
+	public func combineLatest<B>(_ stream: Stream<B>) -> Stream<(Value, B)> {
 		return Stream<(A, B)> { sink in
 			let disposable = CompositeDisposable()
 			var lastSelf: A? = nil
@@ -118,7 +118,7 @@ public extension StreamType {
 		}
 	}
 
-	public func zip<B>(stream: Stream<B>) -> Stream<(A, B)> {
+	public func zip<B>(_ stream: Stream<B>) -> Stream<(A, B)> {
 		return Stream<(A, B)> { sink in
 			let disposable = CompositeDisposable()
 			var selfValues: [A] = []
@@ -146,9 +146,9 @@ public extension StreamType {
 	}
 }
 
-public extension StreamType where A: OptionalType {
+public extension StreamType where Value: OptionalType {
 
-	public func flatten() -> Stream<A.A> {
+	public func flatten() -> Stream<Value.A> {
 		return Stream { sink in
 			observe { value in
 				if let value = value.optional {
@@ -159,9 +159,9 @@ public extension StreamType where A: OptionalType {
 	}
 }
 
-public extension StreamType where A: StreamType {
+public extension StreamType where Value: StreamType {
 
-	public func flatten() -> Stream<A.A> {
+	public func flatten() -> Stream<Value.Value> {
 		return Stream { sink in
 			let disposable = CompositeDisposable()
 			disposable += observe { value in
@@ -172,22 +172,22 @@ public extension StreamType where A: StreamType {
 	}
 }
 
-public extension StreamType {
+public extension Stream {
 
-	public func flatMap<B>(f: A -> B?) -> Stream<B> {
+	public func flatMap<B>(_ f: @escaping (A) -> B?) -> Stream<B> {
 		return map(f).flatten()
 	}
 
-	public func flatMap<B>(f: A -> Stream<B>) -> Stream<B> {
+	public func flatMap<B>(_ f: @escaping (A) -> Stream<B>) -> Stream<B> {
 		return map(f).flatten()
 	}
 }
 
-public extension StreamType where A: Equatable {
+public extension StreamType where Value: Equatable {
 
-	public func distinctUntilChanged() -> Stream<A> {
-		return Stream<A> { sink in
-			var lastValue: A? = nil
+	public func distinctUntilChanged() -> Stream<Value> {
+		return Stream<Value> { sink in
+			var lastValue: Value? = nil
 			return observe { value in
 				if lastValue == nil || lastValue! != value {
 					lastValue = value
