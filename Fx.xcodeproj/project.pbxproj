@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5F288EB11D801A910026296A /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F288EB01D801A910026296A /* Array.swift */; };
+		5F288EB21D801B240026296A /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F288EB01D801A910026296A /* Array.swift */; };
+		5F288EB31D801B250026296A /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F288EB01D801A910026296A /* Array.swift */; };
 		5F98858A1D7EF8FE00748240 /* Weak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB5C45A1D5C6D9400BA78A3 /* Weak.swift */; };
 		5F98858B1D7EF8FF00748240 /* Weak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB5C45A1D5C6D9400BA78A3 /* Weak.swift */; };
 		5FB5C45B1D5C6D9400BA78A3 /* Weak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB5C45A1D5C6D9400BA78A3 /* Weak.swift */; };
@@ -65,6 +68,7 @@
 
 /* Begin PBXFileReference section */
 		5F0E2ABF1D107BC5005EA377 /* OptionalType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionalType.swift; sourceTree = "<group>"; };
+		5F288EB01D801A910026296A /* Array.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		5F2D896D1D534263000DC80A /* Bool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bool.swift; sourceTree = "<group>"; };
 		5F2D89711D534AF0000DC80A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		5F2D89731D534B1B000DC80A /* Fx.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Fx.podspec; sourceTree = SOURCE_ROOT; };
@@ -172,6 +176,7 @@
 				5F796E821D05CB4D00B8A7AC /* Operators.swift */,
 				5F796E7A1D05CB4D00B8A7AC /* Application+Composition.swift */,
 				5F796E831D05CB4D00B8A7AC /* Optional.swift */,
+				5F288EB01D801A910026296A /* Array.swift */,
 			);
 			name = Operators;
 			sourceTree = "<group>";
@@ -396,6 +401,7 @@
 				5FD28AA11D5B27C100BAFC0F /* Operators.swift in Sources */,
 				5FD28A9D1D5B27C100BAFC0F /* Functions.swift in Sources */,
 				5FD28AA61D5B27C100BAFC0F /* Atomic.swift in Sources */,
+				5F288EB11D801A910026296A /* Array.swift in Sources */,
 				5FD28AA31D5B27C100BAFC0F /* Optional.swift in Sources */,
 				5FB5C45B1D5C6D9400BA78A3 /* Weak.swift in Sources */,
 				5FD28ACF1D5B27C800BAFC0F /* Bool.swift in Sources */,
@@ -420,6 +426,7 @@
 				5FD28AC11D5B27C200BAFC0F /* Operators.swift in Sources */,
 				5FD28ABD1D5B27C200BAFC0F /* Functions.swift in Sources */,
 				5FD28AC61D5B27C200BAFC0F /* Atomic.swift in Sources */,
+				5F288EB21D801B240026296A /* Array.swift in Sources */,
 				5FD28AC31D5B27C200BAFC0F /* Optional.swift in Sources */,
 				5F98858B1D7EF8FF00748240 /* Weak.swift in Sources */,
 				5FD28ACE1D5B27C700BAFC0F /* Bool.swift in Sources */,
@@ -444,6 +451,7 @@
 				5FD28AB11D5B27C200BAFC0F /* Operators.swift in Sources */,
 				5FD28AAD1D5B27C200BAFC0F /* Functions.swift in Sources */,
 				5FD28AB61D5B27C200BAFC0F /* Atomic.swift in Sources */,
+				5F288EB31D801B250026296A /* Array.swift in Sources */,
 				5FD28AB31D5B27C200BAFC0F /* Optional.swift in Sources */,
 				5F98858A1D7EF8FE00748240 /* Weak.swift in Sources */,
 				5FD28ACD1D5B27C700BAFC0F /* Bool.swift in Sources */,

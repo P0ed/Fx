@@ -1,4 +1,3 @@
-
 precedencegroup MonadicPrecedenceRight {
     associativity: right
     lowerThan: LogicalDisjunctionPrecedence
