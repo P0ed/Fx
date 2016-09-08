@@ -15,7 +15,7 @@ public final class Stream<A>: StreamType {
 	private let atomicSinks: Atomic<Bag<Sink>> = Atomic(Bag())
 	private let disposable: ScopedDisposable
 
-	public init(generator: (Sink) -> Disposable?) {
+	public init(generator: (@escaping Sink) -> Disposable?) {
 
 		let sendLock = NSLock()
 		sendLock.name = "com.github.P0ed.Fx"
