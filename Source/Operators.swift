@@ -41,3 +41,7 @@ infix operator <*> : ApplicativePrecedenceLeft
 /// flatMap
 infix operator -<< : MonadicPrecedenceRight
 infix operator >>- : MonadicPrecedenceLeft
+
+/// Monadic composition
+infix operator <-< : MonadicPrecedenceRight
+infix operator >-> : MonadicPrecedenceRight
