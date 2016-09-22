@@ -37,7 +37,7 @@ public struct MutableProperty<A>: PropertyType {
 		get {
 			return getter()
 		}
-		set {
+		nonmutating set {
 			setter(newValue)
 		}
 	}
