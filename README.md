@@ -4,7 +4,7 @@
 This is a Swift framework providing a number of functions and types that I miss in Swift standard library.
 
 ## Types:
-#### `Stream`
+#### `Signal`
 #### `Command`
 #### `Property`
 #### `Shared`

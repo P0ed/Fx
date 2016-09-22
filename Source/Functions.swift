@@ -1,4 +1,3 @@
-
 /// The identity function; returns its argument.
 public func id<A>(_ x: A) -> A {
 	return x
@@ -7,11 +6,6 @@ public func id<A>(_ x: A) -> A {
 /// Returns a function which ignores its argument and returns `x` instead.
 public func const<A, B>(_ x: B) -> (A) -> B {
 	return { _ in x }
-}
-
-/// Prints x
-public func log<A>(_ x: A) {
-	print(x)
 }
 
 /// Converts (A, B) -> C func into (B, A) -> C
@@ -32,4 +26,9 @@ public func ignoreInput<A, B>(_ f: @escaping () -> B) -> (A) -> B {
 /// Converts A -> B func into A -> () by ignoring result
 public func ignoreOutput<A, B>(_ f: @escaping (A) -> B) -> (A) -> () {
 	return { x in _ = f(x) }
+}
+
+/// Binds arguments to function
+public func bind<A, B>(_ f: @escaping (A) -> B, x: A) -> () -> B {
+	return { f(x) }
 }

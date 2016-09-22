@@ -2,7 +2,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'Fx'
-  s.version          = '0.1.0'
+  s.version          = '0.7'
   s.summary          = 'This is a Swift framework providing a number of functions and types that I miss in Swift standard library.'
   #s.description      = ''
 
@@ -11,10 +11,9 @@ Pod::Spec.new do |s|
   s.author           = { 'Konstantin Sukharev' => 'poed@me.com' }
   s.source           = { :git => 'https://github.com/P0ed/Fx.git', :tag => s.version.to_s }
 
+  s.compiler_flags = '-whole-module-optimization'
   s.ios.deployment_target = '8.0'
   s.source_files = 'Source/*'
 
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
+  # s.dependency 'Runes', :git => 'https://github.com/thoughtbot/Runes', :branch => 'master'
 end

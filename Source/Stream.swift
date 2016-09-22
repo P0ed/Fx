@@ -1,14 +1,12 @@
 import Foundation.NSLock
 
-public typealias Signal = Stream<Void>
-
-public protocol StreamType {
+public protocol SignalType {
 	associatedtype Value
 
 	func observe(_ sink: @escaping (Value) -> ()) -> Disposable
 }
 
-public final class Stream<A>: StreamType {
+public final class Signal<A>: SignalType {
 	public typealias Value = A
 	public typealias Sink = (A) -> ()
 
@@ -36,7 +34,7 @@ public final class Stream<A>: StreamType {
 		generatorDisposable.innerDisposable = generator(sink)
 	}
 
-	public var signal: Signal {
+	public var asVoid: Signal<Void> {
 		get { return self.map(const()) }
 	}
 
@@ -57,27 +55,27 @@ public final class Stream<A>: StreamType {
 		}
 	}
 
-	public static func pipe() -> (Stream, Sink) {
+	public static func pipe() -> (Signal, Sink) {
 		var sink: Sink!
-		let stream = Stream {
+		let signal = Signal {
 			sink = $0
 			return nil
 		}
 
-		return (stream, sink)
+		return (signal, sink)
 	}
 }
 
-public extension Stream {
+public extension Signal {
 
-	public func map<B>(_ f: @escaping (A) -> B) -> Stream<B> {
-		return Stream<B> { sink in
+	public func map<B>(_ f: @escaping (A) -> B) -> Signal<B> {
+		return Signal<B> { sink in
 			observe § sink • f
 		}
 	}
 
-	public func filter(_ f: @escaping (A) -> Bool) -> Stream<A> {
-		return Stream<A> { sink in
+	public func filter(_ f: @escaping (A) -> Bool) -> Signal<A> {
+		return Signal<A> { sink in
 			observe { value in
 				if f(value) {
 					sink(value)
@@ -86,17 +84,17 @@ public extension Stream {
 		}
 	}
 
-	public func merge(_ stream: Stream<Value>) -> Stream<Value> {
-		return Stream<A> { sink in
+	public func merge(_ signal: Signal<Value>) -> Signal<Value> {
+		return Signal<A> { sink in
 			let disposable = CompositeDisposable()
 			disposable += observe(sink)
-			disposable += stream.observe(sink)
+			disposable += signal.observe(sink)
 			return disposable
 		}
 	}
 
-	public func combineLatest<B>(_ stream: Stream<B>) -> Stream<(Value, B)> {
-		return Stream<(A, B)> { sink in
+	public func combineLatest<B>(_ signal: Signal<B>) -> Signal<(Value, B)> {
+		return Signal<(A, B)> { sink in
 			let disposable = CompositeDisposable()
 			var lastSelf: A? = nil
 			var lastOther: B? = nil
@@ -107,7 +105,7 @@ public extension Stream {
 					sink(value, lastOther)
 				}
 			}
-			disposable += stream.observe { value in
+			disposable += signal.observe { value in
 				lastOther = value
 				if let lastSelf = lastSelf {
 					sink(lastSelf, value)
@@ -118,8 +116,8 @@ public extension Stream {
 		}
 	}
 
-	public func zip<B>(_ stream: Stream<B>) -> Stream<(A, B)> {
-		return Stream<(A, B)> { sink in
+	public func zip<B>(_ signal: Signal<B>) -> Signal<(A, B)> {
+		return Signal<(A, B)> { sink in
 			let disposable = CompositeDisposable()
 			var selfValues: [A] = []
 			var otherValues: [B] = []
@@ -136,7 +134,7 @@ public extension Stream {
 				selfValues.append(value)
 				sendIfNeeded()
 			}
-			disposable += stream.observe { value in
+			disposable += signal.observe { value in
 				otherValues.append(value)
 				sendIfNeeded()
 			}
@@ -146,10 +144,10 @@ public extension Stream {
 	}
 }
 
-public extension StreamType where Value: OptionalType {
+public extension SignalType where Value: OptionalType {
 
-	public func flatten() -> Stream<Value.A> {
-		return Stream { sink in
+	public func flatten() -> Signal<Value.A> {
+		return Signal { sink in
 			observe { value in
 				if let value = value.optional {
 					sink(value)
@@ -159,10 +157,10 @@ public extension StreamType where Value: OptionalType {
 	}
 }
 
-public extension StreamType where Value: StreamType {
+public extension SignalType where Value: SignalType {
 
-	public func flatten() -> Stream<Value.Value> {
-		return Stream { sink in
+	public func flatten() -> Signal<Value.Value> {
+		return Signal { sink in
 			let disposable = CompositeDisposable()
 			disposable += observe { value in
 				disposable += value.observe(sink)
@@ -172,21 +170,21 @@ public extension StreamType where Value: StreamType {
 	}
 }
 
-public extension Stream {
+public extension Signal {
 
-	public func flatMap<B>(_ f: @escaping (A) -> B?) -> Stream<B> {
+	public func flatMap<B>(_ f: @escaping (A) -> B?) -> Signal<B> {
 		return map(f).flatten()
 	}
 
-	public func flatMap<B>(_ f: @escaping (A) -> Stream<B>) -> Stream<B> {
+	public func flatMap<B>(_ f: @escaping (A) -> Signal<B>) -> Signal<B> {
 		return map(f).flatten()
 	}
 }
 
-public extension StreamType where Value: Equatable {
+public extension SignalType where Value: Equatable {
 
-	public func distinctUntilChanged() -> Stream<Value> {
-		return Stream<Value> { sink in
+	public func distinctUntilChanged() -> Signal<Value> {
+		return Signal<Value> { sink in
 			var lastValue: Value? = nil
 			return observe { value in
 				if lastValue == nil || lastValue! != value {
