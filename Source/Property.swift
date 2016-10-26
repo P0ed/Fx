@@ -6,8 +6,8 @@ public protocol PropertyType {
 
 public struct Property<A>: PropertyType {
 
-	fileprivate let _value: () -> A
-	fileprivate let _signal: () -> Signal<A>
+	private let _value: () -> A
+	private let _signal: () -> Signal<A>
 
 	public var value: A {
 		return _value()
@@ -21,7 +21,7 @@ public struct Property<A>: PropertyType {
 		_signal = { property.signal }
 	}
 
-	init(value: A, signal: Signal<A>) {
+	public init(value: A, signal: Signal<A>) {
 		let property = MutableProperty(value)
 		_ = property.bind(signal)
 		self.init(property: property)
@@ -30,8 +30,8 @@ public struct Property<A>: PropertyType {
 
 public struct MutableProperty<A>: PropertyType {
 
-	fileprivate let getter: () -> A
-	fileprivate let setter: (A) -> ()
+	private let getter: () -> A
+	private let setter: (A) -> ()
 
 	public var value: A {
 		get {
