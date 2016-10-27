@@ -22,9 +22,10 @@ public struct Property<A>: PropertyType {
 	}
 
 	public init(value: A, signal: Signal<A>) {
-		let property = MutableProperty(value)
-		_ = property.bind(signal)
-		self.init(property: property)
+		var storage = value
+		_value = { storage }
+		_signal = { signal }
+		_ = signal.observe { storage = $0 }
 	}
 }
 
