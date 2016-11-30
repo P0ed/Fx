@@ -63,6 +63,29 @@ public struct MutableProperty<A>: PropertyType {
 	}
 }
 
+public final class FoldableProperty<A>: PropertyType {
+
+	private let state: MutableProperty<A>
+	private var fold: (A) -> A = id
+
+	public var value: A{
+		get { return state.value }
+		set { state.value = fold § newValue }
+	}
+
+	public var signal: Signal<A> {
+		return state.signal
+	}
+
+	public init(_ value: A) {
+		state = MutableProperty(value)
+	}
+
+	public func addReducer(_ f: @escaping (A) -> A) {
+		fold = f • fold
+	}
+}
+
 public extension PropertyType {
 
 	public func observe(_ sink: @escaping (A) -> ()) -> Disposable {
