@@ -27,7 +27,7 @@ public final class Promise<A>: PromiseType {
 	public init(generator: (@escaping Sink<Result<A>>) -> Void) {
 		generator { result in
 			guard self.result == nil else {
-				return assert(false, "Attempted to completed an Async that is already completed")
+				return assert(false, "Attempted to complete a Promise that is already completed")
 			}
 			self.result = result
 		}

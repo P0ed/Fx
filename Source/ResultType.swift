@@ -32,7 +32,7 @@ public extension ResultType {
 	}
 }
 
-extension ResultType {
+public extension ResultType {
 
 	@discardableResult
 	func onSuccess(_ f: Sink<Value>) -> Result<Value> {
