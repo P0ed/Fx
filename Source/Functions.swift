@@ -39,3 +39,9 @@ public func ignoreOutput<A, B>(_ f: @escaping (A) -> B) -> (A) -> () {
 public func bind<A, B>(_ f: @escaping (A) -> B, x: A) -> () -> B {
 	return { f(x) }
 }
+
+/// Alias for withExtendedLifetime function
+@_transparent
+public func capture(_ value: Any) {
+	withExtendedLifetime(value, {})
+}
