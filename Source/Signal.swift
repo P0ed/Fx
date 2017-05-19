@@ -1,19 +1,12 @@
 import Foundation.NSLock
 
-public protocol SignalType {
-	associatedtype Value
-
-	func observe(_ sink: @escaping (Value) -> ()) -> Disposable
-}
-
 public final class Signal<A>: SignalType {
 	public typealias Value = A
-	public typealias Sink = (A) -> ()
 
-	private let atomicSinks: Atomic<Bag<Sink>> = Atomic(Bag())
+	private let atomicSinks: Atomic<Bag<Sink<A>>> = Atomic(Bag())
 	private let disposable: ScopedDisposable
 
-	public init(generator: (@escaping Sink) -> Disposable?) {
+	public init(generator: (@escaping Sink<A>) -> Disposable?) {
 
 		let sendLock = NSLock()
 		sendLock.name = "com.github.P0ed.Fx"
@@ -21,7 +14,7 @@ public final class Signal<A>: SignalType {
 		let generatorDisposable = SerialDisposable()
 		disposable = ScopedDisposable(generatorDisposable)
 
-		let sink: Sink = { [weak self] value in
+		let sink: Sink<A> = { [weak self] value in
 			guard let welf = self else { return }
 
 			sendLock.lock()
@@ -38,7 +31,7 @@ public final class Signal<A>: SignalType {
 		get { return self.map(const()) }
 	}
 
-	public func observe(_ sink: @escaping (A) -> ()) -> Disposable {
+	public func observe(_ sink: @escaping Sink<A>) -> Disposable {
 		var token: RemovalToken!
 		_ = atomicSinks.modify {
 			var sinks = $0
@@ -55,8 +48,8 @@ public final class Signal<A>: SignalType {
 		}
 	}
 
-	public static func pipe() -> (Signal, Sink) {
-		var sink: Sink!
+	public static func pipe() -> (Signal, Sink<A>) {
+		var sink: Sink<A>!
 		let signal = Signal {
 			sink = $0
 			return nil
@@ -178,20 +171,5 @@ public extension Signal {
 
 	public func flatMap<B>(_ f: @escaping (A) -> Signal<B>) -> Signal<B> {
 		return map(f).flatten()
-	}
-}
-
-public extension SignalType where Value: Equatable {
-
-	public func distinctUntilChanged() -> Signal<Value> {
-		return Signal<Value> { sink in
-			var lastValue: Value? = nil
-			return observe { value in
-				if lastValue == nil || lastValue! != value {
-					lastValue = value
-					sink(value)
-				}
-			}
-		}
 	}
 }
