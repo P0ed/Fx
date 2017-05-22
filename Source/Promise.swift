@@ -70,37 +70,37 @@ public final class Promise<A>: PromiseType {
 
 public extension Promise {
 
-	public static func pending() -> (Promise<A>, Sink<Result<A>>) {
+	static func pending() -> (Promise<A>, Sink<Result<A>>) {
 		var resolve: Sink<Result<A>>!
 		let promise = Promise { resolve = $0 }
 		return (promise, resolve)
 	}
 
-	public convenience init(value: A) {
+	convenience init(value: A) {
 		self.init(result: .value(value))
 	}
 
-	public convenience init(error: Error) {
+	convenience init(error: Error) {
 		self.init(result: .error(error))
 	}
 
-	public var isCompleted: Bool {
+	var isCompleted: Bool {
 		return result != nil
 	}
 
-	public var isSuccess: Bool {
+	var isSuccess: Bool {
 		return result?.analysis(ifSuccess: const(true), ifFailure: const(false)) ?? false
 	}
 
-	public var isFailure: Bool {
+	var isFailure: Bool {
 		return result?.analysis(ifSuccess: const(false), ifFailure: const(true)) ?? false
 	}
 
-	public var value: A? {
+	var value: A? {
 		return result?.value
 	}
 
-	public var error: Error? {
+	var error: Error? {
 		return result?.error
 	}
 }
