@@ -4,7 +4,7 @@ public protocol ResultType {
 	var value: Value? { get }
 	var error: Error? { get }
 
-	func analysis<U>(ifSuccess: (Value) -> U, ifFailure: (Error) -> U) -> U
+	func analysis<B>(ifSuccess: (Value) -> B, ifFailure: (Error) -> B) -> B
 }
 
 public extension ResultType {
@@ -29,6 +29,10 @@ public extension ResultType {
 
 	func flatMap<B>(_ f: (Value) -> Result<B>) -> Result<B>	{
 		return analysis(ifSuccess: f, ifFailure: Result.error)
+	}
+
+	func tryMap<B>(_ f: (Value) throws -> B) -> Result<B> {
+		return flatMap { value in Result { try f(value) } }
 	}
 }
 

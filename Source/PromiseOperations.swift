@@ -33,8 +33,10 @@ public extension PromiseType {
 	}
 
 	func flatMap<B>(_ context: ExecutionContext, f: @escaping (Value) -> Result<B>) -> Promise<B> {
-		return flatMap(context) { value in
-			Promise<B>(result: f(value))
+		return Promise { resolve in
+			onComplete(context) { result in
+				resolve § result.flatMap(f)
+			}
 		}
 	}
 
@@ -49,6 +51,18 @@ public extension PromiseType {
 					ifSuccess: { $0.onComplete(context, callback: resolve) },
 					ifFailure: { resolve(.error($0)) }
 				)
+			}
+		}
+	}
+
+	func tryMap<B>(_ f: @escaping (Value) throws -> B) -> Promise<B> {
+		return tryMap(.default(), f: f)
+	}
+
+	func tryMap<B>(_ context: ExecutionContext, f: @escaping (Value) throws -> B) -> Promise<B> {
+		return Promise { resolve in
+			onComplete(context) { result in
+				resolve § result.tryMap(f)
 			}
 		}
 	}
