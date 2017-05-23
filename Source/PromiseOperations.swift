@@ -67,10 +67,19 @@ public extension PromiseType {
 		}
 	}
 
-	func recover(context: ExecutionContext = .default(), task: @escaping (Error) -> Value) -> Promise<Value> {
+	func recover(context: ExecutionContext = .default(), f: @escaping (Error) -> Value) -> Promise<Value> {
 		return Promise { resolve in
 			onComplete(context) { result in
-				resolve • Result.value § result.analysis(ifSuccess: id, ifFailure: task)
+				resolve • Result.value § result.analysis(ifSuccess: id, ifFailure: f)
+			}
+		}
+	}
+
+	func recover(context: ExecutionContext = .default(), f: @escaping (Error) -> Promise<Value>) -> Promise<Value> {
+		return Promise { resolve in
+			onComplete(context) { result in
+				result.analysis(ifSuccess: Promise.init(value:), ifFailure: f)
+					.onComplete(.immediate, callback: resolve)
 			}
 		}
 	}
