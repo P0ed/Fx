@@ -1,3 +1,4 @@
-public typealias Sink<T> = (T) -> ()
-public typealias FilterFunc<T> = (T) -> Bool
+public typealias Sink<A> = (A) -> ()
+public typealias ResultSink<A> = Sink<Result<A>>
+public typealias FilterFunc<A> = (A) -> Bool
 public typealias VoidFunc = () -> ()

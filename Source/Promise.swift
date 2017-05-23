@@ -18,13 +18,13 @@ public final class Promise<A>: PromiseType {
 
 	private let queue = DispatchQueue(label: "Internal Promises Queue")
 	private let callbackExecutionSemaphore = DispatchSemaphore(value: 1);
-	private var callbacks = [Sink<Result<A>>]()
+	private var callbacks = [ResultSink<A>]()
 
 	public init(result: Result<A>) {
 		self.result = result
 	}
 
-	public init(generator: (@escaping Sink<Result<A>>) -> Void) {
+	public init(generator: (@escaping ResultSink<A>) -> Void) {
 		generator { result in
 			guard self.result == nil else {
 				return assert(false, "Attempted to complete a Promise that is already completed")
@@ -34,8 +34,8 @@ public final class Promise<A>: PromiseType {
 	}
 
 	@discardableResult
-	public func onComplete(_ context: ExecutionContext = .default(), callback: @escaping Sink<Result<A>>) -> Self {
-		let wrappedCallback: Sink<Result<A>> = { [weak self] value in
+	public func onComplete(_ context: ExecutionContext = .default(), callback: @escaping ResultSink<A>) -> Self {
+		let wrappedCallback: ResultSink<A> = { [weak self] value in
 			let welf = self
 			context.run {
 				welf?.callbackExecutionSemaphore.context.run {
@@ -70,8 +70,8 @@ public final class Promise<A>: PromiseType {
 
 public extension Promise {
 
-	static func pending() -> (Promise<A>, Sink<Result<A>>) {
-		var resolve: Sink<Result<A>>!
+	static func pending() -> (Promise<A>, ResultSink<A>) {
+		var resolve: ResultSink<A>!
 		let promise = Promise { resolve = $0 }
 		return (promise, resolve)
 	}
