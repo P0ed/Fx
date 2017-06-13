@@ -27,10 +27,6 @@ public final class Signal<A>: SignalType {
 		generatorDisposable.innerDisposable = generator(sink)
 	}
 
-	public var asVoid: Signal<Void> {
-		get { return self.map(const()) }
-	}
-
 	public func observe(_ sink: @escaping Sink<A>) -> Disposable {
 		var token: RemovalToken!
 		_ = atomicSinks.modify {
@@ -61,13 +57,17 @@ public final class Signal<A>: SignalType {
 
 public extension Signal {
 
-	public func map<B>(_ f: @escaping (A) -> B) -> Signal<B> {
+	var asVoid: Signal<Void> {
+		return map(const())
+	}
+
+	func map<B>(_ f: @escaping (A) -> B) -> Signal<B> {
 		return Signal<B> { sink in
 			observe § sink • f
 		}
 	}
 
-	public func filter(_ f: @escaping (A) -> Bool) -> Signal<A> {
+	func filter(_ f: @escaping (A) -> Bool) -> Signal<A> {
 		return Signal<A> { sink in
 			observe { value in
 				if f(value) {
@@ -77,7 +77,7 @@ public extension Signal {
 		}
 	}
 
-	public func merge(_ signal: Signal<Value>) -> Signal<Value> {
+	func merge(_ signal: Signal<Value>) -> Signal<Value> {
 		return Signal<A> { sink in
 			let disposable = CompositeDisposable()
 			disposable += observe(sink)
@@ -86,7 +86,7 @@ public extension Signal {
 		}
 	}
 
-	public func combineLatest<B>(_ signal: Signal<B>) -> Signal<(Value, B)> {
+	func combineLatest<B>(_ signal: Signal<B>) -> Signal<(Value, B)> {
 		return Signal<(A, B)> { sink in
 			let disposable = CompositeDisposable()
 			var lastSelf: A? = nil
@@ -109,7 +109,7 @@ public extension Signal {
 		}
 	}
 
-	public func zip<B>(_ signal: Signal<B>) -> Signal<(A, B)> {
+	func zip<B>(_ signal: Signal<B>) -> Signal<(A, B)> {
 		return Signal<(A, B)> { sink in
 			let disposable = CompositeDisposable()
 			var selfValues: [A] = []
@@ -139,7 +139,7 @@ public extension Signal {
 
 public extension SignalType where Value: OptionalType {
 
-	public func flatten() -> Signal<Value.A> {
+	func flatten() -> Signal<Value.A> {
 		return Signal { sink in
 			observe { value in
 				if let value = value.optional {
@@ -152,7 +152,7 @@ public extension SignalType where Value: OptionalType {
 
 public extension SignalType where Value: SignalType {
 
-	public func flatten() -> Signal<Value.Value> {
+	func flatten() -> Signal<Value.Value> {
 		return Signal { sink in
 			let disposable = CompositeDisposable()
 			disposable += observe { value in
@@ -163,13 +163,28 @@ public extension SignalType where Value: SignalType {
 	}
 }
 
+public extension SignalType where Value: PromiseType {
+
+	func flatten() -> Signal<Value.Value> {
+		return Signal { sink in
+			observe { promise in
+				promise.onSuccess(callback: sink)
+			}
+		}
+	}
+}
+
 public extension Signal {
 
-	public func flatMap<B>(_ f: @escaping (A) -> B?) -> Signal<B> {
+	func flatMap<B>(_ f: @escaping (A) -> B?) -> Signal<B> {
 		return map(f).flatten()
 	}
 
-	public func flatMap<B>(_ f: @escaping (A) -> Signal<B>) -> Signal<B> {
+	func flatMap<B>(_ f: @escaping (A) -> Signal<B>) -> Signal<B> {
+		return map(f).flatten()
+	}
+
+	func flatMap<B>(_ f: @escaping (A) -> Promise<B>) -> Signal<B> {
 		return map(f).flatten()
 	}
 }
