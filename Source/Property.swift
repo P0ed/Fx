@@ -4,7 +4,7 @@ public protocol PropertyType {
 	var signal: Signal<A> { get }
 }
 
-public struct Property<A>: PropertyType {
+public final class Property<A>: PropertyType {
 
 	private let _value: () -> A
 	private let _signal: () -> Signal<A>
@@ -29,7 +29,7 @@ public struct Property<A>: PropertyType {
 	}
 }
 
-public struct MutableProperty<A>: PropertyType {
+public final class MutableProperty<A>: PropertyType {
 
 	private let getter: () -> A
 	private let setter: (A) -> ()
@@ -38,7 +38,7 @@ public struct MutableProperty<A>: PropertyType {
 		get {
 			return getter()
 		}
-		nonmutating set {
+		set {
 			setter(newValue)
 		}
 	}
