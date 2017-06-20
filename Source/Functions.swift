@@ -53,3 +53,11 @@ public func modify<A>(_ value: inout A, f: (inout A) -> ()) {
 	f(&copy)
 	value = copy
 }
+
+/// Returns mutated copy of value
+@_transparent
+public func modifyCopy<A>(_ value: A, f: (inout A) -> ()) -> A {
+	var copy = value
+	f(&copy)
+	return copy
+}
