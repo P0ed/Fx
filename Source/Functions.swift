@@ -45,3 +45,11 @@ public func bind<A, B>(_ f: @escaping (A) -> B, x: A) -> () -> B {
 public func capture(_ value: Any) {
 	withExtendedLifetime(value, {})
 }
+
+/// Atomically mutates value
+@_transparent
+public func modify<A>(_ value: inout A, f: (inout A) -> ()) {
+	var copy = value
+	f(&copy)
+	value = copy
+}
