@@ -8,7 +8,7 @@ public struct ExecutionContext {
 
 public extension ExecutionContext {
 
-	/// Defines BrightFutures' default threading behavior:
+	/// Defines default threading behavior:
 	/// - if on the main thread, `DispatchQueue.main.context` is returned
 	/// - if off the main thread, `DispatchQueue.global().context` is returned
 	static var `default`: () -> ExecutionContext = {
