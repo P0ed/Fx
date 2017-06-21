@@ -12,8 +12,14 @@ public extension ExecutionContext {
 	/// - if on the main thread, `DispatchQueue.main.context` is returned
 	/// - if off the main thread, `DispatchQueue.global().context` is returned
 	static var `default`: () -> ExecutionContext = {
-		(Thread.isMainThread ? DispatchQueue.main : DispatchQueue.global()).context
+		Thread.isMainThread ? .main : .global
 	}
+
+	/// Async on main queue
+	static let main = DispatchQueue.main.context
+
+	/// Async on global queue
+	static let global = DispatchQueue.global().context
 
 	/// Immediately executes the given task. No threading, no semaphores.
 	static let immediate = ExecutionContext(run: { task in
