@@ -59,7 +59,7 @@ The default threading behavior can be overridden by providing explicit execution
 #### `id`
 Identity function same as `{$0}`
 #### `const`
-A constant function. Takes a value and returns a function that returns that value no matter what is is fed.
+A constant function. Takes a value and returns a function that returns that value no matter what it is fed.
 #### `weakify` and `unown`
 ```swift
 let f = unown(self) {$0.handleEvent}
