@@ -43,22 +43,14 @@ public final class Signal<A>: SignalType {
 			}
 		}
 	}
-}
 
-public extension Signal {
-
-	public struct Pipe {
-		public let signal: Signal<A>
-		public let put: Sink<A>
-	}
-
-	public static func pipe() -> Pipe {
+	public static func pipe() -> (signal: Signal<A>, put: Sink<A>) {
 		var put: Sink<A>!
 		let signal = Signal {
 			put = $0
 			return nil
 		}
-		return Pipe(signal: signal, put: put)
+		return (signal: signal, put: put)
 	}
 }
 
