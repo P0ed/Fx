@@ -7,7 +7,7 @@ public protocol PropertyType {
 public final class Property<A>: PropertyType {
 
 	public var value: A {
-		get { return getter() }
+		return getter()
 	}
 	public let signal: Signal<A>
 
@@ -54,7 +54,7 @@ public final class MutableProperty<A>: PropertyType {
 
 public extension PropertyType {
 
-	public func observe(_ sink: @escaping (A) -> ()) -> Disposable {
+	public func observe(_ sink: @escaping Sink<A>) -> Disposable {
 		sink(value)
 		return signal.observe(sink)
 	}
