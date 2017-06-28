@@ -12,13 +12,16 @@ public final class Property<A>: PropertyType {
 	public let signal: Signal<A>
 
 	private let getter: () -> A
-	private let subscription: Disposable
 
 	public init(value: A, signal: Signal<A>) {
 		var storage = value
 		getter = { storage }
-		subscription = signal.observe { storage = $0 }
-		self.signal = signal
+		self.signal = Signal { sink in
+			signal.observe {
+				storage = $0
+				sink($0)
+			}
+		}
 	}
 }
 
