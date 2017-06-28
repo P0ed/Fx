@@ -6,26 +6,19 @@ public protocol PropertyType {
 
 public final class Property<A>: PropertyType {
 
-	private let _value: () -> A
-	private let _signal: () -> Signal<A>
-
 	public var value: A {
-		return _value()
+		get { return getter() }
 	}
-	public var signal: Signal<A> {
-		return _signal()
-	}
+	public let signal: Signal<A>
 
-	init<P: PropertyType>(property: P) where P.A == A {
-		_value = { property.value }
-		_signal = { property.signal }
-	}
+	private let getter: () -> A
+	private let subscription: Disposable
 
 	public init(value: A, signal: Signal<A>) {
 		var storage = value
-		_value = { storage }
-		_signal = { signal }
-		_ = signal.observe { storage = $0 }
+		getter = { storage }
+		subscription = signal.observe { storage = $0 }
+		self.signal = signal
 	}
 }
 
@@ -35,12 +28,8 @@ public final class MutableProperty<A>: PropertyType {
 	private let setter: (A) -> ()
 
 	public var value: A {
-		get {
-			return getter()
-		}
-		set {
-			setter(newValue)
-		}
+		get { return getter() }
+		set { setter(newValue) }
 	}
 
 	public let signal: Signal<A>
