@@ -1,11 +1,3 @@
-//
-//  Bag.swift
-//  ReactiveCocoa
-//
-//  Created by Justin Spahr-Summers on 2014-07-10.
-//  Copyright (c) 2014 GitHub. All rights reserved.
-//
-
 /// A uniquely identifying token for removing a value that was inserted into a
 /// Bag.
 public final class RemovalToken {
@@ -46,7 +38,7 @@ public struct Bag<Element> {
 	/// If the value has already been removed, nothing happens.
 	public mutating func removeValueForToken(_ token: RemovalToken) {
 		if let identifier = token.identifier {
-			// Removal is more likely for recent objects than old ones.
+			/// Removal is more likely for recent objects than old ones.
 			for i in elements.indices.reversed() {
 				if elements[i].identifier == identifier {
 					elements.remove(at: i)

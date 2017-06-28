@@ -4,15 +4,12 @@ public final class Signal<A>: SignalType {
 	public typealias Value = A
 
 	private let atomicSinks: Atomic<Bag<Sink<A>>> = Atomic(Bag())
-	private let disposable: ScopedDisposable
+	private let disposable = SerialDisposable()
 
 	public init(generator: (@escaping Sink<A>) -> Disposable?) {
 
 		let sendLock = NSLock()
 		sendLock.name = "com.github.P0ed.Fx"
-
-		let generatorDisposable = SerialDisposable()
-		disposable = ScopedDisposable(generatorDisposable)
 
 		let sink: Sink<A> = { [weak self] value in
 			guard let welf = self else { return }
@@ -24,22 +21,18 @@ public final class Signal<A>: SignalType {
 			sendLock.unlock()
 		}
 
-		generatorDisposable.innerDisposable = generator(sink)
+		disposable.innerDisposable = generator(sink)
 	}
 
 	public func observe(_ sink: @escaping Sink<A>) -> Disposable {
 		var token: RemovalToken!
-		_ = atomicSinks.modify {
-			var sinks = $0
-			token = sinks.insert(sink)
-			return sinks
+		atomicSinks.modify {
+			token = $0.insert(sink)
 		}
 
 		return ActionDisposable {
-			_ = self.atomicSinks.modify {
-				var sinks = $0
-				sinks.removeValueForToken(token)
-				return sinks
+			self.atomicSinks.modify {
+				$0.removeValueForToken(token)
 			}
 		}
 	}
