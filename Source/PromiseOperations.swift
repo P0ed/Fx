@@ -23,7 +23,7 @@ public extension PromiseType {
 	func map<B>(_ context: ExecutionContext, f: @escaping (Value) -> B) -> Promise<B> {
 		return Promise { resolve in
 			onComplete(context) { result in
-				resolve § result.map(f)
+				resolve(result.map(f))
 			}
 		}
 	}
@@ -35,7 +35,7 @@ public extension PromiseType {
 	func flatMap<B>(_ context: ExecutionContext, f: @escaping (Value) -> Result<B>) -> Promise<B> {
 		return Promise { resolve in
 			onComplete(context) { result in
-				resolve § result.flatMap(f)
+				resolve(result.flatMap(f))
 			}
 		}
 	}
@@ -62,7 +62,7 @@ public extension PromiseType {
 	func tryMap<B>(_ context: ExecutionContext, f: @escaping (Value) throws -> B) -> Promise<B> {
 		return Promise { resolve in
 			onComplete(context) { result in
-				resolve § result.tryMap(f)
+				resolve(result.tryMap(f))
 			}
 		}
 	}
@@ -70,7 +70,7 @@ public extension PromiseType {
 	func recover(context: ExecutionContext = .default(), f: @escaping (Error) -> Value) -> Promise<Value> {
 		return Promise { resolve in
 			onComplete(context) { result in
-				resolve • Result.value § result.analysis(ifSuccess: id, ifFailure: f)
+				resolve(.value(result.analysis(ifSuccess: id, ifFailure: f)))
 			}
 		}
 	}
@@ -91,7 +91,7 @@ public extension PromiseType {
 	func mapError(_ context: ExecutionContext, f: @escaping (Error) -> Error) -> Promise<Value> {
 		return Promise { resolve in
 			onComplete(context) { result in
-				resolve § result.analysis(ifSuccess: Result.value, ifFailure: Result.error • f)
+				resolve(result.analysis(ifSuccess: Result.value, ifFailure: Result.error • f))
 			}
 		}
 	}
@@ -114,10 +114,10 @@ public extension PromiseType where Value: ResultType {
 	func flatten() -> Promise<Value.Value> {
 		return Promise { resolve in
 			onComplete(.immediate) { result in
-				resolve § result.analysis(
+				resolve(result.analysis(
 					ifSuccess: { $0.analysis(ifSuccess: Result.value, ifFailure: Result.error) },
 					ifFailure: Result.error
-				)
+				))
 			}
 		}
 	}
@@ -195,7 +195,7 @@ public extension DispatchQueue {
 	func asyncResult<A>(_ f: @escaping () -> Result<A>) -> Promise<A> {
 		return Promise { resolve in
 			async {
-				resolve § f()
+				resolve(f())
 			}
 		}
 	}
