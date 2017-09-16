@@ -105,7 +105,7 @@ public extension PromiseType {
 	}
 
 	func asVoid() -> Promise<Void> {
-		return self.map(.immediate, f: const())
+		return self.map(.immediate, f: { _ in () })
 	}
 }
 

@@ -19,7 +19,7 @@ public struct Bag<Element> {
 	/// Inserts the given value in the collection, and returns a token that can
 	/// later be passed to removeValueForToken().
 	public mutating func insert(_ value: Element) -> RemovalToken {
-		let (nextIdentifier, overflow) = UInt.addWithOverflow(currentIdentifier, 1)
+		let (nextIdentifier, overflow) = currentIdentifier.addingReportingOverflow(1)
 		if overflow {
 			reindex()
 		}

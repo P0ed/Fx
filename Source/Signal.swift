@@ -50,12 +50,12 @@ public final class Signal<A>: SignalType {
 public extension Signal {
 
 	var asVoid: Signal<Void> {
-		return map(const())
+		return map { _ in () }
 	}
 
 	func map<B>(_ f: @escaping (A) -> B) -> Signal<B> {
 		return Signal<B> { sink in
-			observe § sink • f
+			observe(sink • f)
 		}
 	}
 
@@ -87,13 +87,13 @@ public extension Signal {
 			disposable += observe { value in
 				lastSelf = value
 				if let lastOther = lastOther {
-					sink(value, lastOther)
+					sink((value, lastOther))
 				}
 			}
 			disposable += signal.observe { value in
 				lastOther = value
 				if let lastSelf = lastSelf {
-					sink(lastSelf, value)
+					sink((lastSelf, value))
 				}
 			}
 
@@ -111,7 +111,7 @@ public extension Signal {
 				if selfValues.count > 0 && otherValues.count > 0 {
 					let selfValue = selfValues.removeFirst()
 					let otherValue = otherValues.removeFirst()
-					sink(selfValue, otherValue)
+					sink((selfValue, otherValue))
 				}
 			}
 
