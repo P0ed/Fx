@@ -66,3 +66,37 @@ public extension PropertyType {
 		return Property(value: f(value), signal: signal.map(f))
 	}
 }
+
+public extension Property {
+
+	func mapCombine<B, C>(_ other: Property<B>, _ f: @escaping (A, B) -> C) -> Property<C> {
+		var (a, b) = (value, other.value)
+
+		return Property<C>(
+			value: f(a, b),
+			signal: Signal<C> { sink in
+				let dA = signal.observe { x in
+					a = x
+					sink(f(x, b))
+				}
+				let dB = other.signal.observe { x in
+					b = x
+					sink(f(a, x))
+				}
+
+				return ActionDisposable {
+					dA.dispose()
+					dB.dispose()
+				}
+			}
+		)
+	}
+
+	func combine<B>(_ other: Property<B>) -> Property<(A, B)> {
+		return mapCombine(other) { x, y in (x, y) }
+	}
+
+	func flatCombine<B, C, D>(_ other: Property<D>) -> Property<(B, C, D)> where A == (B, C) {
+		return mapCombine(other, { xy, z in (xy.0, xy.1, z) })
+	}
+}

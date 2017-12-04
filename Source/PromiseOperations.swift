@@ -28,18 +28,6 @@ public extension PromiseType {
 		}
 	}
 
-	func flatMap<B>(_ f: @escaping (Value) -> Result<B>) -> Promise<B> {
-		return flatMap(.default(), f: f)
-	}
-
-	func flatMap<B>(_ context: ExecutionContext, f: @escaping (Value) -> Result<B>) -> Promise<B> {
-		return Promise { resolve in
-			onComplete(context) { result in
-				resolve(result.flatMap(f))
-			}
-		}
-	}
-
 	func flatMap<B>(_ f: @escaping (Value) -> Promise<B>) -> Promise<B> {
 		return flatMap(.default(), f: f)
 	}
@@ -67,7 +55,7 @@ public extension PromiseType {
 		}
 	}
 
-	func recover(context: ExecutionContext = .default(), f: @escaping (Error) -> Value) -> Promise<Value> {
+	func recover(_ context: ExecutionContext = .default(), f: @escaping (Error) -> Value) -> Promise<Value> {
 		return Promise { resolve in
 			onComplete(context) { result in
 				resolve(.value(result.analysis(ifSuccess: id, ifFailure: f)))
@@ -75,7 +63,7 @@ public extension PromiseType {
 		}
 	}
 
-	func recover(context: ExecutionContext = .default(), f: @escaping (Error) -> Promise<Value>) -> Promise<Value> {
+	func recover(_ context: ExecutionContext = .default(), f: @escaping (Error) -> Promise<Value>) -> Promise<Value> {
 		return Promise { resolve in
 			onComplete(context) { result in
 				result.analysis(ifSuccess: Promise.init(value:), ifFailure: f)
@@ -198,5 +186,28 @@ public extension DispatchQueue {
 				resolve(f())
 			}
 		}
+	}
+
+	func promise<A>(_ f: @escaping () throws -> A) -> Promise<A> {
+		return Promise { resolve in
+			async { resolve(Result(f)) }
+		}
+	}
+}
+
+public extension Sequence where Iterator.Element: PromiseType {
+
+	func fold<R>(_ zero: R, f: @escaping (R, Iterator.Element.Value) -> R) -> Promise<R> {
+		return reduce(Promise(value: zero)) { result, element in
+			result.flatMap { resultValue in
+				element.map { elementValue in
+					f(resultValue, elementValue)
+				}
+			}
+		}
+	}
+
+	func all() -> Promise<[Iterator.Element.Value]> {
+		return fold([]) { $0 + [$1] }
 	}
 }
