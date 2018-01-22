@@ -7,13 +7,3 @@ public extension DispatchQueue {
 		})
 	}
 }
-
-public extension DispatchSemaphore {
-	public var context: ExecutionContext {
-		return .init(run: { task in
-			_ = self.wait(timeout: DispatchTime.distantFuture)
-			task()
-			self.signal()
-		})
-	}
-}

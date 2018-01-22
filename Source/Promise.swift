@@ -16,9 +16,8 @@ public final class Promise<A>: PromiseType {
 		didSet { runCallbacks() }
 	}
 
-	private let queue = DispatchQueue(label: "Internal Promises Queue")
-	private let callbackExecutionSemaphore = DispatchSemaphore(value: 1);
-	private var callbacks = [ResultSink<A>]()
+	private let callbackExecutionSemaphore = DispatchSemaphore(value: 1)
+	private let callbacks = Atomic<[ResultSink<A>]>([])
 
 	public init(result: Result<A>) {
 		self.result = result
@@ -35,20 +34,19 @@ public final class Promise<A>: PromiseType {
 
 	@discardableResult
 	public func onComplete(_ context: ExecutionContext = .default(), callback: @escaping ResultSink<A>) -> Self {
-		let wrappedCallback: ResultSink<A> = { [weak self] value in
-			let welf = self
+		let wrappedCallback: ResultSink<A> = { [callbackExecutionSemaphore] result in
 			context.run {
-				welf?.callbackExecutionSemaphore.context.run {
-					callback(value)
-				}
+				callbackExecutionSemaphore.wait()
+				callback(result)
+				callbackExecutionSemaphore.signal()
 			}
 		}
 
-		queue.sync {
-			if let value = self.result {
-				wrappedCallback(value)
+		callbacks.modify { callbacks in
+			if let result = self.result {
+				wrappedCallback(result)
 			} else {
-				self.callbacks.append(wrappedCallback)
+				callbacks.append(wrappedCallback)
 			}
 		}
 
@@ -60,11 +58,16 @@ public final class Promise<A>: PromiseType {
 			return assert(false, "Can only run callbacks on a completed promise")
 		}
 
-		for callback in self.callbacks {
-			callback(result)
+		callbacks.modify { callbacks in
+			for callback in callbacks { callback(result) }
+			callbacks.removeAll()
 		}
+	}
+}
 
-		self.callbacks.removeAll()
+public extension Promise where A == Void {
+	convenience init() {
+		self.init(value: ())
 	}
 }
 
