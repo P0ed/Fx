@@ -7,9 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5F288EB11D801A910026296A /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F288EB01D801A910026296A /* Array.swift */; };
-		5F288EB21D801B240026296A /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F288EB01D801A910026296A /* Array.swift */; };
-		5F288EB31D801B250026296A /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F288EB01D801A910026296A /* Array.swift */; };
 		5F9679951ECDBFCC002EEADD /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9679941ECDBFCC002EEADD /* Result.swift */; };
 		5F9679971ECDBFF4002EEADD /* ResultType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9679961ECDBFF4002EEADD /* ResultType.swift */; };
 		5F9679981ECDCCC7002EEADD /* ResultType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9679961ECDBFF4002EEADD /* ResultType.swift */; };
@@ -28,11 +25,8 @@
 		5F98858A1D7EF8FE00748240 /* Weak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB5C45A1D5C6D9400BA78A3 /* Weak.swift */; };
 		5F98858B1D7EF8FF00748240 /* Weak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB5C45A1D5C6D9400BA78A3 /* Weak.swift */; };
 		5FA7E2951ECDDD8C00DEC12E /* ExecutionContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7E2941ECDDD8C00DEC12E /* ExecutionContext.swift */; };
-		5FA7E2971ECDDFE300DEC12E /* ExecutionContext+Dispatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7E2961ECDDFE300DEC12E /* ExecutionContext+Dispatch.swift */; };
 		5FA7E2981ECDE10900DEC12E /* ExecutionContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7E2941ECDDD8C00DEC12E /* ExecutionContext.swift */; };
-		5FA7E2991ECDE10900DEC12E /* ExecutionContext+Dispatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7E2961ECDDFE300DEC12E /* ExecutionContext+Dispatch.swift */; };
 		5FA7E29A1ECDE10900DEC12E /* ExecutionContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7E2941ECDDD8C00DEC12E /* ExecutionContext.swift */; };
-		5FA7E29B1ECDE10900DEC12E /* ExecutionContext+Dispatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7E2961ECDDFE300DEC12E /* ExecutionContext+Dispatch.swift */; };
 		5FA7E29D1ECDE1A500DEC12E /* PromiseOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7E29C1ECDE1A500DEC12E /* PromiseOperations.swift */; };
 		5FA7E29E1ECDE31300DEC12E /* PromiseOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7E29C1ECDE1A500DEC12E /* PromiseOperations.swift */; };
 		5FA7E29F1ECDE31400DEC12E /* PromiseOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7E29C1ECDE1A500DEC12E /* PromiseOperations.swift */; };
@@ -92,7 +86,6 @@
 
 /* Begin PBXFileReference section */
 		5F0E2ABF1D107BC5005EA377 /* OptionalType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionalType.swift; sourceTree = "<group>"; };
-		5F288EB01D801A910026296A /* Array.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		5F2D896D1D534263000DC80A /* Bool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bool.swift; sourceTree = "<group>"; };
 		5F2D89711D534AF0000DC80A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		5F2D89731D534B1B000DC80A /* Fx.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Fx.podspec; sourceTree = SOURCE_ROOT; };
@@ -115,7 +108,6 @@
 		5F9679A01ECDCE6E002EEADD /* SignalType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignalType.swift; sourceTree = "<group>"; };
 		5F9679A41ECDDA56002EEADD /* Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Promise.swift; sourceTree = "<group>"; };
 		5FA7E2941ECDDD8C00DEC12E /* ExecutionContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExecutionContext.swift; sourceTree = "<group>"; };
-		5FA7E2961ECDDFE300DEC12E /* ExecutionContext+Dispatch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ExecutionContext+Dispatch.swift"; sourceTree = "<group>"; };
 		5FA7E29C1ECDE1A500DEC12E /* PromiseOperations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseOperations.swift; sourceTree = "<group>"; };
 		5FB5C45A1D5C6D9400BA78A3 /* Weak.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Weak.swift; sourceTree = "<group>"; };
 		5FD28A581D5B26A400BAFC0F /* Boxes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Boxes.swift; sourceTree = "<group>"; };
@@ -209,7 +201,6 @@
 				5F796E821D05CB4D00B8A7AC /* Operators.swift */,
 				5F796E7A1D05CB4D00B8A7AC /* Application+Composition.swift */,
 				5F796E831D05CB4D00B8A7AC /* Optional.swift */,
-				5F288EB01D801A910026296A /* Array.swift */,
 			);
 			name = Operators;
 			sourceTree = "<group>";
@@ -259,7 +250,6 @@
 			isa = PBXGroup;
 			children = (
 				5FA7E2941ECDDD8C00DEC12E /* ExecutionContext.swift */,
-				5FA7E2961ECDDFE300DEC12E /* ExecutionContext+Dispatch.swift */,
 			);
 			name = ExecutionContext;
 			sourceTree = "<group>";
@@ -401,7 +391,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = P0ed;
 				TargetAttributes = {
 					5FD28A5E1D5B271600BAFC0F = {
@@ -478,8 +468,6 @@
 				5FD28A9D1D5B27C100BAFC0F /* Functions.swift in Sources */,
 				5F96799D1ECDCDFA002EEADD /* FunctionAliases.swift in Sources */,
 				5FD28AA61D5B27C100BAFC0F /* Atomic.swift in Sources */,
-				5F288EB11D801A910026296A /* Array.swift in Sources */,
-				5FA7E2971ECDDFE300DEC12E /* ExecutionContext+Dispatch.swift in Sources */,
 				5F9679A51ECDDA56002EEADD /* Promise.swift in Sources */,
 				5FD28AA31D5B27C100BAFC0F /* Optional.swift in Sources */,
 				5FB5C45B1D5C6D9400BA78A3 /* Weak.swift in Sources */,
@@ -511,8 +499,6 @@
 				5FD28ABD1D5B27C200BAFC0F /* Functions.swift in Sources */,
 				5F96799E1ECDCDFA002EEADD /* FunctionAliases.swift in Sources */,
 				5FD28AC61D5B27C200BAFC0F /* Atomic.swift in Sources */,
-				5F288EB21D801B240026296A /* Array.swift in Sources */,
-				5FA7E2991ECDE10900DEC12E /* ExecutionContext+Dispatch.swift in Sources */,
 				5F9679A61ECDDA56002EEADD /* Promise.swift in Sources */,
 				5FD28AC31D5B27C200BAFC0F /* Optional.swift in Sources */,
 				5F98858B1D7EF8FF00748240 /* Weak.swift in Sources */,
@@ -544,8 +530,6 @@
 				5FD28AAD1D5B27C200BAFC0F /* Functions.swift in Sources */,
 				5F96799F1ECDCDFA002EEADD /* FunctionAliases.swift in Sources */,
 				5FD28AB61D5B27C200BAFC0F /* Atomic.swift in Sources */,
-				5F288EB31D801B250026296A /* Array.swift in Sources */,
-				5FA7E29B1ECDE10900DEC12E /* ExecutionContext+Dispatch.swift in Sources */,
 				5F9679A71ECDDA56002EEADD /* Promise.swift in Sources */,
 				5FD28AB31D5B27C200BAFC0F /* Optional.swift in Sources */,
 				5F98858A1D7EF8FE00748240 /* Weak.swift in Sources */,
@@ -575,12 +559,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -633,12 +619,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;

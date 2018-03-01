@@ -27,7 +27,7 @@ public struct MutableBox<A> {
 		get {
 			return store.value
 		}
-		nonmutating set(newValue) {
+		nonmutating set {
 			store.value = newValue
 		}
 	}

@@ -36,7 +36,7 @@ public extension PromiseType {
 		return Promise { resolve in
 			onComplete(context) { result in
 				result.map(f).analysis(
-					ifSuccess: { $0.onComplete(context, callback: resolve) },
+					ifSuccess: { $0.onComplete(.sync, callback: resolve) },
 					ifFailure: { resolve(.error($0)) }
 				)
 			}
@@ -67,7 +67,7 @@ public extension PromiseType {
 		return Promise { resolve in
 			onComplete(context) { result in
 				result.analysis(ifSuccess: Promise.init(value:), ifFailure: f)
-					.onComplete(.immediate, callback: resolve)
+					.onComplete(.sync, callback: resolve)
 			}
 		}
 	}
@@ -85,29 +85,15 @@ public extension PromiseType {
 	}
 
 	func zip<B>(_ that: Promise<B>) -> Promise<(Value, B)> {
-		return flatMap(.immediate) { thisVal -> Promise<(Value, B)> in
-			that.map(.immediate) { thatVal in
+		return flatMap(.sync) { thisVal -> Promise<(Value, B)> in
+			that.map(.sync) { thatVal in
 				(thisVal, thatVal)
 			}
 		}
 	}
 
 	func asVoid() -> Promise<Void> {
-		return self.map(.immediate, f: { _ in () })
-	}
-}
-
-public extension PromiseType where Value: ResultType {
-
-	func flatten() -> Promise<Value.Value> {
-		return Promise { resolve in
-			onComplete(.immediate) { result in
-				resolve(result.analysis(
-					ifSuccess: { $0.analysis(ifSuccess: Result.value, ifFailure: Result.error) },
-					ifFailure: Result.error
-				))
-			}
-		}
+		return self.map(.sync, f: { _ in () })
 	}
 }
 
@@ -115,9 +101,9 @@ public extension PromiseType where Value: PromiseType {
 
 	func flatten() -> Promise<Value.Value> {
 		return Promise { resolve in
-			onComplete(.immediate) { result in
+			onComplete(.sync) { result in
 				result.analysis(
-					ifSuccess: { _ = $0.onComplete(.immediate, callback: resolve) },
+					ifSuccess: { _ = $0.onComplete(.sync, callback: resolve) },
 					ifFailure: resolve • Result.error
 				)
 			}
@@ -141,7 +127,7 @@ public extension Promise {
 
 		let sema = DispatchSemaphore(value: 0)
 		var res: Result<A>? = nil
-		onComplete(DispatchQueue.global().context) {
+		onComplete(.global) {
 			res = $0
 			sema.signal()
 		}
@@ -169,7 +155,7 @@ public extension Promise {
 	/// queue.
 	func delay(_ queue: DispatchQueue, interval: DispatchTimeInterval) -> Promise<A> {
 		return Promise { complete in
-			onComplete(.immediate) { result in
+			onComplete(.sync) { result in
 				queue.asyncAfter(deadline: DispatchTime.now() + interval) {
 					complete(result)
 				}

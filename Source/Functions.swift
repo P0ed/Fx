@@ -9,17 +9,15 @@ public func id<A>(_ x: A) -> A {
 public func const<A, B>(_ x: B) -> (A) -> B {
 	return { _ in x }
 }
+@_transparent
+public func const<A>(_ x: A) -> () -> A {
+	return { x }
+}
 
 /// Converts (A, B) -> C func into (B, A) -> C
 @_transparent
 public func flip<A, B, C>(_ f: @escaping (A, B) -> C) -> (B, A) -> C {
 	return { (y: B, x: A) -> C in f(x, y) }
-}
-
-/// Converts A -> () func into A -> A by rethrowing input argument
-@_transparent
-public func rethrow<A>(_ f: @escaping (A) -> ()) -> (A) -> A {
-	return { x in f(x); return x }
 }
 
 /// Converts () -> B func into A -> B by ignoring input argument
