@@ -112,6 +112,10 @@ public final class SerialDisposable: Disposable {
 		innerDisposable = disposable
 	}
 
+	deinit {
+		dispose()
+	}
+
 	public func dispose() {
 		innerDisposable = nil
 	}
