@@ -43,10 +43,12 @@ public extension PromiseType {
 		}
 	}
 
+	@available(*, deprecated, message: "use map instead")
 	func tryMap<B>(_ f: @escaping (Value) throws -> B) -> Promise<B> {
 		return tryMap(.default(), f: f)
 	}
 
+	@available(*, deprecated, message: "use map instead")
 	func tryMap<B>(_ context: ExecutionContext, f: @escaping (Value) throws -> B) -> Promise<B> {
 		return Promise { resolve in
 			onComplete(context) { result in
