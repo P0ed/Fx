@@ -57,13 +57,22 @@ public final class MutableProperty<A>: PropertyType {
 
 public extension PropertyType {
 
-	public func observe(_ sink: @escaping Sink<A>) -> Disposable {
+	func observe(_ sink: @escaping Sink<A>) -> Disposable {
 		sink(value)
 		return signal.observe(sink)
 	}
 
-	public func map<B>(_ f: @escaping (A) -> B) -> Property<B> {
+	func map<B>(_ f: @escaping (A) -> B) -> Property<B> {
 		return Property(value: f(value), signal: signal.map(f))
+	}
+
+	func flatMap<B>(_ f: @escaping (A) -> Property<B>) -> Property<B> {
+		return Property(value: f(value).value, signal: Signal { sink in
+			let disposable = SerialDisposable()
+			return signal.observe { x in
+				disposable.innerDisposable = f(x).observe(sink)
+			}
+		})
 	}
 }
 
@@ -98,5 +107,34 @@ public extension Property {
 
 	func flatCombine<B, C, D>(_ other: Property<D>) -> Property<(B, C, D)> where A == (B, C) {
 		return mapCombine(other, { xy, z in (xy.0, xy.1, z) })
+	}
+}
+
+public extension Property {
+
+	static func const(_ value: A) -> Property<A> {
+		return Property(value: value, signal: .empty)
+	}
+}
+
+public extension PropertyType where A: Equatable {
+
+	func distinctUntilChanged() -> Property<A> {
+		var lastValue = value
+		return Property(value: lastValue, signal: Signal { sink in
+			signal.observe { value in
+				if lastValue != value {
+					lastValue = value
+					sink(value)
+				}
+			}
+		})
+	}
+}
+
+public extension MutableProperty {
+
+	func modify(_ f: (inout A) -> ()) {
+		Fx.modify(&value, f: f)
 	}
 }

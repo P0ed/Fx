@@ -14,6 +14,4 @@ Pod::Spec.new do |s|
   s.compiler_flags = '-whole-module-optimization'
   s.ios.deployment_target = '8.0'
   s.source_files = 'Source/*'
-
-  # s.dependency 'Runes', :git => 'https://github.com/thoughtbot/Runes', :branch => 'master'
 end

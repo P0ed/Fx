@@ -95,6 +95,20 @@ public extension PromiseType {
 	func asVoid() -> Promise<Void> {
 		return self.map(.sync, f: { _ in () })
 	}
+
+	static func retry(_ times: Int, _ task: @escaping () -> Promise<Value>) -> Promise<Value> {
+		var attempts = 0
+
+		func attempt() -> Promise<Value> {
+			attempts += 1
+			return task().recover { error -> Promise<Value> in
+				guard attempts < times else { return Promise(error: error) }
+				return attempt()
+			}
+		}
+
+		return attempt()
+	}
 }
 
 public extension PromiseType where Value: PromiseType {

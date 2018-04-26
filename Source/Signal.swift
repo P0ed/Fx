@@ -180,3 +180,7 @@ public extension Signal {
 		return map(f).flatten()
 	}
 }
+
+public extension Signal {
+	static var empty: Signal { return Signal { _ in nil } }
+}

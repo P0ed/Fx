@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5F17AFE1209216D900C6977A /* SignalPipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F17AFE0209216D900C6977A /* SignalPipe.swift */; };
+		5F17AFE2209216D900C6977A /* SignalPipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F17AFE0209216D900C6977A /* SignalPipe.swift */; };
+		5F17AFE3209216D900C6977A /* SignalPipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F17AFE0209216D900C6977A /* SignalPipe.swift */; };
 		5F9679951ECDBFCC002EEADD /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9679941ECDBFCC002EEADD /* Result.swift */; };
 		5F9679971ECDBFF4002EEADD /* ResultType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9679961ECDBFF4002EEADD /* ResultType.swift */; };
 		5F9679981ECDCCC7002EEADD /* ResultType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9679961ECDBFF4002EEADD /* ResultType.swift */; };
@@ -86,6 +89,7 @@
 
 /* Begin PBXFileReference section */
 		5F0E2ABF1D107BC5005EA377 /* OptionalType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionalType.swift; sourceTree = "<group>"; };
+		5F17AFE0209216D900C6977A /* SignalPipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalPipe.swift; sourceTree = "<group>"; };
 		5F2D896D1D534263000DC80A /* Bool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bool.swift; sourceTree = "<group>"; };
 		5F2D89711D534AF0000DC80A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		5F2D89731D534B1B000DC80A /* Fx.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Fx.podspec; sourceTree = SOURCE_ROOT; };
@@ -229,8 +233,9 @@
 		5F9679921ECDBEF5002EEADD /* Reactive */ = {
 			isa = PBXGroup;
 			children = (
-				5F9679A01ECDCE6E002EEADD /* SignalType.swift */,
 				5F796E731D05C51800B8A7AC /* Signal.swift */,
+				5F9679A01ECDCE6E002EEADD /* SignalType.swift */,
+				5F17AFE0209216D900C6977A /* SignalPipe.swift */,
 				5F796E7C1D05CB4D00B8A7AC /* Command.swift */,
 				5F796E811D05CB4D00B8A7AC /* Property.swift */,
 			);
@@ -461,6 +466,7 @@
 				5FD28AA81D5B27C100BAFC0F /* Disposable.swift in Sources */,
 				5F9679A11ECDCE6E002EEADD /* SignalType.swift in Sources */,
 				5FD28AA01D5B27C100BAFC0F /* Weakify.swift in Sources */,
+				5F17AFE1209216D900C6977A /* SignalPipe.swift in Sources */,
 				5FD28AA71D5B27C100BAFC0F /* Bag.swift in Sources */,
 				5FD28AAC1D5B27C100BAFC0F /* OptionalType.swift in Sources */,
 				5FD28AA11D5B27C100BAFC0F /* Operators.swift in Sources */,
@@ -492,6 +498,7 @@
 				5FD28AC01D5B27C200BAFC0F /* Weakify.swift in Sources */,
 				5F9679A21ECDCE6E002EEADD /* SignalType.swift in Sources */,
 				5FD28AC71D5B27C200BAFC0F /* Bag.swift in Sources */,
+				5F17AFE2209216D900C6977A /* SignalPipe.swift in Sources */,
 				5F96799B1ECDCD45002EEADD /* Result.swift in Sources */,
 				5FD28ACC1D5B27C200BAFC0F /* OptionalType.swift in Sources */,
 				5FD28AC11D5B27C200BAFC0F /* Operators.swift in Sources */,
@@ -523,6 +530,7 @@
 				5FD28AB01D5B27C200BAFC0F /* Weakify.swift in Sources */,
 				5F9679A31ECDCE6E002EEADD /* SignalType.swift in Sources */,
 				5FD28AB71D5B27C200BAFC0F /* Bag.swift in Sources */,
+				5F17AFE3209216D900C6977A /* SignalPipe.swift in Sources */,
 				5F96799A1ECDCD44002EEADD /* Result.swift in Sources */,
 				5FD28ABC1D5B27C200BAFC0F /* OptionalType.swift in Sources */,
 				5FD28AB11D5B27C200BAFC0F /* Operators.swift in Sources */,
