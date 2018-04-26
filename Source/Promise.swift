@@ -1,16 +1,15 @@
 import Dispatch
 
 public protocol PromiseType {
-	associatedtype Value
+	associatedtype A
 
-	var result: Result<Value>? { get }
+	var result: Result<A>? { get }
 
 	@discardableResult
-	func onComplete(_ context: ExecutionContext, callback: @escaping (Result<Value>) -> Void) -> Self
+	func onComplete(_ context: ExecutionContext, callback: @escaping (Result<A>) -> Void) -> Self
 }
 
 public final class Promise<A>: PromiseType {
-	public typealias Value = A
 
 	public private(set) var result: Result<A>? {
 		didSet { runCallbacks() }
@@ -85,6 +84,10 @@ public extension Promise {
 
 	convenience init(error: Error) {
 		self.init(result: .error(error))
+	}
+
+	convenience init(_ f: () throws -> A) {
+		self.init(result: Result(f))
 	}
 
 	var isCompleted: Bool {

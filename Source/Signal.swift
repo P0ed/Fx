@@ -1,7 +1,6 @@
 import Foundation.NSLock
 
 public final class Signal<A>: SignalType {
-	public typealias Value = A
 
 	private let atomicSinks: Atomic<Bag<Sink<A>>> = Atomic(Bag())
 	private let disposable = SerialDisposable()
@@ -69,7 +68,7 @@ public extension Signal {
 		}
 	}
 
-	func merge(_ signal: Signal<Value>) -> Signal<Value> {
+	func merge(_ signal: Signal<A>) -> Signal<A> {
 		return Signal<A> { sink in
 			let disposable = CompositeDisposable()
 			disposable += observe(sink)
@@ -78,7 +77,7 @@ public extension Signal {
 		}
 	}
 
-	func combineLatest<B>(_ signal: Signal<B>) -> Signal<(Value, B)> {
+	func combineLatest<B>(_ signal: Signal<B>) -> Signal<(A, B)> {
 		return Signal<(A, B)> { sink in
 			let disposable = CompositeDisposable()
 			var lastSelf: A? = nil
@@ -129,9 +128,9 @@ public extension Signal {
 	}
 }
 
-public extension SignalType where Value: OptionalType {
+public extension SignalType where A: OptionalType {
 
-	func flatten() -> Signal<Value.A> {
+	func flatten() -> Signal<A.A> {
 		return Signal { sink in
 			observe { value in
 				if let value = value.optional {
@@ -142,9 +141,9 @@ public extension SignalType where Value: OptionalType {
 	}
 }
 
-public extension SignalType where Value: SignalType {
+public extension SignalType where A: SignalType {
 
-	func flatten() -> Signal<Value.Value> {
+	func flatten() -> Signal<A.A> {
 		return Signal { sink in
 			let disposable = CompositeDisposable()
 			disposable += observe { value in
@@ -155,9 +154,9 @@ public extension SignalType where Value: SignalType {
 	}
 }
 
-public extension SignalType where Value: PromiseType {
+public extension SignalType where A: PromiseType {
 
-	func flatten() -> Signal<Value.Value> {
+	func flatten() -> Signal<A.A> {
 		return Signal { sink in
 			observe { promise in
 				promise.onSuccess(callback: sink)

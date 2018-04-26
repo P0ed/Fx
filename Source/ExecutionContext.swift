@@ -1,7 +1,7 @@
 import Foundation.NSThread
 import Dispatch
 
-public typealias ExecutionContextFunc = (@escaping () -> Void) -> Void
+public typealias ExecutionContextFunc = (@escaping VoidFunc) -> Void
 
 /// The context in which something can be executed
 /// By default, an execution context can be assumed to be asynchronous unless stated otherwise
@@ -12,7 +12,7 @@ public struct ExecutionContext {
 		self.run = run
 	}
 
-	public func run(task: @escaping () -> Void) {
+	public func run(task: @escaping VoidFunc) {
 		run(task)
 	}
 }

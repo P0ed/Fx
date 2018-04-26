@@ -21,7 +21,7 @@ public final class Command<A, B> {
 
 extension Command where B: PromiseType {
 
-	var flatResults: Signal<B.Value> {
+	var flatResults: Signal<B.A> {
 		return results.flatten()
 	}
 }

@@ -1,14 +1,14 @@
 public protocol SignalType {
-	associatedtype Value
+	associatedtype A
 
-	func observe(_ sink: @escaping Sink<Value>) -> Disposable
+	func observe(_ sink: @escaping Sink<A>) -> Disposable
 }
 
-public extension SignalType where Value: Equatable {
+public extension SignalType where A: Equatable {
 
-	public func distinctUntilChanged() -> Signal<Value> {
-		return Signal<Value> { sink in
-			var lastValue: Value? = nil
+	public func distinctUntilChanged() -> Signal<A> {
+		return Signal<A> { sink in
+			var lastValue: A? = nil
 			return observe { value in
 				if lastValue == nil || lastValue! != value {
 					lastValue = value
@@ -21,7 +21,7 @@ public extension SignalType where Value: Equatable {
 
 public extension SignalType {
 
-	func take(_ count: Int) -> Signal<Value> {
+	func take(_ count: Int) -> Signal<A> {
 		let taken = Atomic(0)
 		return count <= 0 ? .empty : Signal { sink in
 			let disposable = SerialDisposable()

@@ -2,8 +2,100 @@ import Foundation
 
 public extension PromiseType {
 
+	func map<B>(_ f: @escaping (A) throws -> B) -> Promise<B> {
+		return map(.default(), f: f)
+	}
+
+	func map<B>(_ context: ExecutionContext, f: @escaping (A) throws -> B) -> Promise<B> {
+		return Promise { resolve in
+			onComplete(context) { result in
+				resolve(result.map(f))
+			}
+		}
+	}
+
+	func flatMap<B>(_ f: @escaping (A) throws -> Promise<B>) -> Promise<B> {
+		return flatMap(.default(), f: f)
+	}
+
+	func flatMap<B>(_ context: ExecutionContext, f: @escaping (A) throws -> Promise<B>) -> Promise<B> {
+		return Promise { resolve in
+			onComplete(context) { result in
+				switch result.map(f) {
+				case .value(let inner): inner.onComplete(.sync, callback: resolve)
+				case .error(let error): resolve(.error(error))
+				}
+			}
+		}
+	}
+
+	@available(*, deprecated, message: "use map instead")
+	func tryMap<B>(_ f: @escaping (A) throws -> B) -> Promise<B> {
+		return tryMap(.default(), f: f)
+	}
+
+	@available(*, deprecated, message: "use map instead")
+	func tryMap<B>(_ context: ExecutionContext, f: @escaping (A) throws -> B) -> Promise<B> {
+		return Promise { resolve in
+			onComplete(context) { result in
+				resolve(result.tryMap(f))
+			}
+		}
+	}
+
+	func recover(_ context: ExecutionContext = .default(), f: @escaping (Error) -> A) -> Promise<A> {
+		return Promise { resolve in
+			onComplete(context) { result in
+				resolve(.value(result.analysis(ifSuccess: id, ifFailure: f)))
+			}
+		}
+	}
+
+	func recover(_ context: ExecutionContext = .default(), f: @escaping (Error) -> Promise<A>) -> Promise<A> {
+		return Promise { resolve in
+			onComplete(context) { result in
+				result.analysis(ifSuccess: Promise.init(value:), ifFailure: f)
+					.onComplete(.sync, callback: resolve)
+			}
+		}
+	}
+
+	func mapError(_ context: ExecutionContext = .default(), f: @escaping (Error) -> Error) -> Promise<A> {
+		return Promise { resolve in
+			onComplete(context) { result in
+				resolve(result.analysis(ifSuccess: Result.value, ifFailure: Result.error • f))
+			}
+		}
+	}
+
+	func zip<B>(_ that: Promise<B>) -> Promise<(A, B)> {
+		return flatMap(.sync) { thisVal -> Promise<(A, B)> in
+			that.map(.sync) { thatVal in
+				(thisVal, thatVal)
+			}
+		}
+	}
+
+	func asVoid() -> Promise<Void> {
+		return self.map(.sync, f: { _ in () })
+	}
+
+	static func retry(_ times: Int, _ task: @escaping () -> Promise<A>) -> Promise<A> {
+		var attempts = 0
+
+		func attempt() -> Promise<A> {
+			attempts += 1
+			return task().recover { error -> Promise<A> in
+				guard attempts < times else { return Promise(error: error) }
+				return attempt()
+			}
+		}
+
+		return attempt()
+	}
+
 	@discardableResult
-	func onSuccess(_ context: ExecutionContext = .default(), callback: @escaping Sink<Value>) -> Self {
+	func onSuccess(_ context: ExecutionContext = .default(), callback: @escaping Sink<A>) -> Self {
 		return onComplete(context) { result in
 			result.analysis(ifSuccess: callback, ifFailure: { _ in })
 		}
@@ -15,107 +107,11 @@ public extension PromiseType {
 			result.analysis(ifSuccess: { _ in }, ifFailure: callback)
 		}
 	}
-
-	func map<B>(_ f: @escaping (Value) -> B) -> Promise<B> {
-		return map(.default(), f: f)
-	}
-
-	func map<B>(_ context: ExecutionContext, f: @escaping (Value) -> B) -> Promise<B> {
-		return Promise { resolve in
-			onComplete(context) { result in
-				resolve(result.map(f))
-			}
-		}
-	}
-
-	func flatMap<B>(_ f: @escaping (Value) -> Promise<B>) -> Promise<B> {
-		return flatMap(.default(), f: f)
-	}
-
-	func flatMap<B>(_ context: ExecutionContext, f: @escaping (Value) -> Promise<B>) -> Promise<B> {
-		return Promise { resolve in
-			onComplete(context) { result in
-				result.map(f).analysis(
-					ifSuccess: { $0.onComplete(.sync, callback: resolve) },
-					ifFailure: { resolve(.error($0)) }
-				)
-			}
-		}
-	}
-
-	@available(*, deprecated, message: "use map instead")
-	func tryMap<B>(_ f: @escaping (Value) throws -> B) -> Promise<B> {
-		return tryMap(.default(), f: f)
-	}
-
-	@available(*, deprecated, message: "use map instead")
-	func tryMap<B>(_ context: ExecutionContext, f: @escaping (Value) throws -> B) -> Promise<B> {
-		return Promise { resolve in
-			onComplete(context) { result in
-				resolve(result.tryMap(f))
-			}
-		}
-	}
-
-	func recover(_ context: ExecutionContext = .default(), f: @escaping (Error) -> Value) -> Promise<Value> {
-		return Promise { resolve in
-			onComplete(context) { result in
-				resolve(.value(result.analysis(ifSuccess: id, ifFailure: f)))
-			}
-		}
-	}
-
-	func recover(_ context: ExecutionContext = .default(), f: @escaping (Error) -> Promise<Value>) -> Promise<Value> {
-		return Promise { resolve in
-			onComplete(context) { result in
-				result.analysis(ifSuccess: Promise.init(value:), ifFailure: f)
-					.onComplete(.sync, callback: resolve)
-			}
-		}
-	}
-
-	func mapError(_ f: @escaping (Error) -> Error) -> Promise<Value> {
-		return mapError(.default(), f: f)
-	}
-
-	func mapError(_ context: ExecutionContext, f: @escaping (Error) -> Error) -> Promise<Value> {
-		return Promise { resolve in
-			onComplete(context) { result in
-				resolve(result.analysis(ifSuccess: Result.value, ifFailure: Result.error • f))
-			}
-		}
-	}
-
-	func zip<B>(_ that: Promise<B>) -> Promise<(Value, B)> {
-		return flatMap(.sync) { thisVal -> Promise<(Value, B)> in
-			that.map(.sync) { thatVal in
-				(thisVal, thatVal)
-			}
-		}
-	}
-
-	func asVoid() -> Promise<Void> {
-		return self.map(.sync, f: { _ in () })
-	}
-
-	static func retry(_ times: Int, _ task: @escaping () -> Promise<Value>) -> Promise<Value> {
-		var attempts = 0
-
-		func attempt() -> Promise<Value> {
-			attempts += 1
-			return task().recover { error -> Promise<Value> in
-				guard attempts < times else { return Promise(error: error) }
-				return attempt()
-			}
-		}
-
-		return attempt()
-	}
 }
 
-public extension PromiseType where Value: PromiseType {
+public extension PromiseType where A: PromiseType {
 
-	func flatten() -> Promise<Value.Value> {
+	func flatten() -> Promise<A.A> {
 		return Promise { resolve in
 			onComplete(.sync) { result in
 				result.analysis(
@@ -199,7 +195,7 @@ public extension DispatchQueue {
 
 public extension Sequence where Iterator.Element: PromiseType {
 
-	func fold<R>(_ zero: R, f: @escaping (R, Iterator.Element.Value) -> R) -> Promise<R> {
+	func fold<R>(_ zero: R, f: @escaping (R, Iterator.Element.A) -> R) -> Promise<R> {
 		return reduce(Promise(value: zero)) { result, element in
 			result.flatMap { resultValue in
 				element.map { elementValue in
@@ -209,7 +205,7 @@ public extension Sequence where Iterator.Element: PromiseType {
 		}
 	}
 
-	func all() -> Promise<[Iterator.Element.Value]> {
+	func all() -> Promise<[Iterator.Element.A]> {
 		return fold([]) { $0 + [$1] }
 	}
 }
