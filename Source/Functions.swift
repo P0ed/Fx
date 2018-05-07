@@ -4,11 +4,12 @@ public func id<A>(_ x: A) -> A {
 	return x
 }
 
-/// Returns a function which ignores its argument and returns `x` instead.
+/// Returns a function which ignores its argument and returns `x` instead
 @_transparent
 public func const<A, B>(_ x: B) -> (A) -> B {
 	return { _ in x }
 }
+/// Returns a function which returns `x`
 @_transparent
 public func const<A>(_ x: A) -> () -> A {
 	return { x }
@@ -32,12 +33,6 @@ public func ignoreOutput<A, B>(_ f: @escaping (A) -> B) -> (A) -> () {
 	return { x in _ = f(x) }
 }
 
-/// Binds arguments to function
-@_transparent
-public func bind<A, B>(_ f: @escaping (A) -> B, x: A) -> () -> B {
-	return { f(x) }
-}
-
 /// Alias for withExtendedLifetime function
 @_transparent
 public func capture(_ value: Any) {
@@ -46,16 +41,23 @@ public func capture(_ value: Any) {
 
 /// Atomically mutates value
 @_transparent
-public func modify<A>(_ value: inout A, f: (inout A) -> ()) {
+public func modify<A>(_ value: inout A, f: (inout A) throws -> ()) rethrows {
 	var copy = value
-	f(&copy)
+	try f(&copy)
 	value = copy
 }
 
 /// Returns mutated copy of value
 @_transparent
-public func modifyCopy<A>(_ value: A, f: (inout A) -> ()) -> A {
+public func modify<A>(_ value: A, f: (inout A) throws -> ()) rethrows -> A {
 	var copy = value
-	f(&copy)
+	try f(&copy)
 	return copy
+}
+
+/// The with function is useful for applying functions to objects, wrapping imperative configuration in an expression
+@_transparent @discardableResult
+public func with<A: AnyObject>(_ x: A, _ f: (A) throws -> Void) rethrows -> A {
+	try f(x)
+	return x
 }
