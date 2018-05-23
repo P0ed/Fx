@@ -41,7 +41,7 @@ public func capture(_ value: Any) {
 
 /// Atomically mutates value
 @_transparent
-public func modify<A>(_ value: inout A, f: (inout A) throws -> ()) rethrows {
+public func modify<A>(_ value: inout A, f: (inout A) throws -> Void) rethrows {
 	var copy = value
 	try f(&copy)
 	value = copy
@@ -49,7 +49,7 @@ public func modify<A>(_ value: inout A, f: (inout A) throws -> ()) rethrows {
 
 /// Returns mutated copy of value
 @_transparent
-public func modify<A>(_ value: A, f: (inout A) throws -> ()) rethrows -> A {
+public func modify<A>(_ value: A, f: (inout A) throws -> Void) rethrows -> A {
 	var copy = value
 	try f(&copy)
 	return copy
@@ -57,7 +57,7 @@ public func modify<A>(_ value: A, f: (inout A) throws -> ()) rethrows -> A {
 
 /// The with function is useful for applying functions to objects, wrapping imperative configuration in an expression
 @_transparent @discardableResult
-public func with<A: AnyObject>(_ x: A, _ f: (A) throws -> Void) rethrows -> A {
+public func with<A>(_ x: A, _ f: (A) throws -> Void) rethrows -> A {
 	try f(x)
 	return x
 }
