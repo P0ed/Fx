@@ -1,4 +1,3 @@
-
 public extension Bool {
 
 	func map<A>(ifTrue: () -> A, ifFalse: () -> A) -> A {

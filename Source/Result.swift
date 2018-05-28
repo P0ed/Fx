@@ -24,6 +24,10 @@ public extension Result {
 		if case .error(let error) = self { return error } else { return nil }
 	}
 
+	func mapResult<B>(_ f: (Result<A>) throws -> B) -> Result<B> {
+		return Result<B> { try f(self) }
+	}
+
 	func map<B>(_ f: (A) throws -> B) -> Result<B> {
 		return Result<B> { try f(dematerialize()) }
 	}
@@ -32,18 +36,17 @@ public extension Result {
 		return Result<B> { try f(dematerialize()).dematerialize() }
 	}
 
-	@available(*, deprecated, message: "use map instead")
-	func tryMap<B>(_ f: (A) throws -> B) -> Result<B> {
-		return map(f)
+	func mapError(_ f: (Error) throws -> A) -> Result<A> {
+		return mapResult { result in try analysis(ifSuccess: id, ifFailure: f) }
 	}
 }
 
 public extension Result {
 
-	public func analysis<B>(ifSuccess: (A) -> B, ifFailure: (Error) -> B) -> B {
+	public func analysis<B>(ifSuccess: (A) throws -> B, ifFailure: (Error) throws -> B) rethrows -> B {
 		switch self {
-		case .value(let value): return ifSuccess(value)
-		case .error(let error): return ifFailure(error)
+		case .value(let value): return try ifSuccess(value)
+		case .error(let error): return try ifFailure(error)
 		}
 	}
 

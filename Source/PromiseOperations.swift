@@ -2,16 +2,26 @@ import Foundation
 
 public extension PromiseType {
 
+	func mapResult<B>(_ context: ExecutionContext = .default(), f: @escaping (Result<A>) throws -> B) -> Promise<B> {
+		return Promise { resolve in onComplete(context) { result in resolve(Result { try f(result) }) } }
+	}
+
+	func flatMapResult<B>(_ context: ExecutionContext = .default(), f: @escaping (Result<A>) throws -> Promise<B>) -> Promise<B> {
+		return Promise { resolve in
+			onComplete(context) { result in
+				Result { try f(result) }
+					.analysis(ifSuccess: id, ifFailure: Promise.init(error:))
+					.onComplete(.sync, callback: resolve)
+			}
+		}
+	}
+
 	func map<B>(_ f: @escaping (A) throws -> B) -> Promise<B> {
 		return map(.default(), f: f)
 	}
 
 	func map<B>(_ context: ExecutionContext, f: @escaping (A) throws -> B) -> Promise<B> {
-		return Promise { resolve in
-			onComplete(context) { result in
-				resolve(result.map(f))
-			}
-		}
+		return mapResult(context) { result in try f(result.dematerialize()) }
 	}
 
 	func flatMap<B>(_ f: @escaping (A) throws -> Promise<B>) -> Promise<B> {
@@ -19,53 +29,19 @@ public extension PromiseType {
 	}
 
 	func flatMap<B>(_ context: ExecutionContext, f: @escaping (A) throws -> Promise<B>) -> Promise<B> {
-		return Promise { resolve in
-			onComplete(context) { result in
-				switch result.map(f) {
-				case .value(let inner): inner.onComplete(.sync, callback: resolve)
-				case .error(let error): resolve(.error(error))
-				}
-			}
-		}
+		return flatMapResult(context) { result in try f(result.dematerialize()) }
 	}
 
-	@available(*, deprecated, message: "use map instead")
-	func tryMap<B>(_ f: @escaping (A) throws -> B) -> Promise<B> {
-		return tryMap(.default(), f: f)
+	func mapError(_ context: ExecutionContext = .default(), f: @escaping (Error) throws -> A) -> Promise<A> {
+		return mapResult(context) { result in try result.mapError(f).dematerialize() }
 	}
 
-	@available(*, deprecated, message: "use map instead")
-	func tryMap<B>(_ context: ExecutionContext, f: @escaping (A) throws -> B) -> Promise<B> {
-		return Promise { resolve in
-			onComplete(context) { result in
-				resolve(result.tryMap(f))
-			}
-		}
+	func flatMapError(_ context: ExecutionContext = .default(), f: @escaping (Error) throws -> Promise<A>) -> Promise<A> {
+		return flatMapResult(context) { result in try result.map(Promise.init(value:)).mapError(f).dematerialize() }
 	}
 
-	func recover(_ context: ExecutionContext = .default(), f: @escaping (Error) -> A) -> Promise<A> {
-		return Promise { resolve in
-			onComplete(context) { result in
-				resolve(.value(result.analysis(ifSuccess: id, ifFailure: f)))
-			}
-		}
-	}
-
-	func recover(_ context: ExecutionContext = .default(), f: @escaping (Error) -> Promise<A>) -> Promise<A> {
-		return Promise { resolve in
-			onComplete(context) { result in
-				result.analysis(ifSuccess: Promise.init(value:), ifFailure: f)
-					.onComplete(.sync, callback: resolve)
-			}
-		}
-	}
-
-	func mapError(_ context: ExecutionContext = .default(), f: @escaping (Error) -> Error) -> Promise<A> {
-		return Promise { resolve in
-			onComplete(context) { result in
-				resolve(result.analysis(ifSuccess: Result.value, ifFailure: Result.error • f))
-			}
-		}
+	func with(_ context: ExecutionContext = .default(), f: @escaping Sink<A>) -> Promise<A> {
+		return map(context) { x in return Fx.with(x, f) }
 	}
 
 	func zip<B>(_ that: Promise<B>) -> Promise<(A, B)> {
@@ -85,7 +61,7 @@ public extension PromiseType {
 
 		func attempt() -> Promise<A> {
 			attempts += 1
-			return task().recover { error -> Promise<A> in
+			return task().flatMapError { error -> Promise<A> in
 				guard attempts < times else { return Promise(error: error) }
 				return attempt()
 			}
@@ -105,20 +81,6 @@ public extension PromiseType {
 	func onFailure(_ context: ExecutionContext = .default(), callback: @escaping Sink<Error>) -> Self {
 		return onComplete(context) { result in
 			result.analysis(ifSuccess: { _ in }, ifFailure: callback)
-		}
-	}
-}
-
-public extension PromiseType where A: PromiseType {
-
-	func flatten() -> Promise<A.A> {
-		return Promise { resolve in
-			onComplete(.sync) { result in
-				result.analysis(
-					ifSuccess: { _ = $0.onComplete(.sync, callback: resolve) },
-					ifFailure: resolve • Result.error
-				)
-			}
 		}
 	}
 }
