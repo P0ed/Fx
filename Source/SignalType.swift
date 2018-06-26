@@ -1,7 +1,7 @@
 public protocol SignalType {
 	associatedtype A
 
-	func observe(_ sink: @escaping Sink<A>) -> Disposable
+	func observe(_ sink: @escaping (A) -> Void) -> Disposable
 }
 
 public extension SignalType where A: Equatable {
