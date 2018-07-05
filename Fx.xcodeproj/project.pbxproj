@@ -32,7 +32,6 @@
 		5FA7E29F1ECDE31400DEC12E /* PromiseOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7E29C1ECDE1A500DEC12E /* PromiseOperations.swift */; };
 		5FB5C45B1D5C6D9400BA78A3 /* Weak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB5C45A1D5C6D9400BA78A3 /* Weak.swift */; };
 		5FD28A9D1D5B27C100BAFC0F /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E7E1D05CB4D00B8A7AC /* Functions.swift */; };
-		5FD28A9E1D5B27C100BAFC0F /* Curry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E7D1D05CB4D00B8A7AC /* Curry.swift */; };
 		5FD28A9F1D5B27C100BAFC0F /* Throttle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E851D05CB4D00B8A7AC /* Throttle.swift */; };
 		5FD28AA01D5B27C100BAFC0F /* Weakify.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E871D05CB4D00B8A7AC /* Weakify.swift */; };
 		5FD28AA11D5B27C100BAFC0F /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E821D05CB4D00B8A7AC /* Operators.swift */; };
@@ -47,7 +46,6 @@
 		5FD28AAB1D5B27C100BAFC0F /* Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E811D05CB4D00B8A7AC /* Property.swift */; };
 		5FD28AAC1D5B27C100BAFC0F /* OptionalType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0E2ABF1D107BC5005EA377 /* OptionalType.swift */; };
 		5FD28AAD1D5B27C200BAFC0F /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E7E1D05CB4D00B8A7AC /* Functions.swift */; };
-		5FD28AAE1D5B27C200BAFC0F /* Curry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E7D1D05CB4D00B8A7AC /* Curry.swift */; };
 		5FD28AAF1D5B27C200BAFC0F /* Throttle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E851D05CB4D00B8A7AC /* Throttle.swift */; };
 		5FD28AB01D5B27C200BAFC0F /* Weakify.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E871D05CB4D00B8A7AC /* Weakify.swift */; };
 		5FD28AB11D5B27C200BAFC0F /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E821D05CB4D00B8A7AC /* Operators.swift */; };
@@ -62,7 +60,6 @@
 		5FD28ABB1D5B27C200BAFC0F /* Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E811D05CB4D00B8A7AC /* Property.swift */; };
 		5FD28ABC1D5B27C200BAFC0F /* OptionalType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0E2ABF1D107BC5005EA377 /* OptionalType.swift */; };
 		5FD28ABD1D5B27C200BAFC0F /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E7E1D05CB4D00B8A7AC /* Functions.swift */; };
-		5FD28ABE1D5B27C200BAFC0F /* Curry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E7D1D05CB4D00B8A7AC /* Curry.swift */; };
 		5FD28ABF1D5B27C200BAFC0F /* Throttle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E851D05CB4D00B8A7AC /* Throttle.swift */; };
 		5FD28AC01D5B27C200BAFC0F /* Weakify.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E871D05CB4D00B8A7AC /* Weakify.swift */; };
 		5FD28AC11D5B27C200BAFC0F /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E821D05CB4D00B8A7AC /* Operators.swift */; };
@@ -82,6 +79,9 @@
 		5FD28ADD1D5B2E6300BAFC0F /* Fx macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 5FD28AD61D5B2E6300BAFC0F /* Fx macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5FD28AE11D5B2EE300BAFC0F /* Fx iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 5FD28AD31D5B2E6300BAFC0F /* Fx iOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5FD28AE31D5B2EEA00BAFC0F /* Fx tvOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 5FD28AD91D5B2E6300BAFC0F /* Fx tvOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5FDB3D8020EE6C4F0006CD8E /* FnFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FDB3D7F20EE6C4F0006CD8E /* FnFunctions.swift */; };
+		5FDB3D8120EE731A0006CD8E /* FnFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FDB3D7F20EE6C4F0006CD8E /* FnFunctions.swift */; };
+		5FDB3D8220EE731B0006CD8E /* FnFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FDB3D7F20EE6C4F0006CD8E /* FnFunctions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -96,7 +96,6 @@
 		5F796E731D05C51800B8A7AC /* Signal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Signal.swift; sourceTree = "<group>"; };
 		5F796E7A1D05CB4D00B8A7AC /* Application+Composition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Application+Composition.swift"; sourceTree = "<group>"; };
 		5F796E7C1D05CB4D00B8A7AC /* Command.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Command.swift; sourceTree = "<group>"; };
-		5F796E7D1D05CB4D00B8A7AC /* Curry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Curry.swift; sourceTree = "<group>"; };
 		5F796E7E1D05CB4D00B8A7AC /* Functions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
 		5F796E811D05CB4D00B8A7AC /* Property.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Property.swift; sourceTree = "<group>"; };
 		5F796E821D05CB4D00B8A7AC /* Operators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
@@ -120,6 +119,7 @@
 		5FD28AD71D5B2E6300BAFC0F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5FD28AD91D5B2E6300BAFC0F /* Fx tvOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Fx tvOS.h"; sourceTree = "<group>"; };
 		5FD28ADA1D5B2E6300BAFC0F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5FDB3D7F20EE6C4F0006CD8E /* FnFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FnFunctions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -209,7 +209,7 @@
 			isa = PBXGroup;
 			children = (
 				5F796E7E1D05CB4D00B8A7AC /* Functions.swift */,
-				5F796E7D1D05CB4D00B8A7AC /* Curry.swift */,
+				5FDB3D7F20EE6C4F0006CD8E /* FnFunctions.swift */,
 				5F796E851D05CB4D00B8A7AC /* Throttle.swift */,
 				5F796E871D05CB4D00B8A7AC /* Weakify.swift */,
 				5F96799C1ECDCDFA002EEADD /* FunctionAliases.swift */,
@@ -467,6 +467,7 @@
 				5FA7E2951ECDDD8C00DEC12E /* ExecutionContext.swift in Sources */,
 				5FD28A9D1D5B27C100BAFC0F /* Functions.swift in Sources */,
 				5F96799D1ECDCDFA002EEADD /* FunctionAliases.swift in Sources */,
+				5FDB3D8020EE6C4F0006CD8E /* FnFunctions.swift in Sources */,
 				5FD28AA61D5B27C100BAFC0F /* Atomic.swift in Sources */,
 				5F9679A51ECDDA56002EEADD /* Promise.swift in Sources */,
 				5FD28AA31D5B27C100BAFC0F /* Optional.swift in Sources */,
@@ -476,7 +477,6 @@
 				5FD28AA91D5B27C100BAFC0F /* Signal.swift in Sources */,
 				5FA7E29D1ECDE1A500DEC12E /* PromiseOperations.swift in Sources */,
 				5FD28AAA1D5B27C100BAFC0F /* Command.swift in Sources */,
-				5FD28A9E1D5B27C100BAFC0F /* Curry.swift in Sources */,
 				5FD28AA21D5B27C100BAFC0F /* Application+Composition.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -494,6 +494,7 @@
 				5F17AFE2209216D900C6977A /* SignalPipe.swift in Sources */,
 				5F96799B1ECDCD45002EEADD /* Result.swift in Sources */,
 				5FD28ACC1D5B27C200BAFC0F /* OptionalType.swift in Sources */,
+				5FDB3D8120EE731A0006CD8E /* FnFunctions.swift in Sources */,
 				5FD28AC11D5B27C200BAFC0F /* Operators.swift in Sources */,
 				5FA7E2981ECDE10900DEC12E /* ExecutionContext.swift in Sources */,
 				5FD28ABD1D5B27C200BAFC0F /* Functions.swift in Sources */,
@@ -507,7 +508,6 @@
 				5FD28AC91D5B27C200BAFC0F /* Signal.swift in Sources */,
 				5FA7E29E1ECDE31300DEC12E /* PromiseOperations.swift in Sources */,
 				5FD28ACA1D5B27C200BAFC0F /* Command.swift in Sources */,
-				5FD28ABE1D5B27C200BAFC0F /* Curry.swift in Sources */,
 				5FD28AC21D5B27C200BAFC0F /* Application+Composition.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -525,6 +525,7 @@
 				5F17AFE3209216D900C6977A /* SignalPipe.swift in Sources */,
 				5F96799A1ECDCD44002EEADD /* Result.swift in Sources */,
 				5FD28ABC1D5B27C200BAFC0F /* OptionalType.swift in Sources */,
+				5FDB3D8220EE731B0006CD8E /* FnFunctions.swift in Sources */,
 				5FD28AB11D5B27C200BAFC0F /* Operators.swift in Sources */,
 				5FA7E29A1ECDE10900DEC12E /* ExecutionContext.swift in Sources */,
 				5FD28AAD1D5B27C200BAFC0F /* Functions.swift in Sources */,
@@ -538,7 +539,6 @@
 				5FD28AB91D5B27C200BAFC0F /* Signal.swift in Sources */,
 				5FA7E29F1ECDE31400DEC12E /* PromiseOperations.swift in Sources */,
 				5FD28ABA1D5B27C200BAFC0F /* Command.swift in Sources */,
-				5FD28AAE1D5B27C200BAFC0F /* Curry.swift in Sources */,
 				5FD28AB21D5B27C200BAFC0F /* Application+Composition.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
