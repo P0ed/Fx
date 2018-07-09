@@ -54,7 +54,17 @@ public extension Fn {
 
 	/// Throttling wraps a block of code with throttling logic,
 	/// guaranteeing that an action will never be called more than once each specified interval.
-	static func throttle<A>(_ interval: TimeInterval, on queue: DispatchQueue = DispatchQueue.main, function f: @escaping (A) -> ()) -> ((A) -> ()) {
+	static func throttle(_ interval: TimeInterval, on queue: DispatchQueue = DispatchQueue.main, function f: @escaping () -> Void) -> () -> Void {
+		return { [cancel = SerialDisposable()] in
+			cancel.innerDisposable = Fx.run(after: interval, on: .global(qos: .userInteractive)) {
+				queue.async { cancel.dispose(); f() }
+			}
+		}
+	}
+
+	/// Throttling wraps a block of code with throttling logic,
+	/// guaranteeing that an action will never be called more than once each specified interval.
+	static func throttle<A>(_ interval: TimeInterval, on queue: DispatchQueue = DispatchQueue.main, function f: @escaping (A) -> Void) -> (A) -> Void {
 		return { [cancel = SerialDisposable()] x in
 			cancel.innerDisposable = Fx.run(after: interval, on: .global(qos: .userInteractive)) {
 				queue.async { cancel.dispose(); f(x) }
