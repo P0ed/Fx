@@ -1,3 +1,5 @@
+import Foundation
+
 /// This namespace contains functional counterparts of some functions.
 /// E.g. Fn.modify = curry(flip(modify))
 /// So instead `[].map { modify($0) { ... } }`
@@ -48,5 +50,15 @@ public extension Fn {
 	/// Runs function in specified ExecutionContext and return promise of flattened result
 	static func flatRun<A, B>(in ctx: ExecutionContext, _ f: @escaping (A) -> Promise<B>) -> (A) -> Promise<B> {
 		return { x in Promise { resolve in ctx.run { f(x).onComplete(.sync, callback: resolve) } } }
+	}
+
+	/// Throttling wraps a block of code with throttling logic,
+	/// guaranteeing that an action will never be called more than once each specified interval.
+	static func throttle<A>(_ interval: TimeInterval, on queue: DispatchQueue = DispatchQueue.main, function f: @escaping (A) -> ()) -> ((A) -> ()) {
+		return { [cancel = SerialDisposable()] x in
+			cancel.innerDisposable = Fx.run(after: interval, on: .global(qos: .userInteractive)) {
+				queue.async { cancel.dispose(); f(x) }
+			}
+		}
 	}
 }

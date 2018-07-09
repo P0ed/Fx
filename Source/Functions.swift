@@ -1,3 +1,5 @@
+import Foundation
+
 /// The identity function; returns its argument.
 public func id<A>(_ x: A) -> A {
 	return x
@@ -71,4 +73,11 @@ public func modify<A>(_ value: A, f: (inout A) throws -> Void) rethrows -> A {
 public func with<A>(_ x: A, _ f: (A) throws -> Void) rethrows -> A {
 	try f(x)
 	return x
+}
+
+/// Runs task on queue after time interval, returns AutoDisposable to cancel task before it started
+public func run(after time: TimeInterval, on queue: DispatchQueue, task: @escaping () -> Void) -> Disposable {
+	let item = DispatchWorkItem(block: task)
+	queue.asyncAfter(deadline: .now() + time, execute: item)
+	return ActionDisposable(action: item.cancel)
 }
