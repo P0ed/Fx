@@ -1,26 +1,15 @@
 import Foundation
 
 public func throttle<A>(_ interval: TimeInterval, on queue: DispatchQueue = DispatchQueue.main, function f: @escaping (A) -> ()) -> ((A) -> ()) {
-
-	var sharedBlock = nil as DispatchWorkItem?
-	let disposable = ActionDisposable {
-		sharedBlock?.cancel()
-	}
-
-	return { x in
-		capture(disposable)
-
-		let block = DispatchWorkItem(flags: .inheritQoS) {
-			queue.async {
-				sharedBlock = nil
-				f(x)
-			}
+	return { [cancel = SerialDisposable()] x in
+		cancel.innerDisposable = run(after: interval, on: .global(qos: .userInteractive)) {
+			queue.async { cancel.dispose(); f(x) }
 		}
-
-		sharedBlock?.cancel()
-		sharedBlock = block
-
-		let globalQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.userInteractive)
-		globalQueue.asyncAfter(deadline: .now() + .init(interval), execute: block)
 	}
+}
+
+public func run(after time: TimeInterval, on queue: DispatchQueue, task: @escaping () -> Void) -> Disposable {
+	let item = DispatchWorkItem(block: task)
+	queue.asyncAfter(deadline: .now() + time, execute: item)
+	return ActionDisposable(action: item.cancel)
 }
