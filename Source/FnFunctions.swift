@@ -7,6 +7,15 @@ import Foundation
 public enum Fn {}
 
 public extension Fn {
+	/// map
+	static func map<A, B>(_ f: @escaping (A) -> B) -> (A?) -> B? {
+		return { x in x.map(f) }
+	}
+	/// flatten • map
+	static func flatMap<A, B>(_ f: @escaping (A) -> B?) -> (A?) -> B? {
+		return { x in x.flatMap(f) }
+	}
+
 	/// Curried version of modify function
 	static func modify<A>(_ f: @escaping (inout A) -> Void) -> (A) -> A {
 		return { Fx.modify($0, f: f) }
@@ -70,5 +79,15 @@ public extension Fn {
 				queue.async { cancel.dispose(); f(x) }
 			}
 		}
+	}
+
+	/// Negate func
+	static func not(_ value: Bool) -> Bool {
+		return !value
+	}
+
+	/// Simple print sink
+	static func print<A>(_ x: A) -> () {
+		Swift.print(x)
 	}
 }
