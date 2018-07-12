@@ -55,14 +55,14 @@ public func capture(_ value: Any) {
 }
 
 /// Atomically mutates value
-public func modify<A>(_ value: inout A, f: (inout A) throws -> Void) rethrows {
+public func modify<A>(_ value: inout A, _ f: (inout A) throws -> Void) rethrows {
 	var copy = value
 	try f(&copy)
 	value = copy
 }
 
 /// Returns mutated copy of value
-public func modify<A>(_ value: A, f: (inout A) throws -> Void) rethrows -> A {
+public func modify<A>(_ value: A, _ f: (inout A) throws -> Void) rethrows -> A {
 	var copy = value
 	try f(&copy)
 	return copy

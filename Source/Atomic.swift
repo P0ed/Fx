@@ -7,7 +7,7 @@ public final class Atomic<Value> {
 
 	/// Atomically gets or sets the value of the variable.
 	public var value: Value {
-		get { return withValue(action: id) }
+		get { return withValue(id) }
 		set { modify { $0 = newValue } }
 	}
 
@@ -38,21 +38,21 @@ public final class Atomic<Value> {
 	}
 
 	/// Atomically modifies the variable.
-	public func modify(action: (inout Value) -> ()) {
+	public func modify(_ f: (inout Value) -> ()) {
 		lock()
 		defer { unlock() }
 
-		Fx.modify(&_value, f: action)
+		Fx.modify(&_value, f)
 	}
 
 	/// Atomically performs an arbitrary action using the current value of the
 	/// variable.
 	///
 	/// Returns the result of the action.
-	public func withValue<Result>(action: (Value) -> Result) -> Result {
+	public func withValue<Result>(_ f: (Value) -> Result) -> Result {
 		lock()
 		defer { unlock() }
 
-		return action(_value)
+		return f(_value)
 	}
 }

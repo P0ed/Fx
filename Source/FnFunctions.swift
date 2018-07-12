@@ -18,11 +18,11 @@ public extension Fn {
 
 	/// Curried version of modify function
 	static func modify<A>(_ f: @escaping (inout A) -> Void) -> (A) -> A {
-		return { Fx.modify($0, f: f) }
+		return { Fx.modify($0, f) }
 	}
 	/// Curried version of modify function
 	static func modify<A>(_ f: @escaping (inout A) throws -> Void) -> (A) throws -> A {
-		return { try Fx.modify($0, f: f) }
+		return { try Fx.modify($0, f) }
 	}
 
 	/// Curried version of with function

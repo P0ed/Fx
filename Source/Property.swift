@@ -135,6 +135,6 @@ public extension PropertyType where A: Equatable {
 public extension MutableProperty {
 
 	func modify(_ f: (inout A) -> ()) {
-		Fx.modify(&value, f: f)
+		Fx.modify(&value, f)
 	}
 }
