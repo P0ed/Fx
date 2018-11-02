@@ -64,18 +64,20 @@ public final class Promise<A>: PromiseType {
 	}
 }
 
-public extension Promise where A == Void {
-	convenience init() {
-		self.init(value: ())
-	}
-}
-
 public extension Promise {
 
 	static func pending() -> (Promise<A>, ResultSink<A>) {
 		var resolve: ResultSink<A>!
 		let promise = Promise { resolve = $0 }
 		return (promise, resolve)
+	}
+
+	static func value(_ value: A) -> Promise<A> {
+		return Promise(result: .value(value))
+	}
+
+	static func error(_ error: Error) -> Promise<A> {
+		return Promise(result: .error(error))
 	}
 
 	convenience init(value: A) {

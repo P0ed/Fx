@@ -11,10 +11,15 @@ extension Optional: OptionalType {
 }
 
 public extension Optional {
+
+	init(_ f: () throws -> Wrapped) {
+		self = try? f()
+	}
+
 	/// Runs function if some
 	@discardableResult
 	func with(_ f: Sink<Wrapped>) -> Wrapped? {
-		if case .some(let x) = self { f(x) }
+		if let x = self { f(x) }
 		return self
 	}
 }
