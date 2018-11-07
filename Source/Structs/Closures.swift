@@ -5,7 +5,7 @@ public struct IO<A> {
 
 	public var value: A {
 		get { return get() }
-		set { set(newValue) }
+		nonmutating set { set(newValue) }
 	}
 
 	public init(get: @escaping () -> A, set: @escaping (A) -> Void) {

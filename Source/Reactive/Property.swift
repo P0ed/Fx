@@ -26,7 +26,6 @@ public final class Property<A>: PropertyType {
 }
 
 public final class MutableProperty<A>: PropertyType {
-
 	private let getter: () -> A
 	private let setter: (A) -> ()
 
@@ -67,8 +66,10 @@ public extension PropertyType {
 	}
 
 	func flatMap<B>(_ f: @escaping (A) -> Property<B>) -> Property<B> {
-		return Property(value: f(value).value, signal: Signal { sink in
-			let disposable = SerialDisposable()
+		let disposable = SerialDisposable()
+		let y = f(value)
+		return Property(value: y.value, signal: Signal { sink in
+			disposable.innerDisposable = y.signal.observe(sink)
 			return signal.observe { x in
 				disposable.innerDisposable = f(x).observe(sink)
 			}
