@@ -9,8 +9,6 @@ This is a Swift framework providing a number of functions and types that I miss 
 The Signal is a stream of values over time
 #### `Property<A>` and `MutableProperty<A>`
 The Property is a value + signal with changes
-#### `Result<A>`
-The Result is an `enum` with two cases: `.value(A)` and `.error(Error)`. Result is also a monad so you can `map` and `flatMap` as well.
 #### `Promise<A>`
 The Promise is an async version of Result. Promises can be used instead of completion handlers to avoid nested closures.
 ```swift

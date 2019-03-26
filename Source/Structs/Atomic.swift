@@ -49,7 +49,7 @@ public final class Atomic<Value> {
 	/// variable.
 	///
 	/// Returns the result of the action.
-	public func withValue<Result>(_ f: (Value) -> Result) -> Result {
+	public func withValue<A>(_ f: (Value) -> A) -> A {
 		lock()
 		defer { unlock() }
 

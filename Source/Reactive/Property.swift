@@ -49,6 +49,10 @@ public final class MutableProperty<A>: PropertyType {
 		}
 	}
 
+	public var readonly: Property<A> {
+		return Property(value: value, signal: signal)
+	}
+
 	public func bind(_ signal: Signal<A>) -> Disposable {
 		return signal.observe § setter
 	}

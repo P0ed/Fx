@@ -3,26 +3,26 @@ import Dispatch
 public protocol PromiseType {
 	associatedtype A
 
-	var result: Result<A>? { get }
+	var result: Result<A, Error>? { get }
 
 	@discardableResult
-	func onComplete(_ context: ExecutionContext, callback: @escaping (Result<A>) -> Void) -> Self
+	func onComplete(_ context: ExecutionContext, callback: @escaping (Result<A, Error>) -> Void) -> Self
 }
 
 public final class Promise<A>: PromiseType {
 
-	public private(set) var result: Result<A>? {
+	public private(set) var result: Result<A, Error>? {
 		didSet { runCallbacks() }
 	}
 
 	private let callbackExecutionSemaphore = DispatchSemaphore(value: 1)
-	private let callbacks = Atomic<[ResultSink<A>]>([])
+	private let callbacks = Atomic<[(Result<A, Error>) -> Void]>([])
 
-	public init(result: Result<A>) {
+	public init(result: Result<A, Error>) {
 		self.result = result
 	}
 
-	public init(generator: (@escaping ResultSink<A>) -> Void) {
+	public init(generator: (@escaping (Result<A, Error>) -> Void) -> Void) {
 		generator { result in
 			guard self.result == nil else {
 				return assert(false, "Attempted to complete a Promise that is already completed")
@@ -32,8 +32,8 @@ public final class Promise<A>: PromiseType {
 	}
 
 	@discardableResult
-	public func onComplete(_ context: ExecutionContext = .default(), callback: @escaping ResultSink<A>) -> Self {
-		let wrappedCallback: ResultSink<A> = { [callbackExecutionSemaphore] result in
+	public func onComplete(_ context: ExecutionContext = .default(), callback: @escaping (Result<A, Error>) -> Void) -> Self {
+		let wrappedCallback: (Result<A, Error>) -> Void = { [callbackExecutionSemaphore] result in
 			context.run {
 				callbackExecutionSemaphore.wait()
 				callback(result)
@@ -66,8 +66,8 @@ public final class Promise<A>: PromiseType {
 
 public extension Promise {
 
-	static func pending() -> (Promise<A>, ResultSink<A>) {
-		var resolve: ResultSink<A>!
+	static func pending() -> (Promise<A>, (Result<A, Error>) -> Void) {
+		var resolve: ((Result<A, Error>) -> Void)!
 		let promise = Promise { resolve = $0 }
 		return (promise, resolve)
 	}
@@ -89,7 +89,7 @@ public extension Promise {
 	}
 
 	convenience init(_ f: () throws -> A) {
-		self.init(result: Result(f))
+		self.init(result: Result<A, Error>(catching: f))
 	}
 
 	var isCompleted: Bool {
@@ -97,11 +97,11 @@ public extension Promise {
 	}
 
 	var isSuccess: Bool {
-		return result?.analysis(ifSuccess: const(true), ifFailure: const(false)) ?? false
+		return result?.fold(success: const(true), failure: const(false)) ?? false
 	}
 
 	var isFailure: Bool {
-		return result?.analysis(ifSuccess: const(false), ifFailure: const(true)) ?? false
+		return result?.fold(success: const(false), failure: const(true)) ?? false
 	}
 
 	var value: A? {

@@ -6,7 +6,7 @@ public protocol SignalType {
 
 public extension SignalType where A: Equatable {
 
-	public func distinctUntilChanged() -> Signal<A> {
+	func distinctUntilChanged() -> Signal<A> {
 		return Signal<A> { sink in
 			var lastValue: A? = nil
 			return observe { value in

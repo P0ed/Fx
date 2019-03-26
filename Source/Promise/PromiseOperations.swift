@@ -2,15 +2,15 @@ import Foundation
 
 public extension PromiseType {
 
-	func mapResult<B>(_ context: ExecutionContext = .default(), f: @escaping (Result<A>) throws -> B) -> Promise<B> {
+	func mapResult<B>(_ context: ExecutionContext = .default(), f: @escaping (Result<A, Error>) throws -> B) -> Promise<B> {
 		return Promise { resolve in onComplete(context) { result in resolve(Result { try f(result) }) } }
 	}
 
-	func flatMapResult<B>(_ context: ExecutionContext = .default(), f: @escaping (Result<A>) throws -> Promise<B>) -> Promise<B> {
+	func flatMapResult<B>(_ context: ExecutionContext = .default(), f: @escaping (Result<A, Error>) throws -> Promise<B>) -> Promise<B> {
 		return Promise { resolve in
 			onComplete(context) { result in
 				Result { try f(result) }
-					.analysis(ifSuccess: id, ifFailure: Promise.init(error:))
+					.fold(success: id, failure: Promise.init(error:))
 					.onComplete(.sync, callback: resolve)
 			}
 		}
@@ -21,7 +21,7 @@ public extension PromiseType {
 	}
 
 	func map<B>(_ context: ExecutionContext, f: @escaping (A) throws -> B) -> Promise<B> {
-		return mapResult(context) { result in try f(result.dematerialize()) }
+		return mapResult(context) { result in try f(result.get()) }
 	}
 
 	func flatMap<B>(_ f: @escaping (A) throws -> Promise<B>) -> Promise<B> {
@@ -29,15 +29,15 @@ public extension PromiseType {
 	}
 
 	func flatMap<B>(_ context: ExecutionContext, f: @escaping (A) throws -> Promise<B>) -> Promise<B> {
-		return flatMapResult(context) { result in try f(result.dematerialize()) }
+		return flatMapResult(context) { result in try f(result.get()) }
 	}
 
 	func mapError(_ context: ExecutionContext = .default(), f: @escaping (Error) throws -> A) -> Promise<A> {
-		return mapResult(context) { result in try result.mapError(f).dematerialize() }
+		return mapResult(context) { result in try result.fold(success: id, failure: f) }
 	}
 
 	func flatMapError(_ context: ExecutionContext = .default(), f: @escaping (Error) throws -> Promise<A>) -> Promise<A> {
-		return flatMapResult(context) { result in try result.map(Promise.init(value:)).mapError(f).dematerialize() }
+		return flatMapResult(context) { result in try result.fold(success: Promise.init(value:), failure: f) }
 	}
 
 	func with(_ context: ExecutionContext = .default(), f: @escaping Sink<A>) -> Promise<A> {
@@ -73,14 +73,14 @@ public extension PromiseType {
 	@discardableResult
 	func onSuccess(_ context: ExecutionContext = .default(), callback: @escaping Sink<A>) -> Self {
 		return onComplete(context) { result in
-			result.analysis(ifSuccess: callback, ifFailure: { _ in })
+			result.fold(success: callback, failure: { _ in })
 		}
 	}
 
 	@discardableResult
 	func onFailure(_ context: ExecutionContext = .default(), callback: @escaping Sink<Error>) -> Self {
 		return onComplete(context) { result in
-			result.analysis(ifSuccess: { _ in }, ifFailure: callback)
+			result.fold(success: { _ in }, failure: callback)
 		}
 	}
 }
@@ -88,19 +88,19 @@ public extension PromiseType {
 public extension Promise {
 
 	/// Blocks the current thread until the promise is completed and then returns the result
-	func forced() -> Result<A> {
+	func forced() -> Result<A, Error> {
 		return forced(.distantFuture)!
 	}
 
 	/// Blocks the current thread until the promise is completed, but no longer than the given timeout
 	/// If the promise did not complete before the timeout, `nil` is returned, otherwise the result of the promise is returned
-	func forced(_ timeout: DispatchTime) -> Result<A>? {
+	func forced(_ timeout: DispatchTime) -> Result<A, Error>? {
 		if let result = result {
 			return result
 		}
 
 		let sema = DispatchSemaphore(value: 0)
-		var res: Result<A>? = nil
+		var res: Result<A, Error>? = nil
 		onComplete(.global) {
 			res = $0
 			sema.signal()
@@ -140,7 +140,7 @@ public extension Promise {
 
 public extension DispatchQueue {
 
-	func asyncResult<A>(_ f: @escaping () -> Result<A>) -> Promise<A> {
+	func asyncResult<A>(_ f: @escaping () -> Result<A, Error>) -> Promise<A> {
 		return Promise { resolve in
 			async {
 				resolve(f())
@@ -150,7 +150,7 @@ public extension DispatchQueue {
 
 	func promise<A>(_ f: @escaping () throws -> A) -> Promise<A> {
 		return Promise { resolve in
-			async { resolve(Result(f)) }
+			async { resolve(Result(catching: f)) }
 		}
 	}
 }
