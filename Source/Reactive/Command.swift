@@ -18,10 +18,3 @@ public final class Command<I, O> {
 		return result
 	}
 }
-
-extension Command where O: PromiseType {
-
-	var flatResults: Signal<O.A> {
-		return results.flatten()
-	}
-}

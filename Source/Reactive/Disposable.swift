@@ -72,7 +72,7 @@ public final class CompositeDisposable: Disposable {
 
 	/// Adds the given disposable to the list, then returns a handle which can
 	/// be used to opaquely remove the disposable later (if desired).
-	public func addDisposable(_ disposable: Disposable) -> Disposable {
+	public func addDisposable(_ disposable: Disposable) -> ManualDisposable {
 		var token: RemovalToken!
 
 		disposables.modify {
@@ -84,6 +84,29 @@ public final class CompositeDisposable: Disposable {
 				$0.removeValueForToken(token)
 			}
 		}
+	}
+
+	/// Adds the right-hand-side disposable to the left-hand-side
+	/// `CompositeDisposable`.
+	///
+	///     disposable += producer
+	///         .filter { ... }
+	///         .map    { ... }
+	///         .start(observer)
+	///
+	@discardableResult
+	public static func +=(lhs: CompositeDisposable, rhs: Disposable) -> ManualDisposable {
+		return lhs.addDisposable(rhs)
+	}
+
+	@discardableResult
+	public static func += (disposable: CompositeDisposable, action: @escaping VoidFunc) -> ManualDisposable {
+		return disposable += ActionDisposable(action: action)
+	}
+
+	@discardableResult
+	public func capture(_ object: Any) -> ManualDisposable {
+		return self += { Fx.capture(object) }
 	}
 }
 
@@ -119,17 +142,4 @@ public final class SerialDisposable: Disposable {
 	public func dispose() {
 		innerDisposable = nil
 	}
-}
-
-/// Adds the right-hand-side disposable to the left-hand-side
-/// `CompositeDisposable`.
-///
-///     disposable += producer
-///         .filter { ... }
-///         .map    { ... }
-///         .start(observer)
-///
-@discardableResult
-public func +=(lhs: CompositeDisposable, rhs: Disposable) -> Disposable {
-	return lhs.addDisposable(rhs)
 }

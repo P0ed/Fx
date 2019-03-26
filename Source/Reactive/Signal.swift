@@ -23,10 +23,10 @@ public final class Signal<A>: SignalType {
 		disposable.innerDisposable = generator(sink)
 	}
 
-	public func observe(_ sink: @escaping Sink<A>) -> Disposable {
+	public func observe(_ f: @escaping Sink<A>) -> Disposable {
 		var token: RemovalToken!
 		atomicSinks.modify {
-			token = $0.insert(sink)
+			token = $0.insert(f)
 		}
 
 		return ActionDisposable {
@@ -52,13 +52,17 @@ public extension Signal {
 		return map { _ in () }
 	}
 
+	func observe(_ ctx: ExecutionContext, _ f: @escaping Sink<A>) -> Disposable {
+		return observe { x in ctx.run { f(x) } }
+	}
+
 	func map<B>(_ f: @escaping (A) -> B) -> Signal<B> {
 		return Signal<B> { sink in
 			observe(sink • f)
 		}
 	}
 
-	func filter(_ f: @escaping (A) -> Bool) -> Signal<A> {
+	func filter(_ f: @escaping (A) -> Bool) -> Signal {
 		return Signal<A> { sink in
 			observe { value in
 				if f(value) {
@@ -126,11 +130,17 @@ public extension Signal {
 			return disposable
 		}
 	}
+
+	func throttled(_ timeInterval: TimeInterval) -> Signal {
+		return Signal { sink in
+			observe(Fn.throttle(timeInterval, function: sink))
+		}
+	}
 }
 
 public extension SignalType where A: OptionalType {
 
-	func flatten() -> Signal<A.A> {
+	func ignoringNils() -> Signal<A.A> {
 		return Signal { sink in
 			observe { value in
 				if let value = value.optional {
@@ -154,28 +164,9 @@ public extension SignalType where A: SignalType {
 	}
 }
 
-public extension SignalType where A: PromiseType {
-
-	func flatten() -> Signal<A.A> {
-		return Signal { sink in
-			observe { promise in
-				promise.onSuccess(callback: sink)
-			}
-		}
-	}
-}
-
 public extension Signal {
 
-	func flatMap<B>(_ f: @escaping (A) -> B?) -> Signal<B> {
-		return map(f).flatten()
-	}
-
 	func flatMap<B>(_ f: @escaping (A) -> Signal<B>) -> Signal<B> {
-		return map(f).flatten()
-	}
-
-	func flatMap<B>(_ f: @escaping (A) -> Promise<B>) -> Signal<B> {
 		return map(f).flatten()
 	}
 }
