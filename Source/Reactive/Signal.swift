@@ -2,15 +2,15 @@ import Foundation.NSLock
 
 public final class Signal<A>: SignalType {
 
-	private let atomicSinks: Atomic<Bag<Sink<A>>> = Atomic(Bag())
+	private let atomicSinks: Atomic<Bag<(A) -> Void>> = Atomic(Bag())
 	private let disposable = SerialDisposable()
 
-	public init(generator: (@escaping Sink<A>) -> Disposable?) {
+	public init(generator: (@escaping (A) -> Void) -> Disposable?) {
 
 		let sendLock = NSLock()
 		sendLock.name = "com.github.P0ed.Fx"
 
-		let sink: Sink<A> = { [weak self] value in
+		let sink: (A) -> Void = { [weak self] value in
 			guard let welf = self else { return }
 
 			sendLock.lock()
@@ -23,7 +23,7 @@ public final class Signal<A>: SignalType {
 		disposable.innerDisposable = generator(sink)
 	}
 
-	public func observe(_ f: @escaping Sink<A>) -> Disposable {
+	public func observe(_ f: @escaping (A) -> Void) -> Disposable {
 		var token: RemovalToken!
 		atomicSinks.modify {
 			token = $0.insert(f)
@@ -36,8 +36,8 @@ public final class Signal<A>: SignalType {
 		}
 	}
 
-	public static func pipe() -> (signal: Signal<A>, put: Sink<A>) {
-		var put: Sink<A>!
+	public static func pipe() -> (signal: Signal<A>, put: (A) -> Void) {
+		var put: ((A) -> Void)!
 		let signal = Signal {
 			put = $0
 			return nil
@@ -52,7 +52,7 @@ public extension Signal {
 		return map { _ in () }
 	}
 
-	func observe(_ ctx: ExecutionContext, _ f: @escaping Sink<A>) -> Disposable {
+	func observe(_ ctx: ExecutionContext, _ f: @escaping (A) -> Void) -> Disposable {
 		return observe { x in ctx.run { f(x) } }
 	}
 

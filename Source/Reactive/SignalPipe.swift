@@ -1,6 +1,6 @@
 public final class SignalPipe<A> {
 	public let signal: Signal<A>
-	private let sendValue: Sink<A>
+	private let sendValue: (A) -> Void
 
 	public init() {
 		(signal, sendValue) = Signal<A>.pipe()

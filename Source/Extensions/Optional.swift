@@ -18,7 +18,7 @@ public extension Optional {
 
 	/// Runs function if some
 	@discardableResult
-	func with(_ f: Sink<Wrapped>) -> Wrapped? {
+	func with(_ f: (Wrapped) -> Void) -> Wrapped? {
 		if let x = self { f(x) }
 		return self
 	}

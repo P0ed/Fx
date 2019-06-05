@@ -27,7 +27,7 @@ public extension Result {
 	}
 
 	@discardableResult
-	func onSuccess(_ f: Sink<Success>) -> Result {
+	func onSuccess(_ f: (Success) -> Void) -> Result {
 		return fold(
 			success: { f($0); return .success($0) },
 			failure: Result.error
@@ -35,7 +35,7 @@ public extension Result {
 	}
 
 	@discardableResult
-	func onFailure(_ f: Sink<Failure>) -> Result {
+	func onFailure(_ f: (Failure) -> Void) -> Result {
 		return fold(
 			success: Result.value,
 			failure: { f($0); return .failure($0) }

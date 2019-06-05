@@ -60,7 +60,7 @@ public final class MutableProperty<A>: PropertyType {
 
 public extension PropertyType {
 
-	func observe(_ sink: @escaping Sink<A>) -> Disposable {
+	func observe(_ sink: @escaping (A) -> Void) -> Disposable {
 		sink(value)
 		return signal.observe(sink)
 	}

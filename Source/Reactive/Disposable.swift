@@ -6,11 +6,10 @@ public protocol Disposable: class {
 
 /// A disposable that will not dispose on deinit
 public final class ManualDisposable: Disposable {
-
-	private let action: Atomic<VoidFunc?>
+	private let action: Atomic<(() -> Void)?>
 
 	/// Initializes the disposable to run the given action upon disposal.
-	public init(action: @escaping VoidFunc) {
+	public init(action: @escaping () -> Void) {
 		self.action = Atomic(action)
 	}
 
@@ -25,7 +24,7 @@ public final class ActionDisposable: Disposable {
 	private let manualDisposable: ManualDisposable
 
 	/// Initializes the disposable to run the given action upon disposal.
-	public init(action: @escaping VoidFunc) {
+	public init(action: @escaping () -> Void) {
 		manualDisposable = ManualDisposable(action: action)
 	}
 
@@ -100,7 +99,7 @@ public final class CompositeDisposable: Disposable {
 	}
 
 	@discardableResult
-	public static func += (disposable: CompositeDisposable, action: @escaping VoidFunc) -> ManualDisposable {
+	public static func += (disposable: CompositeDisposable, action: @escaping () -> Void) -> ManualDisposable {
 		return disposable += ActionDisposable(action: action)
 	}
 

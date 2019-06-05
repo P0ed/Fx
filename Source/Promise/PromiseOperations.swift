@@ -40,7 +40,7 @@ public extension PromiseType {
 		return flatMapResult(context) { result in try result.fold(success: Promise.init(value:), failure: f) }
 	}
 
-	func with(_ context: ExecutionContext = .default(), f: @escaping Sink<A>) -> Promise<A> {
+	func with(_ context: ExecutionContext = .default(), f: @escaping (A) -> Void) -> Promise<A> {
 		return map(context) { x in return Fx.with(x, f) }
 	}
 
@@ -71,14 +71,14 @@ public extension PromiseType {
 	}
 
 	@discardableResult
-	func onSuccess(_ context: ExecutionContext = .default(), callback: @escaping Sink<A>) -> Self {
+	func onSuccess(_ context: ExecutionContext = .default(), callback: @escaping (A) -> Void) -> Self {
 		return onComplete(context) { result in
 			result.fold(success: callback, failure: { _ in })
 		}
 	}
 
 	@discardableResult
-	func onFailure(_ context: ExecutionContext = .default(), callback: @escaping Sink<Error>) -> Self {
+	func onFailure(_ context: ExecutionContext = .default(), callback: @escaping (Error) -> Void) -> Self {
 		return onComplete(context) { result in
 			result.fold(success: { _ in }, failure: callback)
 		}
