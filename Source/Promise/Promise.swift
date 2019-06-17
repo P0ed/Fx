@@ -6,9 +6,15 @@ public protocol PromiseType {
 	var result: Result<A, Error>? { get }
 
 	@discardableResult
-	func onComplete(_ context: ExecutionContext, callback: @escaping (Result<A, Error>) -> Void) -> Self
+	func onComplete(_ context: ExecutionContext, _ callback: @escaping (Result<A, Error>) -> Void) -> Self
 }
 
+/// A Promise represents the outcome of an asynchronous operation
+/// The outcome will be represented as an instance of the `Result` enum and will be stored
+/// in the `result` property. As long as the operation is not yet completed, `result` will be nil.
+/// Interested parties can be informed of the completion by using one of the available callback
+/// registration methods (e.g. onComplete, onSuccess & onFailure) or by immediately composing/chaining
+/// subsequent actions (e.g. map, flatMap).
 public final class Promise<A>: PromiseType {
 
 	public private(set) var result: Result<A, Error>? {
@@ -31,8 +37,9 @@ public final class Promise<A>: PromiseType {
 		}
 	}
 
+	/// End of chain callback, returns self and does not guarantee callback order
 	@discardableResult
-	public func onComplete(_ context: ExecutionContext = .default(), callback: @escaping (Result<A, Error>) -> Void) -> Self {
+	public func onComplete(_ context: ExecutionContext = .default(), _ callback: @escaping (Result<A, Error>) -> Void) -> Self {
 		let wrappedCallback: (Result<A, Error>) -> Void = { [callbackExecutionSemaphore] result in
 			context.run {
 				callbackExecutionSemaphore.wait()

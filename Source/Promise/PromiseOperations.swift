@@ -2,46 +2,47 @@ import Foundation
 
 public extension PromiseType {
 
-	func mapResult<B>(_ context: ExecutionContext = .default(), f: @escaping (Result<A, Error>) throws -> B) -> Promise<B> {
+	func mapResult<B>(_ context: ExecutionContext = .default(), _ f: @escaping (Result<A, Error>) throws -> B) -> Promise<B> {
 		return Promise { resolve in onComplete(context) { result in resolve(Result { try f(result) }) } }
 	}
 
-	func flatMapResult<B>(_ context: ExecutionContext = .default(), f: @escaping (Result<A, Error>) throws -> Promise<B>) -> Promise<B> {
+	func flatMapResult<B>(_ context: ExecutionContext = .default(), _ f: @escaping (Result<A, Error>) throws -> Promise<B>) -> Promise<B> {
 		return Promise { resolve in
 			onComplete(context) { result in
 				Result { try f(result) }
 					.fold(success: id, failure: Promise.init(error:))
-					.onComplete(.sync, callback: resolve)
+					.onComplete(.sync, resolve)
 			}
 		}
 	}
 
 	func map<B>(_ f: @escaping (A) throws -> B) -> Promise<B> {
-		return map(.default(), f: f)
+		return map(.default(), f)
 	}
 
-	func map<B>(_ context: ExecutionContext, f: @escaping (A) throws -> B) -> Promise<B> {
+	func map<B>(_ context: ExecutionContext, _ f: @escaping (A) throws -> B) -> Promise<B> {
 		return mapResult(context) { result in try f(result.get()) }
 	}
 
 	func flatMap<B>(_ f: @escaping (A) throws -> Promise<B>) -> Promise<B> {
-		return flatMap(.default(), f: f)
+		return flatMap(.default(), f)
 	}
 
-	func flatMap<B>(_ context: ExecutionContext, f: @escaping (A) throws -> Promise<B>) -> Promise<B> {
+	func flatMap<B>(_ context: ExecutionContext, _ f: @escaping (A) throws -> Promise<B>) -> Promise<B> {
 		return flatMapResult(context) { result in try f(result.get()) }
 	}
 
-	func mapError(_ context: ExecutionContext = .default(), f: @escaping (Error) throws -> A) -> Promise<A> {
+	func mapError(_ context: ExecutionContext = .default(), _ f: @escaping (Error) throws -> A) -> Promise<A> {
 		return mapResult(context) { result in try result.fold(success: id, failure: f) }
 	}
 
-	func flatMapError(_ context: ExecutionContext = .default(), f: @escaping (Error) throws -> Promise<A>) -> Promise<A> {
+	func flatMapError(_ context: ExecutionContext = .default(), _ f: @escaping (Error) throws -> Promise<A>) -> Promise<A> {
 		return flatMapResult(context) { result in try result.fold(success: Promise.init(value:), failure: f) }
 	}
 
-	func with(_ context: ExecutionContext = .default(), f: @escaping (A) -> Void) -> Promise<A> {
-		return map(context) { x in return Fx.with(x, f) }
+	/// Adds side effect preserving callback order
+	func with(_ context: ExecutionContext = .default(), _ f: @escaping (A) -> Void) -> Promise<A> {
+		return map(context, Fn.with(f))
 	}
 
 	func zip<B>(_ that: Promise<B>) -> Promise<(A, B)> {
@@ -53,9 +54,10 @@ public extension PromiseType {
 	}
 
 	func asVoid() -> Promise<Void> {
-		return self.map(.sync, f: { _ in () })
+		return map(.sync) { _ in () }
 	}
 
+	/// Makes `times` attempts (at least once) until the promise succeeds
 	static func retry(_ times: Int, _ task: @escaping () -> Promise<A>) -> Promise<A> {
 		var attempts = 0
 
@@ -70,15 +72,17 @@ public extension PromiseType {
 		return attempt()
 	}
 
+	/// End of chain success callback, returns self and does not guarantee callback order
 	@discardableResult
-	func onSuccess(_ context: ExecutionContext = .default(), callback: @escaping (A) -> Void) -> Self {
+	func onSuccess(_ context: ExecutionContext = .default(), _ callback: @escaping (A) -> Void) -> Self {
 		return onComplete(context) { result in
 			result.fold(success: callback, failure: { _ in })
 		}
 	}
 
+	/// End of chain failure callback, returns self and does not guarantee callback order
 	@discardableResult
-	func onFailure(_ context: ExecutionContext = .default(), callback: @escaping (Error) -> Void) -> Self {
+	func onFailure(_ context: ExecutionContext = .default(), _ callback: @escaping (Error) -> Void) -> Self {
 		return onComplete(context) { result in
 			result.fold(success: { _ in }, failure: callback)
 		}
@@ -139,15 +143,6 @@ public extension Promise {
 }
 
 public extension DispatchQueue {
-
-	func asyncResult<A>(_ f: @escaping () -> Result<A, Error>) -> Promise<A> {
-		return Promise { resolve in
-			async {
-				resolve(f())
-			}
-		}
-	}
-
 	func promise<A>(_ f: @escaping () throws -> A) -> Promise<A> {
 		return Promise { resolve in
 			async { resolve(Result(catching: f)) }
@@ -157,7 +152,7 @@ public extension DispatchQueue {
 
 public extension Sequence where Iterator.Element: PromiseType {
 
-	func fold<R>(_ zero: R, f: @escaping (R, Iterator.Element.A) -> R) -> Promise<R> {
+	func fold<R>(_ zero: R, _ f: @escaping (R, Iterator.Element.A) -> R) -> Promise<R> {
 		return reduce(Promise(value: zero)) { result, element in
 			result.flatMap { resultValue in
 				element.map { elementValue in

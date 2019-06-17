@@ -27,11 +27,11 @@ public extension Fn {
 
 	/// Curried version of with function
 	static func with<A>(_ f: @escaping (A) -> Void) -> (A) -> A {
-		return { x in f(x); return x }
+		return { x in Fx.with(x, f) }
 	}
 	/// Curried version of with function
 	static func with<A>(_ f: @escaping (A) throws -> Void) -> (A) throws -> A {
-		return { x in try f(x); return x }
+		return { x in try Fx.with(x, f) }
 	}
 
 	/// Runs function in specified ExecutionContext
@@ -54,11 +54,11 @@ public extension Fn {
 
 	/// Runs function in specified ExecutionContext and return promise of flattened result
 	static func flatRun<A>(in ctx: ExecutionContext, _ f: @escaping () -> Promise<A>) -> () -> Promise<A> {
-		return { Promise { resolve in ctx.run { f().onComplete(.sync, callback: resolve) } } }
+		return { Promise { resolve in ctx.run { f().onComplete(.sync, resolve) } } }
 	}
 	/// Runs function in specified ExecutionContext and return promise of flattened result
 	static func flatRun<A, B>(in ctx: ExecutionContext, _ f: @escaping (A) -> Promise<B>) -> (A) -> Promise<B> {
-		return { x in Promise { resolve in ctx.run { f(x).onComplete(.sync, callback: resolve) } } }
+		return { x in Promise { resolve in ctx.run { f(x).onComplete(.sync, resolve) } } }
 	}
 
 	/// Throttling wraps a block of code with throttling logic,

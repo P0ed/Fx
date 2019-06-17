@@ -13,3 +13,14 @@ public struct IO<A> {
 		self.set = set
 	}
 }
+
+/// Escaping readonly value
+public struct Readonly<A> {
+	private let get: () -> A
+
+	public var value: A { return get() }
+
+	public init(get: @escaping () -> A) {
+		self.get = get
+	}
+}

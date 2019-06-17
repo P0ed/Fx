@@ -2,7 +2,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'Fx'
-  s.version          = '2.0'
+  s.version          = '2.1'
   s.summary          = 'This is a Swift framework providing a number of functions and types that I miss in Swift standard library.'
   #s.description      = ''
 
