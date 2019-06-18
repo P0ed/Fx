@@ -66,6 +66,9 @@
 		5FA7E2951ECDDD8C00DEC12E /* ExecutionContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7E2941ECDDD8C00DEC12E /* ExecutionContext.swift */; };
 		5FA7E29D1ECDE1A500DEC12E /* PromiseOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA7E29C1ECDE1A500DEC12E /* PromiseOperations.swift */; };
 		5FB5C45B1D5C6D9400BA78A3 /* Weak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB5C45A1D5C6D9400BA78A3 /* Weak.swift */; };
+		5FB881D922B946C000385DD6 /* Semigroup+Monoid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB881D822B946C000385DD6 /* Semigroup+Monoid.swift */; };
+		5FB881DA22B946DE00385DD6 /* Semigroup+Monoid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB881D822B946C000385DD6 /* Semigroup+Monoid.swift */; };
+		5FB881DB22B946DE00385DD6 /* Semigroup+Monoid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB881D822B946C000385DD6 /* Semigroup+Monoid.swift */; };
 		5FD28A9D1D5B27C100BAFC0F /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E7E1D05CB4D00B8A7AC /* Functions.swift */; };
 		5FD28AA01D5B27C100BAFC0F /* Weakify.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E871D05CB4D00B8A7AC /* Weakify.swift */; };
 		5FD28AA11D5B27C100BAFC0F /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E821D05CB4D00B8A7AC /* Operators.swift */; };
@@ -110,6 +113,7 @@
 		5FA7E2941ECDDD8C00DEC12E /* ExecutionContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExecutionContext.swift; sourceTree = "<group>"; };
 		5FA7E29C1ECDE1A500DEC12E /* PromiseOperations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseOperations.swift; sourceTree = "<group>"; };
 		5FB5C45A1D5C6D9400BA78A3 /* Weak.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Weak.swift; sourceTree = "<group>"; };
+		5FB881D822B946C000385DD6 /* Semigroup+Monoid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Semigroup+Monoid.swift"; sourceTree = "<group>"; };
 		5FD28A5F1D5B271600BAFC0F /* Fx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5FD28A6C1D5B272100BAFC0F /* Fx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5FD28A951D5B275600BAFC0F /* Fx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -237,6 +241,7 @@
 		5F796E661D05C4D900B8A7AC /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				5FB881D722B946A700385DD6 /* Functional */,
 				5F10E86E218C95A500B340C6 /* Extensions */,
 				5F10E86C218C958200B340C6 /* Promise */,
 				5F10E86B218C956B00B340C6 /* Reactive */,
@@ -245,6 +250,14 @@
 				5F10E868218C94EF00B340C6 /* Structs */,
 			);
 			path = Source;
+			sourceTree = "<group>";
+		};
+		5FB881D722B946A700385DD6 /* Functional */ = {
+			isa = PBXGroup;
+			children = (
+				5FB881D822B946C000385DD6 /* Semigroup+Monoid.swift */,
+			);
+			path = Functional;
 			sourceTree = "<group>";
 		};
 		5FD28AD11D5B2E4700BAFC0F /* Meta */ = {
@@ -463,6 +476,7 @@
 				5FA7E29D1ECDE1A500DEC12E /* PromiseOperations.swift in Sources */,
 				5FD28AAA1D5B27C100BAFC0F /* Command.swift in Sources */,
 				5FD28AA21D5B27C100BAFC0F /* Application+Composition.swift in Sources */,
+				5FB881D922B946C000385DD6 /* Semigroup+Monoid.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -494,6 +508,7 @@
 				5F10E87F218C9D5700B340C6 /* PromiseOperations.swift in Sources */,
 				5F10E884218C9D5700B340C6 /* Command.swift in Sources */,
 				5F10E882218C9D5700B340C6 /* SignalType.swift in Sources */,
+				5FB881DA22B946DE00385DD6 /* Semigroup+Monoid.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -525,6 +540,7 @@
 				5F10E899218C9D5900B340C6 /* PromiseOperations.swift in Sources */,
 				5F10E89E218C9D5900B340C6 /* Command.swift in Sources */,
 				5F10E89C218C9D5900B340C6 /* SignalType.swift in Sources */,
+				5FB881DB22B946DE00385DD6 /* Semigroup+Monoid.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
