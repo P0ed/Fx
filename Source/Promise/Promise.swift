@@ -39,7 +39,7 @@ public final class Promise<A>: PromiseType {
 
 	/// End of chain callback, returns self and does not guarantee callback order
 	@discardableResult
-	public func onComplete(_ context: ExecutionContext = .default(), _ callback: @escaping (Result<A, Error>) -> Void) -> Self {
+	public func onComplete(_ context: ExecutionContext, _ callback: @escaping (Result<A, Error>) -> Void) -> Self {
 		let wrappedCallback: (Result<A, Error>) -> Void = { [callbackExecutionSemaphore] result in
 			context.run {
 				callbackExecutionSemaphore.wait()
@@ -65,7 +65,7 @@ public final class Promise<A>: PromiseType {
 		}
 
 		callbacks.modify { callbacks in
-			for callback in callbacks { callback(result) }
+			callbacks.forEach { $0(result) }
 			callbacks.removeAll()
 		}
 	}

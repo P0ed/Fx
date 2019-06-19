@@ -2,11 +2,13 @@ import Foundation
 
 public extension PromiseType {
 
-	func mapResult<B>(_ context: ExecutionContext = .default(), _ f: @escaping (Result<A, Error>) throws -> B) -> Promise<B> {
+	func mapResult<B>(_ context: ExecutionContext, _ f: @escaping (Result<A, Error>) throws -> B) -> Promise<B> {
 		return Promise { resolve in onComplete(context) { result in resolve(Result { try f(result) }) } }
 	}
+	@inlinable
+	func mapResult<B>(_ f: @escaping (Result<A, Error>) throws -> B) -> Promise<B> { return mapResult(.default(), f) }
 
-	func flatMapResult<B>(_ context: ExecutionContext = .default(), _ f: @escaping (Result<A, Error>) throws -> Promise<B>) -> Promise<B> {
+	func flatMapResult<B>(_ context: ExecutionContext, _ f: @escaping (Result<A, Error>) throws -> Promise<B>) -> Promise<B> {
 		return Promise { resolve in
 			onComplete(context) { result in
 				Result { try f(result) }
@@ -15,35 +17,40 @@ public extension PromiseType {
 			}
 		}
 	}
-
-	func map<B>(_ f: @escaping (A) throws -> B) -> Promise<B> {
-		return map(.default(), f)
-	}
+	@inlinable
+	func flatMapResult<B>(_ f: @escaping (Result<A, Error>) throws -> Promise<B>) -> Promise<B> { return flatMapResult(.default(), f) }
 
 	func map<B>(_ context: ExecutionContext, _ f: @escaping (A) throws -> B) -> Promise<B> {
 		return mapResult(context) { result in try f(result.get()) }
 	}
-
-	func flatMap<B>(_ f: @escaping (A) throws -> Promise<B>) -> Promise<B> {
-		return flatMap(.default(), f)
-	}
+	@inlinable
+	func map<B>(_ f: @escaping (A) throws -> B) -> Promise<B> { return map(.default(), f) }
 
 	func flatMap<B>(_ context: ExecutionContext, _ f: @escaping (A) throws -> Promise<B>) -> Promise<B> {
 		return flatMapResult(context) { result in try f(result.get()) }
 	}
+	@inlinable
+	func flatMap<B>(_ f: @escaping (A) throws -> Promise<B>) -> Promise<B> { return flatMap(.default(), f) }
 
-	func mapError(_ context: ExecutionContext = .default(), _ f: @escaping (Error) throws -> A) -> Promise<A> {
+	func mapError(_ context: ExecutionContext, _ f: @escaping (Error) throws -> A) -> Promise<A> {
 		return mapResult(context) { result in try result.fold(success: id, failure: f) }
 	}
+	@inlinable
+	func mapError(_ f: @escaping (Error) throws -> A) -> Promise<A> { return mapError(.default(), f) }
 
-	func flatMapError(_ context: ExecutionContext = .default(), _ f: @escaping (Error) throws -> Promise<A>) -> Promise<A> {
+	func flatMapError(_ context: ExecutionContext, _ f: @escaping (Error) throws -> Promise<A>) -> Promise<A> {
 		return flatMapResult(context) { result in try result.fold(success: Promise.init(value:), failure: f) }
 	}
+	@inlinable
+	func flatMapError(_ f: @escaping (Error) throws -> Promise<A>) -> Promise<A> { return flatMapError(.default(), f) }
 
 	/// Adds side effect preserving callback order
-	func with(_ context: ExecutionContext = .default(), _ f: @escaping (A) -> Void) -> Promise<A> {
+	func with(_ context: ExecutionContext, _ f: @escaping (A) -> Void) -> Promise<A> {
 		return map(context, Fn.with(f))
 	}
+	/// Adds side effect preserving callback order
+	@inlinable
+	func with(_ f: @escaping (A) -> Void) -> Promise<A> { return with(.default(), f) }
 
 	func zip<B>(_ that: Promise<B>) -> Promise<(A, B)> {
 		return flatMap(.sync) { thisVal -> Promise<(A, B)> in
@@ -53,9 +60,7 @@ public extension PromiseType {
 		}
 	}
 
-	func asVoid() -> Promise<Void> {
-		return map(.sync) { _ in () }
-	}
+	func asVoid() -> Promise<Void> { return map(.sync) { _ in () } }
 
 	/// Makes `times` attempts (at least once) until the promise succeeds
 	static func retry(_ times: Int, _ task: @escaping () -> Promise<A>) -> Promise<A> {
@@ -72,21 +77,31 @@ public extension PromiseType {
 		return attempt()
 	}
 
+	/// End of chain callback, returns self and does not guarantee callback order
+	@discardableResult @inlinable
+	func onComplete(_ f: @escaping (Result<A, Error>) -> Void) -> Self { return onComplete(.default(), f) }
+
 	/// End of chain success callback, returns self and does not guarantee callback order
 	@discardableResult
-	func onSuccess(_ context: ExecutionContext = .default(), _ callback: @escaping (A) -> Void) -> Self {
+	func onSuccess(_ context: ExecutionContext, _ f: @escaping (A) -> Void) -> Self {
 		return onComplete(context) { result in
-			result.fold(success: callback, failure: { _ in })
+			result.fold(success: f, failure: { _ in })
 		}
 	}
+	/// End of chain success callback, returns self and does not guarantee callback order
+	@discardableResult @inlinable
+	func onSuccess(_ f: @escaping (A) -> Void) -> Self { return onSuccess(.default(), f) }
 
 	/// End of chain failure callback, returns self and does not guarantee callback order
 	@discardableResult
-	func onFailure(_ context: ExecutionContext = .default(), _ callback: @escaping (Error) -> Void) -> Self {
+	func onFailure(_ context: ExecutionContext, _ f: @escaping (Error) -> Void) -> Self {
 		return onComplete(context) { result in
-			result.fold(success: { _ in }, failure: callback)
+			result.fold(success: { _ in }, failure: f)
 		}
 	}
+	/// End of chain failure callback, returns self and does not guarantee callback order
+	@discardableResult @inlinable
+	func onFailure(_ f: @escaping (Error) -> Void) -> Self { return onFailure(.default(), f) }
 }
 
 public extension Promise {

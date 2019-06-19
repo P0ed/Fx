@@ -24,3 +24,13 @@ public struct Readonly<A> {
 		self.get = get
 	}
 }
+
+public extension IO {
+
+	var readonly: Readonly<A> { return Readonly(get: get) }
+
+	init(copy value: A) {
+		var copy = value
+		self = IO(get: { copy }, set: { copy = $0 })
+	}
+}
