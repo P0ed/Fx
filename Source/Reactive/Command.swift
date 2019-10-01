@@ -5,7 +5,7 @@ public final class Command<I, O> {
 	private let resulitsPipe = Signal<O>.pipe()
 
 	public var results: Signal<O> {
-		return resulitsPipe.signal
+		resulitsPipe.signal
 	}
 
 	public init(_ action: @escaping (I) -> O) {

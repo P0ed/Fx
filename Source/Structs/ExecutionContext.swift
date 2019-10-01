@@ -35,13 +35,13 @@ public extension ExecutionContext {
 	static let global = ExecutionContext.queue(.global())
 	/// Async on provided queue
 	static func queue(_ queue: DispatchQueue) -> ExecutionContext {
-		return ExecutionContext(run: { task in
+		ExecutionContext(run: { task in
 			queue.async(execute: task)
 		})
 	}
 	/// Sync on provided queue
 	static func syncQueue(_ queue: DispatchQueue) -> ExecutionContext {
-		return ExecutionContext(run: { task in
+		ExecutionContext(run: { task in
 			queue.sync(execute: task)
 		})
 	}

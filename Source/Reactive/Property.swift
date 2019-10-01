@@ -4,11 +4,10 @@ public protocol PropertyType {
 	var signal: Signal<A> { get }
 }
 
+@propertyWrapper
 public final class Property<A>: PropertyType {
 
-	public var value: A {
-		return getter()
-	}
+	public var value: A { getter() }
 	public let signal: Signal<A>
 
 	private let getter: () -> A
@@ -23,14 +22,17 @@ public final class Property<A>: PropertyType {
 			}
 		}
 	}
+
+	public var wrappedValue: A { value }
 }
 
+@propertyWrapper
 public final class MutableProperty<A>: PropertyType {
 	private let getter: () -> A
 	private let setter: (A) -> ()
 
 	public var value: A {
-		get { return getter() }
+		get { getter() }
 		set { setter(newValue) }
 	}
 
@@ -49,12 +51,19 @@ public final class MutableProperty<A>: PropertyType {
 		}
 	}
 
+	public convenience init(wrappedValue: A) {
+		self.init(wrappedValue)
+	}
+
+	public var wrappedValue: A { get { value } set { value = newValue } }
+	public var projectedValue: Property<A> { readonly }
+
 	public var readonly: Property<A> {
-		return Property(value: value, signal: signal)
+		Property(value: value, signal: signal)
 	}
 
 	public func bind(_ signal: Signal<A>) -> Disposable {
-		return signal.observe § setter
+		signal.observe § setter
 	}
 }
 
@@ -66,7 +75,7 @@ public extension PropertyType {
 	}
 
 	func map<B>(_ f: @escaping (A) -> B) -> Property<B> {
-		return Property(value: f(value), signal: signal.map(f))
+		Property(value: f(value), signal: signal.map(f))
 	}
 
 	func flatMap<B>(_ f: @escaping (A) -> Property<B>) -> Property<B> {
@@ -107,18 +116,18 @@ public extension Property {
 	}
 
 	func combine<B>(_ other: Property<B>) -> Property<(A, B)> {
-		return mapCombine(other) { x, y in (x, y) }
+		mapCombine(other) { x, y in (x, y) }
 	}
 
 	func flatCombine<B, C, D>(_ other: Property<D>) -> Property<(B, C, D)> where A == (B, C) {
-		return mapCombine(other, { xy, z in (xy.0, xy.1, z) })
+		mapCombine(other, { xy, z in (xy.0, xy.1, z) })
 	}
 }
 
 public extension Property {
 
 	static func const(_ value: A) -> Property<A> {
-		return Property(value: value, signal: .empty)
+		Property(value: value, signal: .empty)
 	}
 }
 

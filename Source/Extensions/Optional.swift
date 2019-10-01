@@ -5,9 +5,7 @@ public protocol OptionalType {
 }
 
 extension Optional: OptionalType {
-	public var optional: Wrapped? {
-		return self
-	}
+	public var optional: Wrapped? { self }
 }
 
 public extension Optional {

@@ -3,13 +3,13 @@ import Foundation
 public extension PromiseType {
 
 	func mapResult<B>(_ context: ExecutionContext, _ f: @escaping (Result<A, Error>) throws -> B) -> Promise<B> {
-		return Promise { resolve in onComplete(context) { result in resolve(Result { try f(result) }) } }
+		Promise { resolve in onComplete(context) { result in resolve(Result { try f(result) }) } }
 	}
 	@inlinable
-	func mapResult<B>(_ f: @escaping (Result<A, Error>) throws -> B) -> Promise<B> { return mapResult(.default(), f) }
+	func mapResult<B>(_ f: @escaping (Result<A, Error>) throws -> B) -> Promise<B> { mapResult(.default(), f) }
 
 	func flatMapResult<B>(_ context: ExecutionContext, _ f: @escaping (Result<A, Error>) throws -> Promise<B>) -> Promise<B> {
-		return Promise { resolve in
+		Promise { resolve in
 			onComplete(context) { result in
 				Result { try f(result) }
 					.fold(success: id, failure: Promise.init(error:))
@@ -18,49 +18,49 @@ public extension PromiseType {
 		}
 	}
 	@inlinable
-	func flatMapResult<B>(_ f: @escaping (Result<A, Error>) throws -> Promise<B>) -> Promise<B> { return flatMapResult(.default(), f) }
+	func flatMapResult<B>(_ f: @escaping (Result<A, Error>) throws -> Promise<B>) -> Promise<B> { flatMapResult(.default(), f) }
 
 	func map<B>(_ context: ExecutionContext, _ f: @escaping (A) throws -> B) -> Promise<B> {
-		return mapResult(context) { result in try f(result.get()) }
+		mapResult(context) { result in try f(result.get()) }
 	}
 	@inlinable
-	func map<B>(_ f: @escaping (A) throws -> B) -> Promise<B> { return map(.default(), f) }
+	func map<B>(_ f: @escaping (A) throws -> B) -> Promise<B> { map(.default(), f) }
 
 	func flatMap<B>(_ context: ExecutionContext, _ f: @escaping (A) throws -> Promise<B>) -> Promise<B> {
-		return flatMapResult(context) { result in try f(result.get()) }
+		flatMapResult(context) { result in try f(result.get()) }
 	}
 	@inlinable
-	func flatMap<B>(_ f: @escaping (A) throws -> Promise<B>) -> Promise<B> { return flatMap(.default(), f) }
+	func flatMap<B>(_ f: @escaping (A) throws -> Promise<B>) -> Promise<B> { flatMap(.default(), f) }
 
 	func mapError(_ context: ExecutionContext, _ f: @escaping (Error) throws -> A) -> Promise<A> {
-		return mapResult(context) { result in try result.fold(success: id, failure: f) }
+		mapResult(context) { result in try result.fold(success: id, failure: f) }
 	}
 	@inlinable
-	func mapError(_ f: @escaping (Error) throws -> A) -> Promise<A> { return mapError(.default(), f) }
+	func mapError(_ f: @escaping (Error) throws -> A) -> Promise<A> { mapError(.default(), f) }
 
 	func flatMapError(_ context: ExecutionContext, _ f: @escaping (Error) throws -> Promise<A>) -> Promise<A> {
-		return flatMapResult(context) { result in try result.fold(success: Promise.init(value:), failure: f) }
+		flatMapResult(context) { result in try result.fold(success: Promise.init(value:), failure: f) }
 	}
 	@inlinable
-	func flatMapError(_ f: @escaping (Error) throws -> Promise<A>) -> Promise<A> { return flatMapError(.default(), f) }
+	func flatMapError(_ f: @escaping (Error) throws -> Promise<A>) -> Promise<A> { flatMapError(.default(), f) }
 
 	/// Adds side effect preserving callback order
 	func with(_ context: ExecutionContext, _ f: @escaping (A) -> Void) -> Promise<A> {
-		return map(context, Fn.with(f))
+		map(context, Fn.with(f))
 	}
 	/// Adds side effect preserving callback order
 	@inlinable
-	func with(_ f: @escaping (A) -> Void) -> Promise<A> { return with(.default(), f) }
+	func with(_ f: @escaping (A) -> Void) -> Promise<A> { with(.default(), f) }
 
 	func zip<B>(_ that: Promise<B>) -> Promise<(A, B)> {
-		return flatMap(.sync) { thisVal -> Promise<(A, B)> in
+		flatMap(.sync) { thisVal -> Promise<(A, B)> in
 			that.map(.sync) { thatVal in
 				(thisVal, thatVal)
 			}
 		}
 	}
 
-	func asVoid() -> Promise<Void> { return map(.sync) { _ in () } }
+	func asVoid() -> Promise<Void> { map(.sync) { _ in () } }
 
 	/// Makes `times` attempts (at least once) until the promise succeeds
 	static func retry(_ times: Int, _ task: @escaping () -> Promise<A>) -> Promise<A> {
@@ -79,36 +79,36 @@ public extension PromiseType {
 
 	/// End of chain callback, returns self and does not guarantee callback order
 	@discardableResult @inlinable
-	func onComplete(_ f: @escaping (Result<A, Error>) -> Void) -> Self { return onComplete(.default(), f) }
+	func onComplete(_ f: @escaping (Result<A, Error>) -> Void) -> Self { onComplete(.default(), f) }
 
 	/// End of chain success callback, returns self and does not guarantee callback order
 	@discardableResult
 	func onSuccess(_ context: ExecutionContext, _ f: @escaping (A) -> Void) -> Self {
-		return onComplete(context) { result in
+		onComplete(context) { result in
 			result.fold(success: f, failure: { _ in })
 		}
 	}
 	/// End of chain success callback, returns self and does not guarantee callback order
 	@discardableResult @inlinable
-	func onSuccess(_ f: @escaping (A) -> Void) -> Self { return onSuccess(.default(), f) }
+	func onSuccess(_ f: @escaping (A) -> Void) -> Self { onSuccess(.default(), f) }
 
 	/// End of chain failure callback, returns self and does not guarantee callback order
 	@discardableResult
 	func onFailure(_ context: ExecutionContext, _ f: @escaping (Error) -> Void) -> Self {
-		return onComplete(context) { result in
+		onComplete(context) { result in
 			result.fold(success: { _ in }, failure: f)
 		}
 	}
 	/// End of chain failure callback, returns self and does not guarantee callback order
 	@discardableResult @inlinable
-	func onFailure(_ f: @escaping (Error) -> Void) -> Self { return onFailure(.default(), f) }
+	func onFailure(_ f: @escaping (Error) -> Void) -> Self { onFailure(.default(), f) }
 }
 
 public extension Promise {
 
 	/// Blocks the current thread until the promise is completed and then returns the result
 	func forced() -> Result<A, Error> {
-		return forced(.distantFuture)!
+		forced(.distantFuture)!
 	}
 
 	/// Blocks the current thread until the promise is completed, but no longer than the given timeout
@@ -134,11 +134,7 @@ public extension Promise {
 	/// Will pass the main queue if we are currently on the main thread, or the
 	/// global queue otherwise
 	func delay(_ interval: DispatchTimeInterval) -> Promise<A> {
-		if Thread.isMainThread {
-			return delay(DispatchQueue.main, interval: interval)
-		}
-
-		return delay(DispatchQueue.global(), interval: interval)
+		delay(Thread.isMainThread ? .main : .global(), interval: interval)
 	}
 
 	/// Returns an Promise that will complete with the result that this Promise completes with
@@ -147,7 +143,7 @@ public extension Promise {
 	/// If you want a delay of 0 to mean 'delay until next runloop', you will want to pass the main
 	/// queue.
 	func delay(_ queue: DispatchQueue, interval: DispatchTimeInterval) -> Promise<A> {
-		return Promise { complete in
+		Promise { complete in
 			onComplete(.sync) { result in
 				queue.asyncAfter(deadline: DispatchTime.now() + interval) {
 					complete(result)
@@ -155,11 +151,31 @@ public extension Promise {
 			}
 		}
 	}
+
+	/// If promise is not resolved in given time it resolves with result of recover function
+	func timeout(_ timeout: TimeInterval, _ ctx: ExecutionContext = .default(), recover: @escaping () throws -> A) -> Promise<A> {
+		Promise { resolve in
+			let disposable = SerialDisposable()
+			let lockResolve: (() throws -> A) -> Void = { [lock = Atomic(false)] result in
+				lock.modify {
+					if $0 { return }
+					$0 = true
+					disposable.dispose()
+					resolve(Result(catching: result))
+				}
+			}
+			onComplete(.sync) { result in lockResolve(result.get) }
+
+			let pendingRecover = DispatchWorkItem { ctx.run { lockResolve(recover) } }
+			DispatchQueue.global().asyncAfter(deadline: .now() + timeout, execute: pendingRecover)
+			disposable.innerDisposable = ActionDisposable(action: pendingRecover.cancel)
+		}
+	}
 }
 
 public extension DispatchQueue {
 	func promise<A>(_ f: @escaping () throws -> A) -> Promise<A> {
-		return Promise { resolve in
+		Promise { resolve in
 			async { resolve(Result(catching: f)) }
 		}
 	}
@@ -168,7 +184,7 @@ public extension DispatchQueue {
 public extension Sequence where Iterator.Element: PromiseType {
 
 	func fold<R>(_ zero: R, _ f: @escaping (R, Iterator.Element.A) -> R) -> Promise<R> {
-		return reduce(Promise(value: zero)) { result, element in
+		reduce(Promise(value: zero)) { result, element in
 			result.flatMap { resultValue in
 				element.map { elementValue in
 					f(resultValue, elementValue)
@@ -178,6 +194,6 @@ public extension Sequence where Iterator.Element: PromiseType {
 	}
 
 	func all() -> Promise<[Iterator.Element.A]> {
-		return fold([]) { $0 + [$1] }
+		fold([]) { $0 + [$1] }
 	}
 }

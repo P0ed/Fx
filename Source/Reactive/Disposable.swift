@@ -95,17 +95,17 @@ public final class CompositeDisposable: Disposable {
 	///
 	@discardableResult
 	public static func +=(lhs: CompositeDisposable, rhs: Disposable) -> ManualDisposable {
-		return lhs.addDisposable(rhs)
+		lhs.addDisposable(rhs)
 	}
 
 	@discardableResult
 	public static func += (disposable: CompositeDisposable, action: @escaping () -> Void) -> ManualDisposable {
-		return disposable += ActionDisposable(action: action)
+		disposable += ActionDisposable(action: action)
 	}
 
 	@discardableResult
 	public func capture(_ object: Any) -> ManualDisposable {
-		return self += { Fx.capture(object) }
+		self += { Fx.capture(object) }
 	}
 }
 
@@ -120,7 +120,7 @@ public final class SerialDisposable: Disposable {
 	/// disposable is automatically disposed.
 	public var innerDisposable: Disposable? {
 		get {
-			return atomicDisposable.value
+			atomicDisposable.value
 		}
 		set {
 			let oldDisposable = atomicDisposable.swap(newValue)

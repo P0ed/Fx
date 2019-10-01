@@ -80,11 +80,11 @@ public extension Promise {
 	}
 
 	static func value(_ value: A) -> Promise<A> {
-		return Promise(result: .value(value))
+		Promise(result: .value(value))
 	}
 
 	static func error(_ error: Error) -> Promise<A> {
-		return Promise(result: .error(error))
+		Promise(result: .error(error))
 	}
 
 	convenience init(value: A) {
@@ -99,23 +99,16 @@ public extension Promise {
 		self.init(result: Result<A, Error>(catching: f))
 	}
 
-	var isCompleted: Bool {
-		return result != nil
-	}
+	var isCompleted: Bool { result != nil }
 
 	var isSuccess: Bool {
-		return result?.fold(success: const(true), failure: const(false)) ?? false
+		result?.fold(success: const(true), failure: const(false)) ?? false
 	}
 
 	var isFailure: Bool {
-		return result?.fold(success: const(false), failure: const(true)) ?? false
+		result?.fold(success: const(false), failure: const(true)) ?? false
 	}
 
-	var value: A? {
-		return result?.value
-	}
-
-	var error: Error? {
-		return result?.error
-	}
+	var value: A? { result?.value }
+	var error: Error? { result?.error }
 }

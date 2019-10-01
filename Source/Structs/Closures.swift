@@ -1,10 +1,11 @@
 /// Escaping inout value
+@propertyWrapper
 public struct IO<A> {
 	private let get: () -> A
 	private let set: (A) -> Void
 
 	public var value: A {
-		get { return get() }
+		get { get() }
 		nonmutating set { set(newValue) }
 	}
 
@@ -12,22 +13,27 @@ public struct IO<A> {
 		self.get = get
 		self.set = set
 	}
+
+	public var wrappedValue: A { get { value } set { value = newValue } }
 }
 
 /// Escaping readonly value
+@propertyWrapper
 public struct Readonly<A> {
 	private let get: () -> A
 
-	public var value: A { return get() }
+	public var value: A { get { get() } }
 
 	public init(get: @escaping () -> A) {
 		self.get = get
 	}
+
+	public var wrappedValue: A { value }
 }
 
 public extension IO {
 
-	var readonly: Readonly<A> { return Readonly(get: get) }
+	var readonly: Readonly<A> { Readonly(get: get) }
 
 	init(copy value: A) {
 		var copy = value

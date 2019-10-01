@@ -1,12 +1,7 @@
 public extension Result {
 
-	static func value(_ value: Success) -> Result {
-		return .success(value)
-	}
-
-	static func error(_ error: Failure) -> Result {
-		return .failure(error)
-	}
+	static func value(_ value: Success) -> Result { .success(value) }
+	static func error(_ error: Failure) -> Result { .failure(error) }
 
 	var value: Success? {
 		if case let .success(value) = self { return value } else { return nil }
@@ -28,7 +23,7 @@ public extension Result {
 
 	@discardableResult
 	func onSuccess(_ f: (Success) -> Void) -> Result {
-		return fold(
+		fold(
 			success: { f($0); return .success($0) },
 			failure: Result.error
 		)
@@ -36,7 +31,7 @@ public extension Result {
 
 	@discardableResult
 	func onFailure(_ f: (Failure) -> Void) -> Result {
-		return fold(
+		fold(
 			success: Result.value,
 			failure: { f($0); return .failure($0) }
 		)

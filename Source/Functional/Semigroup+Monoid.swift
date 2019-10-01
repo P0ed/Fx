@@ -10,18 +10,18 @@ public protocol Monoid: Semigroup {
 
 public extension Semigroup {
 	func combined(_ x: Self) -> Self {
-		return modify(self) { $0.combine(x) }
+		modify(self) { $0.combine(x) }
 	}
 }
 
 public extension Monoid {
 	static func combined(_ x: [Self]) -> Self {
-		return x.reduce(into: empty) { $0.combine($1) }
+		x.reduce(into: empty) { $0.combine($1) }
 	}
 	static func combined(_ x: Self...) -> Self {
-		return combined(x)
+		combined(x)
 	}
 	static func make(_ f: (inout Self) -> Void) -> Self {
-		return modify(empty, f)
+		modify(empty, f)
 	}
 }

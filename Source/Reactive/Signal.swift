@@ -48,22 +48,20 @@ public final class Signal<A>: SignalType {
 
 public extension Signal {
 
-	var asVoid: Signal<Void> {
-		return map { _ in () }
-	}
+	var asVoid: Signal<Void> { map { _ in () } }
 
 	func observe(_ ctx: ExecutionContext, _ f: @escaping (A) -> Void) -> Disposable {
-		return observe { x in ctx.run { f(x) } }
+		observe { x in ctx.run { f(x) } }
 	}
 
 	func map<B>(_ f: @escaping (A) -> B) -> Signal<B> {
-		return Signal<B> { sink in
+		Signal<B> { sink in
 			observe(sink • f)
 		}
 	}
 
 	func filter(_ f: @escaping (A) -> Bool) -> Signal {
-		return Signal<A> { sink in
+		Signal<A> { sink in
 			observe { value in
 				if f(value) {
 					sink(value)
@@ -73,7 +71,7 @@ public extension Signal {
 	}
 
 	func merge(_ signal: Signal<A>) -> Signal<A> {
-		return Signal<A> { sink in
+		Signal<A> { sink in
 			let disposable = CompositeDisposable()
 			disposable += observe(sink)
 			disposable += signal.observe(sink)
@@ -82,7 +80,7 @@ public extension Signal {
 	}
 
 	func combineLatest<B>(_ signal: Signal<B>) -> Signal<(A, B)> {
-		return Signal<(A, B)> { sink in
+		Signal<(A, B)> { sink in
 			let disposable = CompositeDisposable()
 			var lastSelf: A? = nil
 			var lastOther: B? = nil
@@ -105,7 +103,7 @@ public extension Signal {
 	}
 
 	func zip<B>(_ signal: Signal<B>) -> Signal<(A, B)> {
-		return Signal<(A, B)> { sink in
+		Signal<(A, B)> { sink in
 			let disposable = CompositeDisposable()
 			var selfValues: [A] = []
 			var otherValues: [B] = []
@@ -132,7 +130,7 @@ public extension Signal {
 	}
 
 	func throttled(_ timeInterval: TimeInterval) -> Signal {
-		return Signal { sink in
+		Signal { sink in
 			observe(Fn.throttle(timeInterval, function: sink))
 		}
 	}
@@ -141,7 +139,7 @@ public extension Signal {
 public extension SignalType where A: OptionalType {
 
 	func ignoringNils() -> Signal<A.A> {
-		return Signal { sink in
+		Signal { sink in
 			observe { value in
 				if let value = value.optional {
 					sink(value)
@@ -154,7 +152,7 @@ public extension SignalType where A: OptionalType {
 public extension SignalType where A: SignalType {
 
 	func flatten() -> Signal<A.A> {
-		return Signal { sink in
+		Signal { sink in
 			let disposable = CompositeDisposable()
 			disposable += observe { value in
 				disposable += value.observe(sink)
@@ -167,10 +165,10 @@ public extension SignalType where A: SignalType {
 public extension Signal {
 
 	func flatMap<B>(_ f: @escaping (A) -> Signal<B>) -> Signal<B> {
-		return map(f).flatten()
+		map(f).flatten()
 	}
 }
 
 public extension Signal {
-	static var empty: Signal { return Signal { _ in nil } }
+	static var empty: Signal { Signal { _ in nil } }
 }
