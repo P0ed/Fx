@@ -130,30 +130,24 @@ public extension Promise {
 		return res
 	}
 
-	/// Alias of delay(queue:interval:)
-	/// Will pass the main queue if we are currently on the main thread, or the
-	/// global queue otherwise
-	func delay(_ interval: DispatchTimeInterval) -> Promise<A> {
-		delay(Thread.isMainThread ? .main : .global(), interval: interval)
-	}
-
 	/// Returns an Promise that will complete with the result that this Promise completes with
 	/// after waiting for the given interval
-	/// The delay is implemented using dispatch_after. The given queue is passed to that function.
-	/// If you want a delay of 0 to mean 'delay until next runloop', you will want to pass the main
-	/// queue.
-	func delay(_ queue: DispatchQueue, interval: DispatchTimeInterval) -> Promise<A> {
+	func delay(_ ctx: ExecutionContext, _ interval: TimeInterval) -> Promise<A> {
 		Promise { complete in
 			onComplete(.sync) { result in
-				queue.asyncAfter(deadline: DispatchTime.now() + interval) {
-					complete(result)
+				DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: DispatchTime.now() + interval) {
+					ctx.run { complete(result) }
 				}
 			}
 		}
 	}
 
+	/// Returns an Promise that will complete with the result that this Promise completes with
+	/// after waiting for the given interval
+	func delay(_ interval: TimeInterval) -> Promise<A> { delay(.default(), interval) }
+
 	/// If promise is not resolved in given time it resolves with result of recover function
-	func timeout(_ timeout: TimeInterval, _ ctx: ExecutionContext = .default(), recover: @escaping () throws -> A) -> Promise<A> {
+	func timeout(_ ctx: ExecutionContext, _ interval: TimeInterval, recover: @escaping () throws -> A) -> Promise<A> {
 		Promise { resolve in
 			let disposable = SerialDisposable()
 			let lockResolve: (() throws -> A) -> Void = { [lock = Atomic(false)] result in
@@ -167,9 +161,14 @@ public extension Promise {
 			onComplete(.sync) { result in lockResolve(result.get) }
 
 			let pendingRecover = DispatchWorkItem { ctx.run { lockResolve(recover) } }
-			DispatchQueue.global().asyncAfter(deadline: .now() + timeout, execute: pendingRecover)
+			DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + interval, execute: pendingRecover)
 			disposable.innerDisposable = ActionDisposable(action: pendingRecover.cancel)
 		}
+	}
+
+	/// If promise is not resolved in given time it resolves with result of recover function
+	func timeout(_ interval: TimeInterval, recover: @escaping () throws -> A) -> Promise<A> {
+		timeout(.default(), interval, recover: recover)
 	}
 }
 
