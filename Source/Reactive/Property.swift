@@ -6,11 +6,10 @@ public protocol PropertyType {
 
 @propertyWrapper
 public final class Property<A>: PropertyType {
+	private let getter: () -> A
 
 	public var value: A { getter() }
 	public let signal: Signal<A>
-
-	private let getter: () -> A
 
 	public init(value: A, signal: Signal<A>) {
 		var storage = value
@@ -21,6 +20,11 @@ public final class Property<A>: PropertyType {
 				sink($0)
 			}
 		}
+	}
+
+	init(getter: @escaping () -> A, signal: Signal<A>) {
+		self.getter = getter
+		self.signal = signal
 	}
 
 	public var wrappedValue: A { value }
@@ -35,7 +39,6 @@ public final class MutableProperty<A>: PropertyType {
 		get { getter() }
 		set { setter(newValue) }
 	}
-
 	public let signal: Signal<A>
 
 	public init(_ initialValue: A) {
@@ -59,11 +62,11 @@ public final class MutableProperty<A>: PropertyType {
 	public var projectedValue: Property<A> { readonly }
 
 	public var readonly: Property<A> {
-		Property(value: value, signal: signal)
+		Property(getter: getter, signal: signal)
 	}
 
 	public func bind(_ signal: Signal<A>) -> Disposable {
-		signal.observe § setter
+		signal.observe(setter)
 	}
 }
 
