@@ -12,6 +12,9 @@ public func const<A>(_ x: A) -> () -> A {
 	{ x }
 }
 
+/// Takes value and returns void, does nothing but can be usefull as an adapter with function composition
+public func sink<A>(_ x: A) {}
+
 /// Converts (A, B) -> C func into (A) -> (B) -> C
 public func curry<A, B, C>(_ f: @escaping (A, B) -> C) -> (A) -> (B) -> C {
 	{ x in { y in f(x, y) } }

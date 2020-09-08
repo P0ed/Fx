@@ -149,6 +149,49 @@ public extension PropertyType where A: Equatable {
 	}
 }
 
+public extension Sequence where Iterator.Element: PropertyType {
+	func fold<R>(_ zero: R, _ f: @escaping (R, Iterator.Element.A) -> R) -> Property<R> {
+		reduce(.const(zero)) { result, element in
+			result.flatMap { resultValue in
+				element.map { elementValue in
+					f(resultValue, elementValue)
+				}
+			}
+		}
+	}
+
+	func all() -> Property<[Iterator.Element.A]> {
+		fold([]) { $0 + [$1] }
+	}
+}
+
+public extension PropertyType where A: OptionalType {
+	/// Lifts `Optional` outside of inner `Property`. `Property<A?>` becomes `Property<Property<A>?>`
+	/// Outside `Property` changes only on `Optional` case change from `.some` to `.none` and in reverse.
+	/// That way successive `.some` values gets combined in single stream of inner `Property` values,
+	/// as do successive `.none` values remain single `.none` value of external `Property`
+	func distinctOptional() -> Property<Property<A.A>?> {
+		var state = value.optional.map { MutableProperty($0) }
+		return Property(value: state?.readonly, signal: Signal { sink in
+			signal.observe { value in
+				if let value = value.optional {
+					if let state = state {
+						state.value = value
+					} else {
+						state = MutableProperty(value)
+						sink(state?.readonly)
+					}
+				} else {
+					if state != nil {
+						state = nil
+						sink(nil)
+					}
+				}
+			}
+		})
+	}
+}
+
 public extension MutableProperty {
 
 	func modify(_ f: (inout A) -> ()) {
