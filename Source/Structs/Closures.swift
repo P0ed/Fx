@@ -1,8 +1,8 @@
 /// Escaping inout value
 @propertyWrapper
 public struct IO<A> {
-	private let get: () -> A
-	private let set: (A) -> Void
+	public var get: () -> A
+	public var set: (A) -> Void
 
 	public var value: A {
 		get { get() }
