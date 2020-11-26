@@ -16,7 +16,11 @@ public extension Semigroup {
 
 public extension Monoid {
 	static func combined(_ x: [Self]) -> Self {
-		x.reduce(into: empty) { $0.combine($1) }
+		switch x.count {
+		case 0: return empty
+		case 1: return x[0]
+		default: return x.dropFirst().reduce(into: x[0], { $0.combine($1) })
+		}
 	}
 	static func combined(_ x: Self...) -> Self {
 		combined(x)

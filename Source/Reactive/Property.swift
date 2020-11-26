@@ -27,7 +27,12 @@ public final class Property<A>: PropertyType {
 		self.signal = signal
 	}
 
+	public convenience init(_ property: Property) {
+		self.init(getter: property.getter, signal: property.signal)
+	}
+
 	public var wrappedValue: A { value }
+	public var projectedValue: Property { self }
 }
 
 @propertyWrapper
