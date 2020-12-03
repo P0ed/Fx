@@ -15,6 +15,10 @@ public struct IO<A> {
 	}
 
 	public var wrappedValue: A { get { value } set { value = newValue } }
+
+	public init(wrappedValue: A) {
+		self = IO(copy: wrappedValue)
+	}
 }
 
 /// Escaping readonly value

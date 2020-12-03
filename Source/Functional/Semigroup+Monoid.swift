@@ -29,3 +29,26 @@ public extension Monoid {
 		modify(empty, f)
 	}
 }
+
+/// Less efficient reference semantics version of Semigroup
+public protocol RefSemigroup {
+	func combined(_ x: Self) -> Self
+}
+
+/// Less efficient reference semantics version of Monoid
+public protocol RefMonoid: RefSemigroup {
+	static var empty: Self { get }
+}
+
+public extension RefMonoid {
+	static func combined(_ x: [Self]) -> Self {
+		switch x.count {
+		case 0: return empty
+		case 1: return x[0]
+		default: return x.dropFirst().reduce(x[0], { $0.combined($1) })
+		}
+	}
+	static func combined(_ x: Self...) -> Self {
+		combined(x)
+	}
+}

@@ -82,6 +82,7 @@ public extension Fn {
 	}
 
 	/// Negate func
+	@available(*, deprecated, message: "Use `(!)` instead")
 	static func not(_ value: Bool) -> Bool { !value }
 
 	/// Simple print sink
