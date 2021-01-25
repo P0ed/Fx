@@ -85,6 +85,12 @@
 		5FD28AE11D5B2EE300BAFC0F /* Fx iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 5FD28AD31D5B2E6300BAFC0F /* Fx iOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5FD28AE31D5B2EEA00BAFC0F /* Fx tvOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 5FD28AD91D5B2E6300BAFC0F /* Fx tvOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5FDB3D8020EE6C4F0006CD8E /* FnFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FDB3D7F20EE6C4F0006CD8E /* FnFunctions.swift */; };
+		CEA39D6025BEE05C00C452BC /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA39D5F25BEE05C00C452BC /* Timer.swift */; };
+		CEA39D6125BEE05C00C452BC /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA39D5F25BEE05C00C452BC /* Timer.swift */; };
+		CEA39D6225BEE05C00C452BC /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA39D5F25BEE05C00C452BC /* Timer.swift */; };
+		CEA39D6725BEE09B00C452BC /* NotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA39D6625BEE09B00C452BC /* NotificationCenter.swift */; };
+		CEA39D6825BEE09B00C452BC /* NotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA39D6625BEE09B00C452BC /* NotificationCenter.swift */; };
+		CEA39D6925BEE09B00C452BC /* NotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA39D6625BEE09B00C452BC /* NotificationCenter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -124,6 +130,8 @@
 		5FD28AD91D5B2E6300BAFC0F /* Fx tvOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Fx tvOS.h"; sourceTree = "<group>"; };
 		5FD28ADA1D5B2E6300BAFC0F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5FDB3D7F20EE6C4F0006CD8E /* FnFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FnFunctions.swift; sourceTree = "<group>"; };
+		CEA39D5F25BEE05C00C452BC /* Timer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
+		CEA39D6625BEE09B00C452BC /* NotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -213,6 +221,8 @@
 				5F10E871218C969900B340C6 /* KVO.swift */,
 				5F10E873218C985200B340C6 /* Void.swift */,
 				5F10E8AD218CA0E800B340C6 /* Common.swift */,
+				CEA39D5F25BEE05C00C452BC /* Timer.swift */,
+				CEA39D6625BEE09B00C452BC /* NotificationCenter.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -459,6 +469,7 @@
 				5FD28AA81D5B27C100BAFC0F /* Disposable.swift in Sources */,
 				5F9679A11ECDCE6E002EEADD /* SignalType.swift in Sources */,
 				5FD28AA01D5B27C100BAFC0F /* Weakify.swift in Sources */,
+				CEA39D6725BEE09B00C452BC /* NotificationCenter.swift in Sources */,
 				5F17AFE1209216D900C6977A /* SignalPipe.swift in Sources */,
 				5FD28AA71D5B27C100BAFC0F /* Bag.swift in Sources */,
 				5FD28AAC1D5B27C100BAFC0F /* Optional.swift in Sources */,
@@ -469,6 +480,7 @@
 				5FDB3D8020EE6C4F0006CD8E /* FnFunctions.swift in Sources */,
 				5FD28AA61D5B27C100BAFC0F /* Atomic.swift in Sources */,
 				5F9679A51ECDDA56002EEADD /* Promise.swift in Sources */,
+				CEA39D6025BEE05C00C452BC /* Timer.swift in Sources */,
 				5FB5C45B1D5C6D9400BA78A3 /* Weak.swift in Sources */,
 				5FD28ACF1D5B27C800BAFC0F /* Bool.swift in Sources */,
 				5FD28AA91D5B27C100BAFC0F /* Signal.swift in Sources */,
@@ -491,6 +503,7 @@
 				5F10E87B218C9D5700B340C6 /* Bool.swift in Sources */,
 				5F10E88D218C9D5700B340C6 /* Atomic.swift in Sources */,
 				5F10E87E218C9D5700B340C6 /* Promise.swift in Sources */,
+				CEA39D6825BEE09B00C452BC /* NotificationCenter.swift in Sources */,
 				5F10E892218C9D5700B340C6 /* Closures.swift in Sources */,
 				5F10E87C218C9D5700B340C6 /* KVO.swift in Sources */,
 				5F10E890218C9D5700B340C6 /* Weak.swift in Sources */,
@@ -501,6 +514,7 @@
 				5F10E880218C9D5700B340C6 /* Disposable.swift in Sources */,
 				5F10E888218C9D5700B340C6 /* Functions.swift in Sources */,
 				5F10E889218C9D5700B340C6 /* FnFunctions.swift in Sources */,
+				CEA39D6125BEE05C00C452BC /* Timer.swift in Sources */,
 				5F10E883218C9D5700B340C6 /* SignalPipe.swift in Sources */,
 				5F10E887218C9D5700B340C6 /* Application+Composition.swift in Sources */,
 				5F10E886218C9D5700B340C6 /* Operators.swift in Sources */,
@@ -523,6 +537,7 @@
 				5F10E895218C9D5900B340C6 /* Bool.swift in Sources */,
 				5F10E8A7218C9D5900B340C6 /* Atomic.swift in Sources */,
 				5F10E898218C9D5900B340C6 /* Promise.swift in Sources */,
+				CEA39D6925BEE09B00C452BC /* NotificationCenter.swift in Sources */,
 				5F10E8AC218C9D5900B340C6 /* Closures.swift in Sources */,
 				5F10E896218C9D5900B340C6 /* KVO.swift in Sources */,
 				5F10E8AA218C9D5900B340C6 /* Weak.swift in Sources */,
@@ -533,6 +548,7 @@
 				5F10E89A218C9D5900B340C6 /* Disposable.swift in Sources */,
 				5F10E8A2218C9D5900B340C6 /* Functions.swift in Sources */,
 				5F10E8A3218C9D5900B340C6 /* FnFunctions.swift in Sources */,
+				CEA39D6225BEE05C00C452BC /* Timer.swift in Sources */,
 				5F10E89D218C9D5900B340C6 /* SignalPipe.swift in Sources */,
 				5F10E8A1218C9D5900B340C6 /* Application+Composition.swift in Sources */,
 				5F10E8A0218C9D5900B340C6 /* Operators.swift in Sources */,
