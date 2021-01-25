@@ -75,10 +75,5 @@ Currying takes a function of >1 parameter and returns a function of one paramete
 ## Integration
 Add to Cartfile:
 ```
-github "P0ed/Fx" "master"
+github "P0ed/Fx"
 ```
-Or Podfile:
-```
-pod 'Fx', :git => 'https://github.com/P0ed/Fx.git', :branch => 'master'
-```
-
