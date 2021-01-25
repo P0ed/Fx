@@ -1,4 +1,8 @@
+#if canImport(UIKit)
 import UIKit
+#elseif canImport(AppKit)
+import AppKit
+#endif
 
 public extension Timer {
 	static func once(_ interval: TimeInterval, _ function: @escaping () -> Void) -> ActionDisposable {
@@ -15,12 +19,17 @@ public extension Timer {
 				repeats: repeats != nil,
 				block: { _ in function() }
 			)
-			RunLoop.current.add(timer!, forMode: .default)
+
+			#if os(iOS)
+				RunLoop.current.add(timer!, forMode: .default)
+			#elseif os(macOS) || os(tvOS)
+				RunLoop.current.add(timer!, forMode: .defaultRunLoopMode)
+			#endif
 		}
 
 		makeTimer()
 
-		let observer = NotificationCenter.default.signal(forName: UIApplication.didBecomeActiveNotification).observe { _ in
+		let observer = didBecomeActiveNotificationSignal().observe { _ in
 			guard timer?.isValid == false else { return }
 			makeTimer()
 		}
@@ -29,5 +38,15 @@ public extension Timer {
 			observer.dispose()
 			timer?.invalidate()
 		}
+	}
+
+	private static func didBecomeActiveNotificationSignal() -> Signal<Notification> {
+		#if os(iOS)
+			return NotificationCenter.default.signal(forName: UIApplication.didBecomeActiveNotification)
+		#elseif os(tvOS)
+			return NotificationCenter.default.signal(forName: .UIApplicationDidBecomeActive)
+		#elseif os(macOS)
+			return NotificationCenter.default.signal(forName: NSApplication.didBecomeActiveNotification)
+		#endif
 	}
 }
