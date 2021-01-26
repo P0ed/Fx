@@ -47,6 +47,8 @@ public extension Timer {
 			return NotificationCenter.default.signal(forName: .UIApplicationDidBecomeActive)
 		#elseif os(macOS)
 			return NotificationCenter.default.signal(forName: NSApplication.didBecomeActiveNotification)
+		#else
+			return .empty
 		#endif
 	}
 }
