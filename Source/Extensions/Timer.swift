@@ -9,6 +9,10 @@ public extension Timer {
 		makeTimer(offset: interval, repeats: nil, function: function)
 	}
 
+	static func `repeat`(_ interval: TimeInterval, _ function: @escaping () -> Void) -> ActionDisposable {
+		makeTimer(offset: interval, repeats: interval, function: function)
+	}
+
 	static func makeTimer(offset: TimeInterval, repeats: TimeInterval?, function: @escaping () -> Void) -> ActionDisposable {
 		var timer = nil as Timer?
 
