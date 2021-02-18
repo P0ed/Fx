@@ -143,6 +143,14 @@ public final class SerialDisposable: Disposable {
 	}
 }
 
-public func • (lhs: Disposable, rhs: Disposable) -> ActionDisposable {
-	ActionDisposable(action: lhs.dispose • rhs.dispose)
+public extension ManualDisposable {
+	static func • (lhs: ManualDisposable, rhs: ManualDisposable) -> ManualDisposable {
+		ManualDisposable(action: lhs.dispose • rhs.dispose)
+	}
+}
+
+public extension ActionDisposable {
+	static func • (lhs: ActionDisposable, rhs: ActionDisposable) -> ActionDisposable {
+		ActionDisposable(action: lhs.dispose • rhs.dispose)
+	}
 }
