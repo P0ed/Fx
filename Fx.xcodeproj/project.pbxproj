@@ -69,6 +69,9 @@
 		5FB881D922B946C000385DD6 /* Semigroup+Monoid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB881D822B946C000385DD6 /* Semigroup+Monoid.swift */; };
 		5FB881DA22B946DE00385DD6 /* Semigroup+Monoid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB881D822B946C000385DD6 /* Semigroup+Monoid.swift */; };
 		5FB881DB22B946DE00385DD6 /* Semigroup+Monoid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB881D822B946C000385DD6 /* Semigroup+Monoid.swift */; };
+		5FC0E83425DE7FD400A41F45 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC0E83325DE7FD400A41F45 /* Errors.swift */; };
+		5FC0E83525DE7FD400A41F45 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC0E83325DE7FD400A41F45 /* Errors.swift */; };
+		5FC0E83625DE7FD400A41F45 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC0E83325DE7FD400A41F45 /* Errors.swift */; };
 		5FD28A9D1D5B27C100BAFC0F /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E7E1D05CB4D00B8A7AC /* Functions.swift */; };
 		5FD28AA01D5B27C100BAFC0F /* Weakify.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E871D05CB4D00B8A7AC /* Weakify.swift */; };
 		5FD28AA11D5B27C100BAFC0F /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F796E821D05CB4D00B8A7AC /* Operators.swift */; };
@@ -120,6 +123,7 @@
 		5FA7E29C1ECDE1A500DEC12E /* PromiseOperations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseOperations.swift; sourceTree = "<group>"; };
 		5FB5C45A1D5C6D9400BA78A3 /* Weak.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Weak.swift; sourceTree = "<group>"; };
 		5FB881D822B946C000385DD6 /* Semigroup+Monoid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Semigroup+Monoid.swift"; sourceTree = "<group>"; };
+		5FC0E83325DE7FD400A41F45 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		5FD28A5F1D5B271600BAFC0F /* Fx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5FD28A6C1D5B272100BAFC0F /* Fx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5FD28A951D5B275600BAFC0F /* Fx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -168,6 +172,7 @@
 				5F796E6F1D05C51800B8A7AC /* Atomic.swift */,
 				5F796E701D05C51800B8A7AC /* Bag.swift */,
 				5FB5C45A1D5C6D9400BA78A3 /* Weak.swift */,
+				5FC0E83325DE7FD400A41F45 /* Errors.swift */,
 			);
 			path = Structs;
 			sourceTree = "<group>";
@@ -482,6 +487,7 @@
 				5F9679A51ECDDA56002EEADD /* Promise.swift in Sources */,
 				CEA39D6025BEE05C00C452BC /* Timer.swift in Sources */,
 				5FB5C45B1D5C6D9400BA78A3 /* Weak.swift in Sources */,
+				5FC0E83425DE7FD400A41F45 /* Errors.swift in Sources */,
 				5FD28ACF1D5B27C800BAFC0F /* Bool.swift in Sources */,
 				5FD28AA91D5B27C100BAFC0F /* Signal.swift in Sources */,
 				5F10E872218C969900B340C6 /* KVO.swift in Sources */,
@@ -516,6 +522,7 @@
 				5F10E889218C9D5700B340C6 /* FnFunctions.swift in Sources */,
 				CEA39D6125BEE05C00C452BC /* Timer.swift in Sources */,
 				5F10E883218C9D5700B340C6 /* SignalPipe.swift in Sources */,
+				5FC0E83525DE7FD400A41F45 /* Errors.swift in Sources */,
 				5F10E887218C9D5700B340C6 /* Application+Composition.swift in Sources */,
 				5F10E886218C9D5700B340C6 /* Operators.swift in Sources */,
 				5F10E88E218C9D5700B340C6 /* Bag.swift in Sources */,
@@ -550,6 +557,7 @@
 				5F10E8A3218C9D5900B340C6 /* FnFunctions.swift in Sources */,
 				CEA39D6225BEE05C00C452BC /* Timer.swift in Sources */,
 				5F10E89D218C9D5900B340C6 /* SignalPipe.swift in Sources */,
+				5FC0E83625DE7FD400A41F45 /* Errors.swift in Sources */,
 				5F10E8A1218C9D5900B340C6 /* Application+Composition.swift in Sources */,
 				5F10E8A0218C9D5900B340C6 /* Operators.swift in Sources */,
 				5F10E8A8218C9D5900B340C6 /* Bag.swift in Sources */,

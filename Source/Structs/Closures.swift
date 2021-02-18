@@ -16,6 +16,10 @@ public struct IO<A> {
 
 	public var wrappedValue: A { get { value } set { value = newValue } }
 
+	public init(_ io: IO) {
+		self = io
+	}
+
 	public init(wrappedValue: A) {
 		self = IO(copy: wrappedValue)
 	}
@@ -24,7 +28,7 @@ public struct IO<A> {
 /// Escaping readonly value
 @propertyWrapper
 public struct Readonly<A> {
-	private let get: () -> A
+	public var get: () -> A
 
 	public var value: A { get { get() } }
 
@@ -33,6 +37,14 @@ public struct Readonly<A> {
 	}
 
 	public var wrappedValue: A { value }
+
+	public init(_ readonly: Readonly) {
+		self = readonly
+	}
+
+	public init(wrappedValue: A) {
+		self = Self { wrappedValue }
+	}
 }
 
 public extension IO {

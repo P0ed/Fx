@@ -6,8 +6,8 @@ public protocol OptionalType {
 }
 
 extension Optional: OptionalType {
-	public static func optional(_ value: Wrapped?) -> Optional<Wrapped> { value }
-	public var optional: Wrapped? { self }
+	public static func optional(_ value: Optional) -> Optional { value }
+	public var optional: Optional { self }
 }
 
 public extension Optional {

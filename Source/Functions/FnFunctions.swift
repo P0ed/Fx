@@ -81,10 +81,25 @@ public extension Fn {
 		}
 	}
 
-	/// Negate func
-	@available(*, deprecated, message: "Use `(!)` instead")
-	static func not(_ value: Bool) -> Bool { !value }
-
 	/// Simple print sink
 	static func print<A>(_ x: A) -> () { Swift.print(x) }
+}
+
+public extension Fn {
+	private enum LazyState<A> {
+		case generator(() -> A)
+		case value(A)
+	}
+
+	/// Calls generator only once, caching value and reusing on future calls
+	static func lazy<A>(_ generator: @escaping () -> A) -> () -> A {
+		var state = LazyState.generator(generator)
+
+		return {
+			switch state {
+			case .generator(let f): return Fx.with(f()) { state = .value($0) }
+			case .value(let x): return x
+			}
+		}
+	}
 }
