@@ -33,26 +33,25 @@ public extension Timer {
 
 		makeTimer()
 
-		let observer = didBecomeActiveNotificationSignal().observe { _ in
+		let observer = observeDidBecomeActiveNotificationSignal { _ in
 			guard timer?.isValid == false else { return }
 			makeTimer()
 		}
 
-		return ActionDisposable {
-			observer.dispose()
+		return observer • ActionDisposable {
 			timer?.invalidate()
 		}
 	}
 
-	private static func didBecomeActiveNotificationSignal() -> Signal<Notification> {
+	private static func observeDidBecomeActiveNotificationSignal(handler: @escaping (Notification) -> Void) -> ActionDisposable {
 		#if os(iOS)
-			return NotificationCenter.default.signal(forName: UIApplication.didBecomeActiveNotification)
+			return NotificationCenter.default.addObserver(name: UIApplication.didBecomeActiveNotification, handler: handler)
 		#elseif os(tvOS)
-			return NotificationCenter.default.signal(forName: .UIApplicationDidBecomeActive)
+			return NotificationCenter.default.addObserver(name: .UIApplicationDidBecomeActive, handler: handler)
 		#elseif os(macOS)
-			return NotificationCenter.default.signal(forName: NSApplication.didBecomeActiveNotification)
+			return NotificationCenter.default.addObserver(name: NSApplication.didBecomeActiveNotification, handler: handler)
 		#else
-			return .empty
+			return ActionDisposable {}
 		#endif
 	}
 }

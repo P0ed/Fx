@@ -142,3 +142,7 @@ public final class SerialDisposable: Disposable {
 		innerDisposable = nil
 	}
 }
+
+public func • (lhs: Disposable, rhs: Disposable) -> ActionDisposable {
+	ActionDisposable(action: lhs.dispose • rhs.dispose)
+}
