@@ -51,7 +51,7 @@ public func ignoreOutput<A, B>(_ f: @escaping (A) -> B) -> (A) -> () {
 }
 
 /// Alias for withExtendedLifetime function
-public func capture(_ value: Any) {
+public func capture<A>(_ value: A) {
 	withExtendedLifetime(value, {})
 }
 

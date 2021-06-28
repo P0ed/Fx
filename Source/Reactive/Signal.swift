@@ -30,9 +30,11 @@ public final class Signal<A>: SignalType {
 		}
 
 		return ActionDisposable {
+			var f = nil as Any?
 			self.atomicSinks.modify {
-				$0.removeValueForToken(token)
+				f = $0.removeValueForToken(token)
 			}
+			capture(f)
 		}
 	}
 

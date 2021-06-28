@@ -36,17 +36,19 @@ public struct Bag<Element> {
 	/// Removes a value, given the token returned from insert().
 	///
 	/// If the value has already been removed, nothing happens.
-	public mutating func removeValueForToken(_ token: RemovalToken) {
+	@discardableResult
+	public mutating func removeValueForToken(_ token: RemovalToken) -> Element? {
 		if let identifier = token.identifier {
 			/// Removal is more likely for recent objects than old ones.
 			for i in elements.indices.reversed() {
 				if elements[i].identifier == identifier {
-					elements.remove(at: i)
+					let element = elements.remove(at: i)
 					token.identifier = nil
-					break
+					return element.value
 				}
 			}
 		}
+		return nil
 	}
 
 	/// In the event of an identifier overflow (highly, highly unlikely), this
