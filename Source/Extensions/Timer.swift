@@ -33,7 +33,7 @@ public extension Timer {
 
 		makeTimer()
 
-		let observer = observeDidBecomeActiveNotificationSignal { _ in
+		let observer = observeDidBecomeActiveNotification { _ in
 			guard timer?.isValid == false else { return }
 			makeTimer()
 		}
@@ -43,7 +43,7 @@ public extension Timer {
 		}
 	}
 
-	private static func observeDidBecomeActiveNotificationSignal(handler: @escaping (Notification) -> Void) -> ActionDisposable {
+	private static func observeDidBecomeActiveNotification(handler: @escaping (Notification) -> Void) -> ActionDisposable {
 		#if os(iOS)
 			return NotificationCenter.default.addObserver(name: UIApplication.didBecomeActiveNotification, handler: handler)
 		#elseif os(tvOS)

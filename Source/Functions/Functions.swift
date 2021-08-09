@@ -62,6 +62,14 @@ public func modify<A>(_ value: inout A, _ f: (inout A) throws -> Void) rethrows 
 	value = copy
 }
 
+/// Atomically mutates value and returns result of mutating function
+public func modify<A, B>(_ value: inout A, _ f: (inout A) throws -> B) rethrows -> B {
+	var copy = value
+	let result = try f(&copy)
+	value = copy
+	return result
+}
+
 /// Returns mutated copy of value
 public func modify<A>(_ value: A, _ f: (inout A) throws -> Void) rethrows -> A {
 	var copy = value

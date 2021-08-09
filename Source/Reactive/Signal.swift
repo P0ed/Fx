@@ -10,11 +10,11 @@ public final class Signal<A>: SignalType {
 		let sendLock = NSLock()
 		sendLock.name = "com.github.P0ed.Fx"
 
-		let sink: (A) -> Void = weakify(self) {
+		let sink: (A) -> Void = { [weak self] value in
+			guard let self = self else { return }
+
 			sendLock.lock()
-			for sink in $0.atomicSinks.value {
-				sink($1)
-			}
+			self.atomicSinks.value.forEach { sink in sink(value) }
 			sendLock.unlock()
 		}
 
@@ -22,17 +22,9 @@ public final class Signal<A>: SignalType {
 	}
 
 	public func observe(_ f: @escaping (A) -> Void) -> Disposable {
-		var token: RemovalToken!
-		atomicSinks.modify {
-			token = $0.insert(f)
-		}
-
-		return ActionDisposable {
-			var f = nil as Any?
-			self.atomicSinks.modify {
-				f = $0.removeValueForToken(token)
-			}
-			capture(f)
+		ActionDisposable { [token = atomicSinks.modify { $0.insert(f) }] in
+			let f = self.atomicSinks.modify { $0.removeValueForToken(token) }
+			withExtendedLifetime(f, {})
 		}
 	}
 

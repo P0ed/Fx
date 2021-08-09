@@ -29,7 +29,12 @@ public final class Atomic<A> {
 	}
 
 	/// Atomically modifies the variable.
-	public func modify(_ f: (inout A) -> ()) {
+	public func modify(_ f: (inout A) -> Void) {
+		lock.with { Fx.modify(&_value, f) }
+	}
+
+	/// Atomically modifies the variable and returns result of mutating function.
+	public func modify<B>(_ f: (inout A) -> B) -> B {
 		lock.with { Fx.modify(&_value, f) }
 	}
 

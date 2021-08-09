@@ -72,16 +72,8 @@ public final class CompositeDisposable: Disposable {
 	/// Adds the given disposable to the list, then returns a handle which can
 	/// be used to opaquely remove the disposable later (if desired).
 	public func addDisposable(_ disposable: Disposable) -> ManualDisposable {
-		var token: RemovalToken!
-
-		disposables.modify {
-			token = $0.insert(disposable)
-		}
-
-		return ManualDisposable { [weak self] in
-			self?.disposables.modify {
-				$0.removeValueForToken(token)
-			}
+		ManualDisposable { [weak self, token = disposables.modify { $0.insert(disposable) }] in
+			self?.disposables.modify { _ = $0.removeValueForToken(token) }
 		}
 	}
 
