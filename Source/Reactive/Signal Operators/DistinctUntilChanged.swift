@@ -6,13 +6,9 @@ public extension SignalType {
 
 		return .init { sink in
 			observe { value in
-				defer { lastValue = value }
-				guard let lastValue = lastValue else {
+				if lastValue == nil || comparator(lastValue!, value) {
+					lastValue = value
 					return sink(value)
-				}
-
-				if comparator(lastValue, value) {
-					sink(value)
 				}
 			}
 		}
