@@ -1,8 +1,11 @@
 public extension SignalType {
 	func compactMap<B>(_ f: @escaping (A) -> B?) -> Signal<B> {
-		self
-			.map(f)
-			.filter { $0 != nil }
-			.map { $0! }
+		.init { sink in
+			observe {
+				guard let value = f($0) else { return }
+
+				sink(value)
+			}
+		}
 	}
 }
