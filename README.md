@@ -29,13 +29,13 @@ A Promise is designed to be read-only, except for the site where the Promise is 
 
 ```swift
 let promise = Promise<Int> { resolve in
-	resolve § .value(42)
+	resolve(.success(42))
 }
 ```
 or
 ```swift
 let (promise, resolve) = Promise<Int>.pending()
-resolve § .value(42)
+resolve(.success(42))
 ```
 
 ##### Default Threading Model
