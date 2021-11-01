@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5F2C18432775B3A10002BE83 /* FunctionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2C18422775B3A10002BE83 /* FunctionType.swift */; };
 		877DDBC4275E9D580024F85D /* FxPromiseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877DDBC3275E9D580024F85D /* FxPromiseTests.swift */; };
 		877DDBD4275E9E870024F85D /* FxTestKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 877DDBD3275E9E870024F85D /* FxTestKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		877DDBE2275EA1390024F85D /* Fx.h in Headers */ = {isa = PBXBuildFile; fileRef = 877DDBE1275EA1390024F85D /* Fx.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -95,6 +96,7 @@
 		5F10E873218C985200B340C6 /* Void.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Void.swift; sourceTree = "<group>"; };
 		5F10E8AD218CA0E800B340C6 /* Common.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
 		5F17AFE0209216D900C6977A /* SignalPipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalPipe.swift; sourceTree = "<group>"; };
+		5F2C18422775B3A10002BE83 /* FunctionType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FunctionType.swift; sourceTree = "<group>"; };
 		5F2D896D1D534263000DC80A /* Bool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bool.swift; sourceTree = "<group>"; };
 		5F2D89711D534AF0000DC80A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		5F2D89731D534B1B000DC80A /* Fx.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Fx.podspec; sourceTree = SOURCE_ROOT; };
@@ -183,6 +185,7 @@
 		5F10E869218C951700B340C6 /* Functions */ = {
 			isa = PBXGroup;
 			children = (
+				5F2C18422775B3A10002BE83 /* FunctionType.swift */,
 				5F796E7E1D05CB4D00B8A7AC /* Functions.swift */,
 				5FDB3D7F20EE6C4F0006CD8E /* FnFunctions.swift */,
 				5F796E871D05CB4D00B8A7AC /* Weakify.swift */,
@@ -544,6 +547,7 @@
 				877DDBEE275EA19B0024F85D /* PromiseOperations.swift in Sources */,
 				877DDBFD275EA1A90024F85D /* Weak.swift in Sources */,
 				877DDBE8275EA1970024F85D /* NotificationCenter.swift in Sources */,
+				5F2C18432775B3A10002BE83 /* FunctionType.swift in Sources */,
 				877DDBEC275EA1970024F85D /* Timer.swift in Sources */,
 				877DDBFA275EA1A50024F85D /* Weakify.swift in Sources */,
 				877DDBEB275EA1970024F85D /* KVO.swift in Sources */,
