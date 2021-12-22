@@ -129,9 +129,6 @@ public extension PromiseType {
 	func onFailure(_ f: @escaping (Error) -> Void) -> Self {
 		onFailure(.default(), f)
 	}
-}
-
-public extension Promise {
 
 	/// Blocks the current thread until the promise is completed and then returns the result
 	func forced() -> Result<A, Error> {

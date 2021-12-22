@@ -24,11 +24,7 @@ public extension Timer {
 				block: { _ in function() }
 			)
 
-			#if os(iOS)
-				RunLoop.current.add(timer!, forMode: .default)
-			#elseif os(macOS) || os(tvOS)
-				RunLoop.current.add(timer!, forMode: .defaultRunLoopMode)
-			#endif
+			RunLoop.current.add(timer!, forMode: .default)
 		}
 
 		makeTimer()
