@@ -43,6 +43,10 @@
 		877DDC09275EAEF60024F85D /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 877DDC08275EAEF60024F85D /* XCTest.framework */; };
 		877DDC0A275EAEF60024F85D /* XCTest.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 877DDC08275EAEF60024F85D /* XCTest.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		878088BB27724C9C0034D605 /* FxTestArranger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 878088BA27724C9C0034D605 /* FxTestArranger.swift */; };
+		87BF2A012773B3EE00B2EC57 /* XCTestCase+FxTestArranger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BF2A002773B3EE00B2EC57 /* XCTestCase+FxTestArranger.swift */; };
+		87BF2A032773B41500B2EC57 /* FxTestArranger+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BF2A022773B41500B2EC57 /* FxTestArranger+Promise.swift */; };
+		87BF2A052773B48100B2EC57 /* FxTestArranger+Signal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BF2A042773B48100B2EC57 /* FxTestArranger+Signal.swift */; };
+		87BF2A072773BDCB00B2EC57 /* FxSignalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BF2A062773BDCB00B2EC57 /* FxSignalTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -127,6 +131,10 @@
 		877DDBE1275EA1390024F85D /* Fx.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Fx.h; sourceTree = "<group>"; };
 		877DDC08275EAEF60024F85D /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/WatchOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		878088BA27724C9C0034D605 /* FxTestArranger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxTestArranger.swift; sourceTree = "<group>"; };
+		87BF2A002773B3EE00B2EC57 /* XCTestCase+FxTestArranger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+FxTestArranger.swift"; sourceTree = "<group>"; };
+		87BF2A022773B41500B2EC57 /* FxTestArranger+Promise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FxTestArranger+Promise.swift"; sourceTree = "<group>"; };
+		87BF2A042773B48100B2EC57 /* FxTestArranger+Signal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FxTestArranger+Signal.swift"; sourceTree = "<group>"; };
+		87BF2A062773BDCB00B2EC57 /* FxSignalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxSignalTests.swift; sourceTree = "<group>"; };
 		CEA39D5F25BEE05C00C452BC /* Timer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
 		CEA39D6625BEE09B00C452BC /* NotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -316,6 +324,7 @@
 			isa = PBXGroup;
 			children = (
 				877DDBC3275E9D580024F85D /* FxPromiseTests.swift */,
+				87BF2A062773BDCB00B2EC57 /* FxSignalTests.swift */,
 			);
 			path = FxTests;
 			sourceTree = "<group>";
@@ -332,6 +341,9 @@
 			children = (
 				877DDBD3275E9E870024F85D /* FxTestKit.h */,
 				878088BA27724C9C0034D605 /* FxTestArranger.swift */,
+				87BF2A022773B41500B2EC57 /* FxTestArranger+Promise.swift */,
+				87BF2A042773B48100B2EC57 /* FxTestArranger+Signal.swift */,
+				87BF2A002773B3EE00B2EC57 /* XCTestCase+FxTestArranger.swift */,
 			);
 			path = FxTestKit;
 			sourceTree = "<group>";
@@ -506,6 +518,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				877DDBC4275E9D580024F85D /* FxPromiseTests.swift in Sources */,
+				87BF2A072773BDCB00B2EC57 /* FxSignalTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -513,7 +526,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				87BF2A012773B3EE00B2EC57 /* XCTestCase+FxTestArranger.swift in Sources */,
 				878088BB27724C9C0034D605 /* FxTestArranger.swift in Sources */,
+				87BF2A032773B41500B2EC57 /* FxTestArranger+Promise.swift in Sources */,
+				87BF2A052773B48100B2EC57 /* FxTestArranger+Signal.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -630,11 +646,11 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = iphoneos;
+				SDKROOT = "";
 				SUPPORTED_PLATFORMS = "watchsimulator watchos macosx iphonesimulator iphoneos driverkit appletvsimulator appletvos";
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3,6";
 				TVOS_DEPLOYMENT_TARGET = 10.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -692,11 +708,11 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10;
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				SDKROOT = iphoneos;
+				SDKROOT = "";
 				SUPPORTED_PLATFORMS = "watchsimulator watchos macosx iphonesimulator iphoneos driverkit appletvsimulator appletvos";
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3,6";
 				TVOS_DEPLOYMENT_TARGET = 10.0;
 				VALIDATE_PRODUCT = YES;
@@ -718,7 +734,6 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -728,7 +743,6 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -745,7 +759,6 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MARKETING_VERSION = 1.0;
 				MTL_FAST_MATH = YES;
@@ -753,14 +766,12 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
 		877DDBD6275E9E870024F85D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_ENABLE_MODULES = YES;
@@ -778,25 +789,18 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MARKETING_VERSION = 1.0;
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.p0ed.FxTestKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "watchsimulator watchos macosx iphonesimulator iphoneos driverkit appletvsimulator appletvos";
-				SUPPORTS_MACCATALYST = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,6,3";
 			};
 			name = Debug;
 		};
 		877DDBD7275E9E870024F85D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_ENABLE_MODULES = YES;
@@ -814,15 +818,10 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MARKETING_VERSION = 1.0;
-				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.p0ed.FxTestKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "watchsimulator watchos macosx iphonesimulator iphoneos driverkit appletvsimulator appletvos";
-				SUPPORTS_MACCATALYST = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,6,3";
 			};
 			name = Release;
 		};
@@ -845,14 +844,11 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MARKETING_VERSION = 1.0;
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.p0ed.Fx;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -875,12 +871,10 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MARKETING_VERSION = 1.0;
-				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.p0ed.Fx;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
