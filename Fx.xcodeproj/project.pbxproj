@@ -43,9 +43,12 @@
 		877DDC09275EAEF60024F85D /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 877DDC08275EAEF60024F85D /* XCTest.framework */; };
 		877DDC0A275EAEF60024F85D /* XCTest.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 877DDC08275EAEF60024F85D /* XCTest.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		878088BB27724C9C0034D605 /* FxTestArranger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 878088BA27724C9C0034D605 /* FxTestArranger.swift */; };
+		87AB75CB2775ED35002A069C /* ReactiveOperator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87AB75CA2775ED35002A069C /* ReactiveOperator.swift */; };
+		87AB75CD2775ED61002A069C /* TimedValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87AB75CC2775ED61002A069C /* TimedValue.swift */; };
+		87AB75CF277753C5002A069C /* ReactiveOperator+TestSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87AB75CE277753C5002A069C /* ReactiveOperator+TestSignal.swift */; };
 		87BF2A012773B3EE00B2EC57 /* XCTestCase+FxTestArranger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BF2A002773B3EE00B2EC57 /* XCTestCase+FxTestArranger.swift */; };
 		87BF2A032773B41500B2EC57 /* FxTestArranger+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BF2A022773B41500B2EC57 /* FxTestArranger+Promise.swift */; };
-		87BF2A052773B48100B2EC57 /* FxTestArranger+Signal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BF2A042773B48100B2EC57 /* FxTestArranger+Signal.swift */; };
+		87BF2A052773B48100B2EC57 /* FxTestArranger+ReactiveOperator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BF2A042773B48100B2EC57 /* FxTestArranger+ReactiveOperator.swift */; };
 		87BF2A072773BDCB00B2EC57 /* FxSignalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BF2A062773BDCB00B2EC57 /* FxSignalTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -131,9 +134,12 @@
 		877DDBE1275EA1390024F85D /* Fx.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Fx.h; sourceTree = "<group>"; };
 		877DDC08275EAEF60024F85D /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/WatchOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		878088BA27724C9C0034D605 /* FxTestArranger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxTestArranger.swift; sourceTree = "<group>"; };
+		87AB75CA2775ED35002A069C /* ReactiveOperator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactiveOperator.swift; sourceTree = "<group>"; };
+		87AB75CC2775ED61002A069C /* TimedValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimedValue.swift; sourceTree = "<group>"; };
+		87AB75CE277753C5002A069C /* ReactiveOperator+TestSignal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReactiveOperator+TestSignal.swift"; sourceTree = "<group>"; };
 		87BF2A002773B3EE00B2EC57 /* XCTestCase+FxTestArranger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+FxTestArranger.swift"; sourceTree = "<group>"; };
 		87BF2A022773B41500B2EC57 /* FxTestArranger+Promise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FxTestArranger+Promise.swift"; sourceTree = "<group>"; };
-		87BF2A042773B48100B2EC57 /* FxTestArranger+Signal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FxTestArranger+Signal.swift"; sourceTree = "<group>"; };
+		87BF2A042773B48100B2EC57 /* FxTestArranger+ReactiveOperator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FxTestArranger+ReactiveOperator.swift"; sourceTree = "<group>"; };
 		87BF2A062773BDCB00B2EC57 /* FxSignalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxSignalTests.swift; sourceTree = "<group>"; };
 		CEA39D5F25BEE05C00C452BC /* Timer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
 		CEA39D6625BEE09B00C452BC /* NotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenter.swift; sourceTree = "<group>"; };
@@ -340,9 +346,12 @@
 			isa = PBXGroup;
 			children = (
 				877DDBD3275E9E870024F85D /* FxTestKit.h */,
+				87AB75CC2775ED61002A069C /* TimedValue.swift */,
+				87AB75CA2775ED35002A069C /* ReactiveOperator.swift */,
+				87AB75CE277753C5002A069C /* ReactiveOperator+TestSignal.swift */,
 				878088BA27724C9C0034D605 /* FxTestArranger.swift */,
 				87BF2A022773B41500B2EC57 /* FxTestArranger+Promise.swift */,
-				87BF2A042773B48100B2EC57 /* FxTestArranger+Signal.swift */,
+				87BF2A042773B48100B2EC57 /* FxTestArranger+ReactiveOperator.swift */,
 				87BF2A002773B3EE00B2EC57 /* XCTestCase+FxTestArranger.swift */,
 			);
 			path = FxTestKit;
@@ -528,8 +537,11 @@
 			files = (
 				87BF2A012773B3EE00B2EC57 /* XCTestCase+FxTestArranger.swift in Sources */,
 				878088BB27724C9C0034D605 /* FxTestArranger.swift in Sources */,
+				87AB75CF277753C5002A069C /* ReactiveOperator+TestSignal.swift in Sources */,
 				87BF2A032773B41500B2EC57 /* FxTestArranger+Promise.swift in Sources */,
-				87BF2A052773B48100B2EC57 /* FxTestArranger+Signal.swift in Sources */,
+				87AB75CB2775ED35002A069C /* ReactiveOperator.swift in Sources */,
+				87BF2A052773B48100B2EC57 /* FxTestArranger+ReactiveOperator.swift in Sources */,
+				87AB75CD2775ED61002A069C /* TimedValue.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
