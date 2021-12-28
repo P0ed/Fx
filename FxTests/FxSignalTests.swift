@@ -70,4 +70,26 @@ final class FxSignalTests: XCTestCase {
 				XCTAssertEqual($0, [0, 2, 4])
 			}
 	}
+
+	func testThrottlingValues() {
+		self
+			.arrange {
+				TestSignal(
+					expectedReturns: 5,
+					timedInputs: stride(from: 0 as TimeInterval, to: 5, by: 0.5).map { timed(at: $0, value: $0) }
+				) { $1.throttled(1) }
+			}
+			.assert {
+				XCTAssertEqual(
+					$0,
+					[
+						timed(at: 0, value: 0),
+						timed(at: 1, value: 1),
+						timed(at: 2, value: 2),
+						timed(at: 3, value: 3),
+						timed(at: 4, value: 4)
+					]
+				)
+			}
+	}
 }
