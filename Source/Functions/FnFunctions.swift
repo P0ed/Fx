@@ -71,8 +71,9 @@ public extension Fn {
 		case firedAt(Date)
 	}
 
-	/// Throttling wraps a block of code with throttling logic,
+	/// Throttling wraps a block of code with logic,
 	/// guaranteeing that an action will never be called more than once each specified interval.
+	/// Throttle filters events if the time since the last passed event is less than `interval`
 	static func throttle<A>(_ interval: TimeInterval, on queue: DispatchQueue = DispatchQueue.main, function f: @escaping (A) -> Void) -> (A) -> Void {
 		var state = ThrottledState.notFired
 
@@ -91,10 +92,40 @@ public extension Fn {
 		}
 	}
 
-	/// Throttling wraps a block of code with throttling logic,
+	/// Throttling wraps a block of code with logic,
 	/// guaranteeing that an action will never be called more than once each specified interval.
+	/// Throttle filters events if the time since the last passed event is less than `interval`
 	static func throttle(_ interval: TimeInterval, on queue: DispatchQueue = DispatchQueue.main, function f: @escaping () -> Void) -> () -> Void {
 		throttle(interval, on: queue) { _ in f() } • const(())
+	}
+
+	/// Debouncing wraps a block of code with logic,
+	/// guaranteeing that an action will never be called more than once each specified interval.
+	/// Debounce allows to unify several events, delaying execution after each event by `interval` if the time since the previous event is less than `interval`.
+	static func debounce<A>(_ interval: TimeInterval, on queue: DispatchQueue = DispatchQueue.main, function f: @escaping ([A]) -> Void) -> (A) -> Void {
+		var accumulator = [] as [A]
+		let cancel = SerialDisposable()
+
+		return { x in
+			accumulator.append(x)
+			cancel.innerDisposable = Fx.run(after: interval, on: .global(qos: .userInteractive)) {
+				queue.async { cancel.dispose(); f(accumulator) }
+			}
+		}
+	}
+
+	/// Debouncing wraps a block of code with logic,
+	/// guaranteeing that an action will never be called more than once each specified interval.
+	/// Debounce allows to unify several events, delaying execution after each event by `interval` if the time since the previous event is less than `interval`.
+	static func debounce<A>(_ interval: TimeInterval, on queue: DispatchQueue = DispatchQueue.main, function f: @escaping (A) -> Void) -> (A) -> Void {
+		debounce(interval, on: queue) { f($0.last!) }
+	}
+
+	/// Debouncing wraps a block of code with logic,
+	/// guaranteeing that an action will never be called more than once each specified interval.
+	/// Debounce allows to unify several events, delaying execution after each event by `interval` if the time since the previous event is less than `interval`.
+	static func debounce(_ interval: TimeInterval, on queue: DispatchQueue = DispatchQueue.main, function f: @escaping () -> Void) -> () -> Void {
+		debounce(interval, on: queue) { _ in f() } • const(())
 	}
 }
 

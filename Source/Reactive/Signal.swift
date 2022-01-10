@@ -132,25 +132,11 @@ public extension Signal {
 	}
 
 	func throttled(_ timeInterval: TimeInterval) -> Signal {
-		Signal { sink in
-			observe(Fn.throttle(timeInterval, function: sink))
-		}
+		Signal { sink in observe(Fn.throttle(timeInterval, function: sink)) }
 	}
 
-	/// Throttled function with predicate to throttle
-	/// If `timeInterval` == 0 then signal will be notified immediately
-	func throttled(_ timeInterval: TimeInterval, shouldThrottle: @escaping (A) -> Bool) -> Signal {
-		Signal { sink in
-			let disposable = SerialDisposable()
-			return observe { x in
-				if timeInterval > 0 && shouldThrottle(x) {
-					disposable.innerDisposable = Timer.once(timeInterval, { sink(x) })
-				} else {
-					disposable.dispose()
-					sink(x)
-				}
-			}
-		}
+	func debounced(_ timeInterval: TimeInterval) -> Signal {
+		Signal { sink in observe(Fn.debounce(timeInterval, function: sink)) }
 	}
 }
 

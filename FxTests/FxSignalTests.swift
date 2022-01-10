@@ -92,4 +92,23 @@ final class FxSignalTests: XCTestCase {
 				)
 			}
 	}
+
+	func testDebouncingValues() {
+		self
+			.arrange {
+				TestSignal(
+					expectedReturns: 2,
+					timedInputs: [0, 0.5, 1, 1.5, 2, 3.5, 4].map { timed(at: $0, value: $0) }
+				) { $1.debounced(1) }
+			}
+			.assert {
+				XCTAssertEqual(
+					$0,
+					[
+						timed(at: 3, value: 2),
+						timed(at: 5, value: 4)
+					]
+				)
+			}
+	}
 }
