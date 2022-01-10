@@ -109,7 +109,11 @@ public extension Fn {
 		return { x in
 			accumulator.append(x)
 			cancel.innerDisposable = Fx.run(after: interval, on: .global(qos: .userInteractive)) {
-				queue.async { cancel.dispose(); f(accumulator) }
+				queue.async {
+					cancel.dispose()
+					f(accumulator)
+					accumulator = []
+				}
 			}
 		}
 	}
