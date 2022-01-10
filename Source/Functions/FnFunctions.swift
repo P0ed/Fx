@@ -61,28 +61,76 @@ public extension Fn {
 		{ x in Promise { resolve in ctx.run { f(x).onComplete(.sync, resolve) } } }
 	}
 
-	/// Throttling wraps a block of code with throttling logic,
-	/// guaranteeing that an action will never be called more than once each specified interval.
-	static func throttle(_ interval: TimeInterval, on queue: DispatchQueue = DispatchQueue.main, function f: @escaping () -> Void) -> () -> Void {
-		{ [cancel = SerialDisposable()] in
-			cancel.innerDisposable = Fx.run(after: interval, on: .global(qos: .userInteractive)) {
-				queue.async { cancel.dispose(); f() }
-			}
-		}
-	}
-
-	/// Throttling wraps a block of code with throttling logic,
-	/// guaranteeing that an action will never be called more than once each specified interval.
-	static func throttle<A>(_ interval: TimeInterval, on queue: DispatchQueue = DispatchQueue.main, function f: @escaping (A) -> Void) -> (A) -> Void {
-		{ [cancel = SerialDisposable()] x in
-			cancel.innerDisposable = Fx.run(after: interval, on: .global(qos: .userInteractive)) {
-				queue.async { cancel.dispose(); f(x) }
-			}
-		}
-	}
-
 	/// Simple print sink
 	static func print<A>(_ x: A) -> () { Swift.print(x) }
+}
+
+public extension Fn {
+	private enum ThrottledState {
+		case notFired
+		case firedAt(Date)
+	}
+
+	/// Throttling wraps a block of code with logic,
+	/// guaranteeing that an action will never be called more than once each specified interval.
+	/// Throttle filters events if the time since the last passed event is less than `interval`
+	static func throttle<A>(_ interval: TimeInterval, on queue: DispatchQueue = DispatchQueue.main, function f: @escaping (A) -> Void) -> (A) -> Void {
+		var state = ThrottledState.notFired
+
+		return { x in
+			let fire = {
+				state = .firedAt(.init())
+				f(x)
+			}
+
+			switch state {
+			case .notFired:
+				fire()
+			case let .firedAt(date):
+				Date().timeIntervalSince(date) >= interval ? fire() : ()
+			}
+		}
+	}
+
+	/// Throttling wraps a block of code with logic,
+	/// guaranteeing that an action will never be called more than once each specified interval.
+	/// Throttle filters events if the time since the last passed event is less than `interval`
+	static func throttle(_ interval: TimeInterval, on queue: DispatchQueue = DispatchQueue.main, function f: @escaping () -> Void) -> () -> Void {
+		throttle(interval, on: queue) { _ in f() } • const(())
+	}
+
+	/// Debouncing wraps a block of code with logic,
+	/// guaranteeing that an action will never be called more than once each specified interval.
+	/// Debounce allows to unify several events, delaying execution after each event by `interval` if the time since the previous event is less than `interval`.
+	static func debounce<A>(_ interval: TimeInterval, on queue: DispatchQueue = DispatchQueue.main, function f: @escaping ([A]) -> Void) -> (A) -> Void {
+		var accumulator = [] as [A]
+		let cancel = SerialDisposable()
+
+		return { x in
+			accumulator.append(x)
+			cancel.innerDisposable = Fx.run(after: interval, on: .global(qos: .userInteractive)) {
+				queue.async {
+					cancel.dispose()
+					f(accumulator)
+					accumulator = []
+				}
+			}
+		}
+	}
+
+	/// Debouncing wraps a block of code with logic,
+	/// guaranteeing that an action will never be called more than once each specified interval.
+	/// Debounce allows to unify several events, delaying execution after each event by `interval` if the time since the previous event is less than `interval`.
+	static func debounce<A>(_ interval: TimeInterval, on queue: DispatchQueue = DispatchQueue.main, function f: @escaping (A) -> Void) -> (A) -> Void {
+		debounce(interval, on: queue) { f($0.last!) }
+	}
+
+	/// Debouncing wraps a block of code with logic,
+	/// guaranteeing that an action will never be called more than once each specified interval.
+	/// Debounce allows to unify several events, delaying execution after each event by `interval` if the time since the previous event is less than `interval`.
+	static func debounce(_ interval: TimeInterval, on queue: DispatchQueue = DispatchQueue.main, function f: @escaping () -> Void) -> () -> Void {
+		debounce(interval, on: queue) { _ in f() } • const(())
+	}
 }
 
 public extension Fn {
