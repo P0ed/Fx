@@ -50,6 +50,8 @@
 		87BF2A032773B41500B2EC57 /* FxTestArranger+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BF2A022773B41500B2EC57 /* FxTestArranger+Promise.swift */; };
 		87BF2A052773B48100B2EC57 /* FxTestArranger+ReactiveOperator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BF2A042773B48100B2EC57 /* FxTestArranger+ReactiveOperator.swift */; };
 		87BF2A072773BDCB00B2EC57 /* FxSignalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BF2A062773BDCB00B2EC57 /* FxSignalTests.swift */; };
+		87EA90E1278CAA3400327792 /* ReactiveOperator+TestProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87EA90E0278CAA3400327792 /* ReactiveOperator+TestProperty.swift */; };
+		87EA90E3278CABF600327792 /* FxPropertyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87EA90E2278CABF600327792 /* FxPropertyTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -141,6 +143,8 @@
 		87BF2A022773B41500B2EC57 /* FxTestArranger+Promise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FxTestArranger+Promise.swift"; sourceTree = "<group>"; };
 		87BF2A042773B48100B2EC57 /* FxTestArranger+ReactiveOperator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FxTestArranger+ReactiveOperator.swift"; sourceTree = "<group>"; };
 		87BF2A062773BDCB00B2EC57 /* FxSignalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxSignalTests.swift; sourceTree = "<group>"; };
+		87EA90E0278CAA3400327792 /* ReactiveOperator+TestProperty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReactiveOperator+TestProperty.swift"; sourceTree = "<group>"; };
+		87EA90E2278CABF600327792 /* FxPropertyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxPropertyTests.swift; sourceTree = "<group>"; };
 		CEA39D5F25BEE05C00C452BC /* Timer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
 		CEA39D6625BEE09B00C452BC /* NotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -331,6 +335,7 @@
 			children = (
 				877DDBC3275E9D580024F85D /* FxPromiseTests.swift */,
 				87BF2A062773BDCB00B2EC57 /* FxSignalTests.swift */,
+				87EA90E2278CABF600327792 /* FxPropertyTests.swift */,
 			);
 			path = FxTests;
 			sourceTree = "<group>";
@@ -349,6 +354,7 @@
 				87AB75CC2775ED61002A069C /* TimedValue.swift */,
 				87AB75CA2775ED35002A069C /* ReactiveOperator.swift */,
 				87AB75CE277753C5002A069C /* ReactiveOperator+TestSignal.swift */,
+				87EA90E0278CAA3400327792 /* ReactiveOperator+TestProperty.swift */,
 				878088BA27724C9C0034D605 /* FxTestArranger.swift */,
 				87BF2A022773B41500B2EC57 /* FxTestArranger+Promise.swift */,
 				87BF2A042773B48100B2EC57 /* FxTestArranger+ReactiveOperator.swift */,
@@ -526,6 +532,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				87EA90E3278CABF600327792 /* FxPropertyTests.swift in Sources */,
 				877DDBC4275E9D580024F85D /* FxPromiseTests.swift in Sources */,
 				87BF2A072773BDCB00B2EC57 /* FxSignalTests.swift in Sources */,
 			);
@@ -540,6 +547,7 @@
 				87AB75CF277753C5002A069C /* ReactiveOperator+TestSignal.swift in Sources */,
 				87BF2A032773B41500B2EC57 /* FxTestArranger+Promise.swift in Sources */,
 				87AB75CB2775ED35002A069C /* ReactiveOperator.swift in Sources */,
+				87EA90E1278CAA3400327792 /* ReactiveOperator+TestProperty.swift in Sources */,
 				87BF2A052773B48100B2EC57 /* FxTestArranger+ReactiveOperator.swift in Sources */,
 				87AB75CD2775ED61002A069C /* TimedValue.swift in Sources */,
 			);
