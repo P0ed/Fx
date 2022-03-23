@@ -180,6 +180,7 @@
 			isa = PBXGroup;
 			children = (
 				5F070D3C27E9D4C500A05A3D /* Fx */,
+				877DDBD2275E9E870024F85D /* FxTestKit */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -300,9 +301,8 @@
 				5F2D89711D534AF0000DC80A /* README.md */,
 				5F070D8E27E9D55700A05A3D /* Package.swift */,
 				5F070D3B27E9D4C500A05A3D /* Sources */,
-				5FD28AD11D5B2E4700BAFC0F /* Meta */,
-				877DDBD2275E9E870024F85D /* FxTestKit */,
 				5F070D8F27E9D63900A05A3D /* Tests */,
+				5FD28AD11D5B2E4700BAFC0F /* Meta */,
 				5F796E651D05C4D900B8A7AC /* Products */,
 				877DDC02275EA1E70024F85D /* Frameworks */,
 			);
