@@ -56,16 +56,17 @@ The default threading behavior can be overridden by providing explicit execution
 
 ## Functions:
 #### `id`
-Identity function same as `{$0}`
+Identity function same as `{ $0 }`
 #### `const`
 A constant function. Takes a value and returns a function that returns that value no matter what it is fed.
-#### `weakify` and `unown`
+#### `weakify`
 ```swift
-let f = unown(self) {$0.handleEvent}
+let f = weakify(self) { $0.handleEvent }
 ```
 equals to
 ```swift
-let f = { [unowned self] in
+let f = { [weak self] in
+	guard let self = self else { return }
 	self.handleEvent($0)
 }
 ```
