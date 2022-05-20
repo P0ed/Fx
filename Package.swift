@@ -5,8 +5,8 @@ let package = Package(
 	name: "Fx",
 	platforms: [
 		.iOS(.v11),
-		.macOS(.v10_15),
-		.watchOS(.v6),
+		.macOS(.v11),
+		.watchOS(.v7),
 		.tvOS(.v11)
 	],
 	products: [

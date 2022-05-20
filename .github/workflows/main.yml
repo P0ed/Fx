@@ -8,6 +8,5 @@ jobs:
     runs-on: macos-11
     steps:
       - uses: actions/checkout@v2
-      - run: swift package generate-xcodeproj
-      - run: fastlane run_tests
+      - run: swift test --enable-code-coverage
       - uses: codecov/codecov-action@v2

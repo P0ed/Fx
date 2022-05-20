@@ -1,9 +1,0 @@
-lane :run_tests do
-	scan(scheme: "Fx")
-	slather(
-		proj: "Fx.xcodeproj",
-		scheme: "Fx",
-		build_directory: lane_context[SharedValues::SCAN_DERIVED_DATA_PATH],
-		cobertura_xml: true
-	)
-end
