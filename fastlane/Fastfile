@@ -1,5 +1,5 @@
 lane :run_tests do
-	scan(scheme: "Fx", device: "My Mac")
+	scan(scheme: "Fx")
 	slather(
 		proj: "Fx.xcodeproj",
 		scheme: "Fx",
