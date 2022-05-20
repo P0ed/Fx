@@ -1,4 +1,5 @@
 import Fx
+import Foundation
 
 public extension FxTestArranger where Target: ReactiveOperator {
 	@discardableResult
