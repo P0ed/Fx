@@ -1,5 +1,4 @@
 # Fx
-[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![codecov](https://codecov.io/gh/P0ed/Fx/branch/master/graph/badge.svg?token=6exeUP7sRY)](https://codecov.io/gh/P0ed/Fx)
 
 This is a Swift framework providing a number of functions and types that I miss in Swift standard library.
@@ -75,7 +74,5 @@ Currying takes a function of >1 parameter and returns a function of one paramete
 
 
 ## Integration
-Add to Cartfile:
-```
-github "P0ed/Fx"
-```
+__⛔️ Carthage support is deprecated starting v3.0.0__. 
+Install using Swift Package Manager
