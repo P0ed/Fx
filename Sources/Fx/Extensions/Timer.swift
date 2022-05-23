@@ -40,10 +40,8 @@ public extension Timer {
 	}
 
 	private static func observeDidBecomeActiveNotificationSignal(handler: @escaping (Notification) -> Void) -> ActionDisposable {
-		#if os(iOS)
+		#if os(iOS) || os(tvOS)
 			return NotificationCenter.default.addObserver(name: UIApplication.didBecomeActiveNotification, handler: handler)
-		#elseif os(tvOS)
-			return NotificationCenter.default.addObserver(name: .UIApplicationDidBecomeActive, handler: handler)
 		#elseif os(macOS)
 			return NotificationCenter.default.addObserver(name: NSApplication.didBecomeActiveNotification, handler: handler)
 		#else

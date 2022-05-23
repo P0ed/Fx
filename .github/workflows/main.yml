@@ -8,5 +8,6 @@ jobs:
     runs-on: macos-11
     steps:
       - uses: actions/checkout@v2
-      - run: fastlane run_tests
+      - run: swift test --enable-code-coverage
+      - run: cp "$(swift test --show-codecov-path)" coverage.json
       - uses: codecov/codecov-action@v2
