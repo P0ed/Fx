@@ -23,7 +23,9 @@ let package = Package(
 	targets: [
 		.target(
 			name: "Fx",
-			dependencies: []
+			linkerSettings: [
+				.unsafeFlags(["-Xlinker", "-application_extension"])
+			]
 		),
 		.target(
 			name: "FxTestKit",
