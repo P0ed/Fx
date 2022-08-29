@@ -1,5 +1,6 @@
 import Fx
 import Foundation
+import QuartzCore
 
 public extension FxTestArranger where Target: ReactiveOperator {
 	@discardableResult
@@ -7,9 +8,9 @@ public extension FxTestArranger where Target: ReactiveOperator {
 		let factory = targetGenerator()
 		let expectation = createExpectation()
 		var collectedValues = [TimedValue<Target.ReturnValues>]()
-		let startedTime = Date()
+		let startedTime = CACurrentMediaTime()
 		let sink: (Target.ReturnValues) -> Void = {
-			let time = Date().timeIntervalSince(startedTime)
+			let time = CACurrentMediaTime() - startedTime
 			collectedValues.append(timed(at: time, value: $0))
 			collectedValues.count == factory.expectedReturns ? expectation.fulfill() : ()
 		}
