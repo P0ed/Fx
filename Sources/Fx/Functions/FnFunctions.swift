@@ -1,4 +1,5 @@
 import Foundation
+import QuartzCore
 
 /// This namespace contains functional counterparts of some functions.
 /// E.g. Fn.modify = curry(flip(modify))
@@ -68,8 +69,10 @@ public extension Fn {
 public extension Fn {
 	private enum ThrottledState {
 		case notFired
-		case firedAt(Date)
+		case firedAt(CFTimeInterval)
 	}
+
+	private static let timeResolution = 100 as CFTimeInterval
 
 	/// Throttling wraps a block of code with logic,
 	/// guaranteeing that an action will never be called more than once each specified interval.
@@ -78,16 +81,17 @@ public extension Fn {
 		var state = ThrottledState.notFired
 
 		return { x in
-			let fire = {
-				state = .firedAt(.init())
+			func fire(_ time: CFTimeInterval) {
+				state = .firedAt(time)
 				f(x)
 			}
 
+			let currentTime = CACurrentMediaTime()
 			switch state {
 			case .notFired:
-				fire()
-			case let .firedAt(date):
-				Date().timeIntervalSince(date) >= interval ? fire() : ()
+				fire(currentTime)
+			case let .firedAt(lastFire):
+				round((currentTime - lastFire) * timeResolution) / timeResolution >= interval ? fire(currentTime) : ()
 			}
 		}
 	}

@@ -9,5 +9,5 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: swift test --enable-code-coverage
-      - run: cp "$(swift test --show-codecov-path)" coverage.json
+      - run: xcrun llvm-cov export .build/debug/FxPackageTests.xctest/Contents/MacOS/FxPackageTests -instr-profile .build/debug/codecov/default.profdata -format lcov > coverage.lcov
       - uses: codecov/codecov-action@v2
