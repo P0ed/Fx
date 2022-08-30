@@ -5,7 +5,7 @@ on:
   pull_request:
 jobs:
   test:
-    runs-on: macos-11
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: swift test --enable-code-coverage
