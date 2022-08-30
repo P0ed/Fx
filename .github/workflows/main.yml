@@ -9,5 +9,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: swift test --enable-code-coverage
+      - run: brew install llvm && brew link --force llvm
+        env:
+          HOMEBREW_NO_INSTALL_CLEANUP: 1
+          HOMEBREW_NO_AUTO_UPDATE: 1
       - run: llvm-cov export .build/debug/FxPackageTests.xctest/Contents/MacOS/FxPackageTests -instr-profile .build/debug/codecov/default.profdata -format lcov > coverage.lcov
       - uses: codecov/codecov-action@v2
