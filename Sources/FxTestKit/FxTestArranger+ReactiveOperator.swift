@@ -46,7 +46,6 @@ private func createContext() -> (disposable: ManualDisposable, context: Reactive
 			.removeAll { timedValue in
 				with(elapsedTime >= CFTimeInterval(timedValue.time)) {
 					guard $0 else { return }
-					print(#fileID, #function, elapsedTime)
 					DispatchQueue.main.async {
 						timedValue.value()
 					}

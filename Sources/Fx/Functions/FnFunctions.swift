@@ -87,12 +87,10 @@ public extension Fn {
 			}
 
 			let currentTime = CACurrentMediaTime()
-
 			switch state {
 			case .notFired:
 				fire(currentTime)
 			case let .firedAt(lastFire):
-				Swift.print(#fileID, #function, round((currentTime - lastFire) * timeResolution) / timeResolution, currentTime - lastFire)
 				round((currentTime - lastFire) * timeResolution) / timeResolution >= interval ? fire(currentTime) : ()
 			}
 		}
