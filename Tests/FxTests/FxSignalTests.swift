@@ -76,18 +76,18 @@ final class FxSignalTests: XCTestCase {
 			.arrange {
 				TestSignal(
 					expectedReturns: 5,
-					timedInputs: [0, 0.5, 0.9, 1.1, 2.2, 3, 3.4, 3.7, 4.5].map { timed(at: $0, value: $0) }
-				) { $1.throttled(1) }
+					timedInputs: [0, 1, 2, 3, 4, 5, 6, 7, 8].map { timed(at: $0, value: $0) }
+				) { $1.throttled(2) }
 			}
 			.assert {
 				XCTAssertEqual(
 					$0,
 					[
 						timed(at: 0, value: 0),
-						timed(at: 1.1, value: 1.1),
-						timed(at: 2.2, value: 2.2),
-						timed(at: 3.4, value: 3.4),
-						timed(at: 4.5, value: 4.5)
+						timed(at: 2, value: 2),
+						timed(at: 4, value: 4),
+						timed(at: 6, value: 6),
+						timed(at: 8, value: 8)
 					]
 				)
 			}
@@ -98,15 +98,15 @@ final class FxSignalTests: XCTestCase {
 			.arrange {
 				TestSignal(
 					expectedReturns: 2,
-					timedInputs: [0, 0.5, 1, 1.5, 2, 3.5, 4].map { timed(at: $0, value: $0) }
-				) { $1.debounced(1) }
+					timedInputs: [0, 1, 2, 3, 6, 7, 8].map { timed(at: $0, value: $0) }
+				) { $1.debounced(2) }
 			}
 			.assert {
 				XCTAssertEqual(
 					$0,
 					[
-						timed(at: 3, value: 2),
-						timed(at: 5, value: 4)
+						timed(at: 5, value: 3),
+						timed(at: 10, value: 8)
 					]
 				)
 			}

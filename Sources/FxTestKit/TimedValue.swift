@@ -3,21 +3,21 @@ import Foundation
 public protocol TimeSampledValue {
 	associatedtype Value
 
-	var time: TimeInterval { get }
+	var time: Int { get }
 	var value: Value { get }
 }
 
 public struct TimedValue<Value>: TimeSampledValue {
-	public let time: TimeInterval
+	public let time: Int
 	public let value: Value
 
-	public init(time: TimeInterval, value: Value) {
-		self.time = time.roundedByContext
+	public init(time: Int, value: Value) {
+		self.time = time
 		self.value = value
 	}
 }
 
-public func timed<Value>(at: TimeInterval, value: Value) -> TimedValue<Value> {
+public func timed<Value>(at: Int, value: Value) -> TimedValue<Value> {
 	.init(time: at, value: value)
 }
 

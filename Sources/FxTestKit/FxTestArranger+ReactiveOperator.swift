@@ -11,16 +11,14 @@ public extension FxTestArranger where Target: ReactiveOperator {
 		let startedTime = CACurrentMediaTime()
 		let sink: (Target.ReturnValues) -> Void = {
 			let time = CACurrentMediaTime() - startedTime
-			collectedValues.append(timed(at: time, value: $0))
+			collectedValues.append(timed(at: Int(floor(time)), value: $0))
 			collectedValues.count == factory.expectedReturns ? expectation.fulfill() : ()
 		}
-		let queueNow = DispatchTime.now()
-		let context = ReactiveOperatorContext {
-			DispatchQueue.main.asyncAfter(deadline: queueNow + $0.roundedByContext, execute: $1)
-		}
-		let disposable = factory.generator(context, sink)
+		let contextEngine = createContext()
+		let disposable = factory.generator(contextEngine.context, sink)
 		waitForExpectation(expectation)
 		disposable.dispose()
+		contextEngine.disposable.dispose()
 		closure(collectedValues)
 		return self
 	}
@@ -31,4 +29,36 @@ public extension FxTestArranger where Target: ReactiveOperator {
 			closure($0.map(\.value))
 		}
 	}
+}
+
+private func createContext() -> (disposable: ManualDisposable, context: ReactiveOperatorContext) {
+	var isStopped = false
+	var accumulatedValues = [TimedValue<() -> Void>]()
+	let context = ReactiveOperatorContext { time, value in
+		accumulatedValues.append(.init(time: time, value: value))
+	}
+
+	let engineStartTime = CACurrentMediaTime()
+	func engineCycle() {
+		let elapsedTime = CACurrentMediaTime() - engineStartTime
+
+		accumulatedValues
+			.removeAll { timedValue in
+				with(elapsedTime >= CFTimeInterval(timedValue.time)) {
+					guard $0 else { return }
+					print(#fileID, #function, elapsedTime)
+					timedValue.value()
+				}
+			}
+
+		guard !isStopped else { return }
+		DispatchQueue.main.async(execute: engineCycle)
+	}
+
+	DispatchQueue.main.async(execute: engineCycle)
+
+	return (
+		ManualDisposable { isStopped = true },
+		context
+	)
 }
