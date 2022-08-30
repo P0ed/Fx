@@ -18,7 +18,7 @@ final class FxSignalTests: XCTestCase {
 				) { context, signal in
 					signal.flatMap { value in
 						Signal<Int> { sink in
-							context.timed(at: .init(value)) {
+							context.timed(at: value) {
 								sink(value)
 								sink(value * 2)
 							}

@@ -47,7 +47,9 @@ private func createContext() -> (disposable: ManualDisposable, context: Reactive
 				with(elapsedTime >= CFTimeInterval(timedValue.time)) {
 					guard $0 else { return }
 					print(#fileID, #function, elapsedTime)
-					timedValue.value()
+					DispatchQueue.main.async {
+						timedValue.value()
+					}
 				}
 			}
 
