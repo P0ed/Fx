@@ -72,7 +72,7 @@ public extension Fn {
 		case firedAt(CFTimeInterval)
 	}
 
-	private static let timeResolution = 1000 as CFTimeInterval
+	private static let timeResolution = 100 as CFTimeInterval
 
 	/// Throttling wraps a block of code with logic,
 	/// guaranteeing that an action will never be called more than once each specified interval.
