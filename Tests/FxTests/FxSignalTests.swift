@@ -77,7 +77,7 @@ final class FxSignalTests: XCTestCase {
 				TestSignal(
 					expectedReturns: 5,
 					timedInputs: [0, 1, 2, 3, 4, 5, 6, 7, 8].map { timed(at: $0, value: $0) }
-				) { $1.throttled(2) }
+				) { $1.throttled(fxTest(timeInterval: 2)) }
 			}
 			.assert {
 				XCTAssertEqual(
@@ -99,7 +99,7 @@ final class FxSignalTests: XCTestCase {
 				TestSignal(
 					expectedReturns: 2,
 					timedInputs: [0, 1, 2, 3, 6, 7, 8].map { timed(at: $0, value: $0) }
-				) { $1.debounced(2) }
+				) { $1.debounced(fxTest(timeInterval: 2)) }
 			}
 			.assert {
 				XCTAssertEqual(
