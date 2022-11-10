@@ -11,7 +11,7 @@ public extension FxTestArranger where Target: ReactiveOperator {
 		let startedTime = CACurrentMediaTime()
 		let sink: (Target.ReturnValues) -> Void = {
 			let time = CACurrentMediaTime() - startedTime
-			collectedValues.append(timed(at: Int(floor(time)), value: $0))
+			collectedValues.append(timed(at: Int(floor(time / ReactiveOperatorContext.realClockMultiplier)), value: $0))
 			collectedValues.count == factory.expectedReturns ? expectation.fulfill() : ()
 		}
 		let contextEngine = createContext()
@@ -44,7 +44,7 @@ private func createContext() -> (disposable: ManualDisposable, context: Reactive
 
 		accumulatedValues
 			.removeAll { timedValue in
-				with(elapsedTime >= CFTimeInterval(timedValue.time)) {
+				with(elapsedTime >= CFTimeInterval(timedValue.time) * ReactiveOperatorContext.realClockMultiplier) {
 					guard $0 else { return }
 					DispatchQueue.main.async {
 						timedValue.value()
