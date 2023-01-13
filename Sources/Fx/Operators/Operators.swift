@@ -1,5 +1,5 @@
-precedencegroup FxApplicativePrecedenceRight {
-	associativity: right
+precedencegroup FxApplicativePrecedence {
+	associativity: left
 	higherThan: AssignmentPrecedence
 	lowerThan: TernaryPrecedence
 }
@@ -11,7 +11,7 @@ precedencegroup FxCompositionPrecedence {
 
 
 /// Function application
-infix operator § : FxApplicativePrecedenceRight
+infix operator § : FxApplicativePrecedence
 
 /// Function composition
 infix operator • : FxCompositionPrecedence
