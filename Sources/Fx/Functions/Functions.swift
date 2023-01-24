@@ -82,3 +82,8 @@ public func run(after time: TimeInterval, on queue: DispatchQueue, task: @escapi
 	queue.asyncAfter(deadline: .now() + time, execute: item)
 	return ActionDisposable(action: item.cancel)
 }
+
+/// Useful with application operator. Write `§ compact` instead of `.compactMap(id)`.
+public func compact<S, T>(_ sequence: S) -> [T] where S: Sequence, S.Element == T? {
+	sequence.compactMap(id)
+}
