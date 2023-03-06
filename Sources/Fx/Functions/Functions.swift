@@ -24,6 +24,15 @@ public func curry<A, B, C>(_ f: @escaping (A, B) throws -> C) -> (A) -> (B) thro
 	{ x in { y in try f(x, y) } }
 }
 
+/// Converts (A) -> (B) -> C func into (A, B) -> C
+public func uncurry<A, B, C>(_ f: @escaping (A) -> (B) -> C) -> (A, B) -> C {
+	{ x, y in f(x)(y) }
+}
+/// Converts (A) -> (B) -> C func into (A, B) -> C
+public func uncurry<A, B, C>(_ f: @escaping (A) -> (B) throws -> C) -> (A, B) throws -> C {
+	{ x, y in try f(x)(y) }
+}
+
 /// Converts (A, B) -> C func into (B, A) -> C
 public func flip<A, B, C>(_ f: @escaping (A, B) -> C) -> (B, A) -> C {
 	{ (y: B, x: A) -> C in f(x, y) }
