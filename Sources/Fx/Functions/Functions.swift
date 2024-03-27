@@ -82,3 +82,21 @@ public func run(after time: TimeInterval, on queue: DispatchQueue, task: @escapi
 	queue.asyncAfter(deadline: .now() + time, execute: item)
 	return ActionDisposable(action: item.cancel)
 }
+
+public func with<A>(_ x: A) -> ((A) -> Void) -> A {
+	{ f in f(x); return x }
+}
+public func with<A>(_ f: @escaping (A) -> Void) -> (A) -> A {
+	{ x in f(x); return x }
+}
+
+public func modify<A>(_ x: A) -> ((inout A) -> Void) -> A {
+	{ f in var x = x; f(&x); return x }
+}
+public func modify<A>(_ f: @escaping (inout A) -> Void) -> (A) -> A {
+	{ x in var x = x; f(&x); return x }
+}
+
+public func transform<A, B>(_ x: A) -> ((A) -> B) -> B {
+	{ f in f(x) }
+}

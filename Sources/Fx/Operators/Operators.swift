@@ -15,3 +15,6 @@ infix operator § : FxApplicativePrecedence
 
 /// Function composition
 infix operator • : FxCompositionPrecedence
+
+/// Monoids combine
+prefix operator ∑
