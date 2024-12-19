@@ -24,16 +24,41 @@ public final class Promise<A>: PromiseType {
 	private let callbackExecutionSemaphore = DispatchSemaphore(value: 1)
 	private let callbacks = Atomic<[(Result<A, Error>) -> Void]>([])
 
+	/// Synchronous initializer
 	public init(result: Result<A, Error>) {
 		self.result = result
 	}
 
+	/// Async callback based initializer
 	public init(generator: (@escaping (Result<A, Error>) -> Void) -> Void) {
 		generator { result in
 			guard self.result == nil else {
 				return assert(false, "Attempted to complete a Promise that is already completed")
 			}
 			self.result = result
+		}
+	}
+
+	/// Async throwing function wrapper
+	public convenience init(generator: @escaping () async throws -> A) {
+		self.init { resolve in
+			Task {
+				do {
+					let result = try await generator()
+					resolve(.success(result))
+				} catch {
+					resolve(.failure(error))
+				}
+			}
+		}
+	}
+
+	/// Async value getter
+	public func get() async throws -> A {
+		try await withCheckedThrowingContinuation { continuation in
+			onComplete { result in
+				continuation.resume(with: result)
+			}
 		}
 	}
 
