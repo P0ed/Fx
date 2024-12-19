@@ -17,12 +17,21 @@ public protocol PromiseType {
 /// subsequent actions (e.g. map, flatMap).
 public final class Promise<A>: PromiseType {
 
-	public private(set) var result: Result<A, Error>? {
-		didSet { runCallbacks() }
-	}
-
 	private let callbackExecutionSemaphore = DispatchSemaphore(value: 1)
 	private let callbacks = Atomic<[(Result<A, Error>) -> Void]>([])
+
+	public private(set) var result: Result<A, Error>? {
+		didSet {
+			guard let result = self.result else {
+				return assert(false, "Can only run callbacks on a completed promise")
+			}
+
+			callbacks.modify { callbacks in
+				callbacks.forEach { $0(result) }
+				callbacks.removeAll()
+			}
+		}
+	}
 
 	/// Synchronous initializer
 	public init(result: Result<A, Error>) {
@@ -82,17 +91,6 @@ public final class Promise<A>: PromiseType {
 		}
 
 		return self
-	}
-
-	private func runCallbacks() {
-		guard let result = self.result else {
-			return assert(false, "Can only run callbacks on a completed promise")
-		}
-
-		callbacks.modify { callbacks in
-			callbacks.forEach { $0(result) }
-			callbacks.removeAll()
-		}
 	}
 }
 
