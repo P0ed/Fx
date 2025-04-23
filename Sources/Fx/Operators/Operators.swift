@@ -1,5 +1,5 @@
 precedencegroup FxApplicativePrecedence {
-	associativity: left
+	associativity: right
 	higherThan: AssignmentPrecedence
 	lowerThan: TernaryPrecedence
 }

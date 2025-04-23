@@ -23,6 +23,10 @@ public final class Signal<A>: SignalType {
 		disposable.innerDisposable = generator(sink)
 	}
 
+	public func sink(_ f: @escaping (A) -> Void) {
+		atomicSinks.modify { _ = $0.insert(f) }
+	}
+
 	public func observe(_ f: @escaping (A) -> Void) -> Disposable {
 		var token: RemovalToken!
 		atomicSinks.modify {
