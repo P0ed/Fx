@@ -1,13 +1,13 @@
-// swift-tools-version:5.5
+// swift-tools-version:5.10
 import PackageDescription
 
 let package = Package(
 	name: "Fx",
 	platforms: [
-		.iOS(.v13),
-		.macOS(.v11),
-		.watchOS(.v7),
-		.tvOS(.v13)
+		.iOS(.v14),
+		.macOS(.v12),
+		.watchOS(.v8),
+		.tvOS(.v14)
 	],
 	products: [
 		.library(
