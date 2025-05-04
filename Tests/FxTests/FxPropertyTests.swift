@@ -17,4 +17,8 @@ final class FxPropertyTests: XCTestCase {
 				XCTAssertEqual($0, [0, 2, 4, 6, 8, 10, 12, 14, 16, 18])
 			}
 	}
+
+	func testDynamicLookup() {
+		XCTAssertEqual(Property.const("123").count.value, 3)
+	}
 }
