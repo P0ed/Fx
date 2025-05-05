@@ -67,10 +67,6 @@ public extension Fn {
 }
 
 public extension Fn {
-	private enum ThrottledState {
-		case notFired
-		case firedAt(CFTimeInterval)
-	}
 
 	private static let timeResolution = 100 as CFTimeInterval
 
@@ -78,19 +74,19 @@ public extension Fn {
 	/// guaranteeing that an action will never be called more than once each specified interval.
 	/// Throttle filters events if the time since the last passed event is less than `interval`
 	static func throttle<A>(_ interval: TimeInterval, on queue: DispatchQueue = DispatchQueue.main, function f: @escaping (A) -> Void) -> (A) -> Void {
-		var state = ThrottledState.notFired
+		var state = CFTimeInterval?.none
 
 		return { x in
 			func fire(_ time: CFTimeInterval) {
-				state = .firedAt(time)
+				state = .some(time)
 				f(x)
 			}
 
 			let currentTime = CACurrentMediaTime()
 			switch state {
-			case .notFired:
+			case .none:
 				fire(currentTime)
-			case let .firedAt(lastFire):
+			case let .some(lastFire):
 				round((currentTime - lastFire) * timeResolution) / timeResolution >= interval ? fire(currentTime) : ()
 			}
 		}

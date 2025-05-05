@@ -1,19 +1,18 @@
 public protocol PropertyType {
-	associatedtype A: Sendable
+	associatedtype A
 	var value: A { get }
 	var signal: Signal<A> { get }
 }
 
 @propertyWrapper
-public final class Property<A: Sendable>: Sendable, PropertyType {
-	private let getter: @Sendable () -> A
-
-	public var value: A { getter() }
+public final class Property<A>: PropertyType {
+	@Readonly
+	public var value: A
 	public let signal: Signal<A>
 
 	public init(value: A, signal: Signal<A>) {
-		nonisolated(unsafe) var storage = value
-		getter = { storage }
+		var storage = value
+		_value = .init { storage }
 		self.signal = Signal { sink in
 			signal.observe {
 				storage = $0
@@ -22,13 +21,13 @@ public final class Property<A: Sendable>: Sendable, PropertyType {
 		}
 	}
 
-	init(getter: @Sendable @escaping () -> A, signal: Signal<A>) {
-		self.getter = getter
+	init(getter: @escaping () -> A, signal: Signal<A>) {
+		_value = Readonly(get: getter)
 		self.signal = signal
 	}
 
 	public convenience init(_ property: Property) {
-		self.init(getter: property.getter, signal: property.signal)
+		self.init(getter: property._value.get, signal: property.signal)
 	}
 
 	public var wrappedValue: A { value }
@@ -36,27 +35,24 @@ public final class Property<A: Sendable>: Sendable, PropertyType {
 }
 
 @propertyWrapper
-public final class MutableProperty<A: Sendable>: Sendable, PropertyType {
-	private let getter: @Sendable () -> A
-	private let setter: @Sendable (A) -> ()
-
-	public var value: A {
-		get { getter() }
-		set { setter(newValue) }
-	}
+public final class MutableProperty<A>: PropertyType {
+	@IO
+	public var value: A
 	public let signal: Signal<A>
 
 	public init(_ initialValue: A) {
-		nonisolated(unsafe) var value = initialValue
+		var value = initialValue
 
 		let (signal, pipe) = Signal<A>.pipe()
 		self.signal = signal
 
-		getter = { value }
-		setter = { newValue in
-			value = newValue
-			pipe(newValue)
-		}
+		_value = IO(
+			get: { value },
+			set: { newValue in
+				value = newValue
+				pipe(newValue)
+			}
+		)
 	}
 
 	public convenience init(wrappedValue: A) {
@@ -66,27 +62,29 @@ public final class MutableProperty<A: Sendable>: Sendable, PropertyType {
 	public var wrappedValue: A { get { value } set { value = newValue } }
 	public var projectedValue: Property<A> { readonly }
 
+	public var io: IO<A> { _value }
+
 	public var readonly: Property<A> {
-		Property(getter: getter, signal: signal)
+		Property(getter: _value.get, signal: signal)
 	}
 
 	public func bind(_ signal: Signal<A>) -> Disposable {
-		signal.observe(setter)
+		signal.observe(_value.set)
 	}
 }
 
 public extension PropertyType {
 
-	func observe(_ sink: @Sendable @escaping (A) -> Void) -> Disposable {
+	func observe(_ sink: @escaping (A) -> Void) -> Disposable {
 		sink(value)
 		return signal.observe(sink)
 	}
 
-	func map<B>(_ f: @Sendable @escaping (A) -> B) -> Property<B> {
+	func map<B>(_ f: @escaping (A) -> B) -> Property<B> {
 		Property(value: f(value), signal: signal.map(f))
 	}
 
-	func flatMap<B>(_ f: @Sendable @escaping (A) -> Property<B>) -> Property<B> {
+	func flatMap<B>(_ f: @escaping (A) -> Property<B>) -> Property<B> {
 		let disposable = SerialDisposable()
 		let y = f(value)
 		return Property(value: y.value, signal: Signal { sink in
@@ -101,7 +99,7 @@ public extension PropertyType {
 public extension Property {
 
 	func mapCombine<B, C>(_ other: Property<B>, _ f: @Sendable @escaping (A, B) -> C) -> Property<C> {
-		var (a, b) = (value, other.value)
+		nonisolated(unsafe) var (a, b) = (value, other.value)
 
 		return Property<C>(
 			value: f(a, b),
@@ -142,7 +140,7 @@ public extension Property {
 public extension PropertyType where A: Equatable {
 
 	func distinctUntilChanged() -> Property<A> {
-		var lastValue = value
+		nonisolated(unsafe) var lastValue = value
 		return Property(value: lastValue, signal: Signal { sink in
 			signal.observe { value in
 				if lastValue != value {
@@ -176,7 +174,7 @@ public extension PropertyType where A: OptionalType, A.A: Sendable {
 	/// That way successive `.some` values gets combined in single stream of inner `Property` values,
 	/// as do successive `.none` values remain single `.none` value of external `Property`
 	func distinctOptional() -> Property<Property<A.A>?> {
-		var state = value.optional.map { MutableProperty($0) }
+		nonisolated(unsafe) var state = value.optional.map { MutableProperty($0) }
 		return Property(value: state?.readonly, signal: Signal { sink in
 			signal.observe { value in
 				if let value = value.optional {
