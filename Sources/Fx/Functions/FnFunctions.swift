@@ -27,38 +27,38 @@ public extension Fn {
 	}
 
 	/// Curried version of with function
-	static func with<A>(_ f: @escaping (A) -> Void) -> (A) -> A {
+	static func with<A>(_ f: @Sendable @escaping (A) -> Void) -> @Sendable (A) -> A {
 		{ x in Fx.with(x, f) }
 	}
 	/// Curried version of with function
-	static func with<A>(_ f: @escaping (A) throws -> Void) -> (A) throws -> A {
+	static func with<A>(_ f: @Sendable @escaping (A) throws -> Void) -> @Sendable (A) throws -> A {
 		{ x in try Fx.with(x, f) }
 	}
 
 	/// Runs function in specified ExecutionContext
-	static func runTask(in ctx: ExecutionContext, _ f: @escaping () -> Void) -> () -> Void {
+	static func runTask(in ctx: ExecutionContext, _ f: @Sendable @escaping () -> Void) -> () -> Void {
 		{ ctx.run(task: f) }
 	}
 	/// Runs function in specified ExecutionContext
-	static func runSink<A>(in ctx: ExecutionContext, _ f: @escaping (A) -> Void) -> (A) -> Void {
+	static func runSink<A: Sendable>(in ctx: ExecutionContext, _ f: @Sendable @escaping (A) -> Void) -> (A) -> Void {
 		{ x in ctx.run { f(x) } }
 	}
 
 	/// Runs function in specified ExecutionContext and return promise of result
-	static func run<A>(in ctx: ExecutionContext, _ f: @escaping () -> A) -> () -> Promise<A> {
-		flatRun(in: ctx, Promise.init(value:) • f)
+	static func run<A>(in ctx: ExecutionContext, _ f: @Sendable @escaping () -> A) -> () -> Promise<A> {
+		flatRun(in: ctx, { Promise(value: f()) })
 	}
 	/// Runs function in specified ExecutionContext and return promise of result
-	static func run<A, B>(in ctx: ExecutionContext, _ f: @escaping (A) -> B) -> (A) -> Promise<B> {
-		flatRun(in: ctx, Promise.init(value:) • f)
+	static func run<A: Sendable, B>(in ctx: ExecutionContext, _ f: @Sendable @escaping (A) -> B) -> (A) -> Promise<B> {
+		flatRun(in: ctx, { x in Promise(value: f(x)) })
 	}
 
 	/// Runs function in specified ExecutionContext and return promise of flattened result
-	static func flatRun<A>(in ctx: ExecutionContext, _ f: @escaping () -> Promise<A>) -> () -> Promise<A> {
+	static func flatRun<A>(in ctx: ExecutionContext, _ f: @Sendable @escaping () -> Promise<A>) -> () -> Promise<A> {
 		{ Promise { resolve in ctx.run { f().onComplete(.sync, resolve) } } }
 	}
 	/// Runs function in specified ExecutionContext and return promise of flattened result
-	static func flatRun<A, B>(in ctx: ExecutionContext, _ f: @escaping (A) -> Promise<B>) -> (A) -> Promise<B> {
+	static func flatRun<A: Sendable, B>(in ctx: ExecutionContext, _ f: @Sendable @escaping (A) -> Promise<B>) -> (A) -> Promise<B> {
 		{ x in Promise { resolve in ctx.run { f(x).onComplete(.sync, resolve) } } }
 	}
 
@@ -106,8 +106,8 @@ public extension Fn {
 	/// Debouncing wraps a block of code with logic,
 	/// guaranteeing that an action will never be called more than once each specified interval.
 	/// Debounce allows to unify several events, delaying execution after each event by `interval` if the time since the previous event is less than `interval`.
-	static func debounce<A>(_ interval: TimeInterval, on queue: DispatchQueue = DispatchQueue.main, function f: @escaping ([A]) -> Void) -> (A) -> Void {
-		var accumulator = [] as [A]
+	static func debounce<A>(_ interval: TimeInterval, on queue: DispatchQueue = DispatchQueue.main, function f: @Sendable @escaping ([A]) -> Void) -> (A) -> Void {
+		nonisolated(unsafe) var accumulator = [] as [A]
 		let cancel = SerialDisposable()
 
 		return { x in
@@ -125,14 +125,14 @@ public extension Fn {
 	/// Debouncing wraps a block of code with logic,
 	/// guaranteeing that an action will never be called more than once each specified interval.
 	/// Debounce allows to unify several events, delaying execution after each event by `interval` if the time since the previous event is less than `interval`.
-	static func debounce<A>(_ interval: TimeInterval, on queue: DispatchQueue = DispatchQueue.main, function f: @escaping (A) -> Void) -> (A) -> Void {
+	static func debounce<A>(_ interval: TimeInterval, on queue: DispatchQueue = DispatchQueue.main, function f: @Sendable @escaping (A) -> Void) -> (A) -> Void {
 		debounce(interval, on: queue) { f($0.last!) }
 	}
 
 	/// Debouncing wraps a block of code with logic,
 	/// guaranteeing that an action will never be called more than once each specified interval.
 	/// Debounce allows to unify several events, delaying execution after each event by `interval` if the time since the previous event is less than `interval`.
-	static func debounce(_ interval: TimeInterval, on queue: DispatchQueue = DispatchQueue.main, function f: @escaping () -> Void) -> () -> Void {
+	static func debounce(_ interval: TimeInterval, on queue: DispatchQueue = DispatchQueue.main, function f: @Sendable @escaping () -> Void) -> () -> Void {
 		debounce(interval, on: queue) { _ in f() } • const(())
 	}
 }

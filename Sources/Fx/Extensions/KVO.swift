@@ -2,7 +2,7 @@ import Foundation
 
 public extension NSObjectProtocol where Self: NSObject {
 
-	func observable<Value>(_ keyPath: KeyPath<Self, Value>) -> Property<Value> {
+	func observable<Value>(_ keyPath: KeyPath<Self, Value> & Sendable) -> Property<Value> {
 		Property<Value>(
 			value: self[keyPath: keyPath],
 			signal: Signal<Value> { didChange in

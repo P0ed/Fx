@@ -1,4 +1,6 @@
-import Foundation
+@preconcurrency import Foundation
+
+extension Notification: @unchecked @retroactive Sendable {}
 
 public extension NotificationCenter {
 	func signal(
@@ -13,7 +15,7 @@ public extension NotificationCenter {
 		}
 	}
 
-	func addObserver(name: NSNotification.Name?, object: Any? = nil, queue: OperationQueue? = nil, handler: @escaping (Notification) -> Void) -> ActionDisposable {
+	func addObserver(name: NSNotification.Name?, object: Any? = nil, queue: OperationQueue? = nil, handler: @Sendable @escaping (Notification) -> Void) -> ActionDisposable {
 		let observer = addObserver(forName: name, object: object, queue: queue, using: handler)
 		return ActionDisposable { [weak self] in
 			self?.removeObserver(observer)

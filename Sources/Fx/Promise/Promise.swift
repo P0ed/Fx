@@ -1,12 +1,12 @@
 import Dispatch
 
 public protocol PromiseType {
-	associatedtype A
+	associatedtype A: Sendable
 
 	var result: Result<A, Error>? { get }
 
 	@discardableResult
-	func onComplete(_ context: ExecutionContext, _ callback: @escaping (Result<A, Error>) -> Void) -> Self
+	func onComplete(_ context: ExecutionContext, _ callback: @Sendable @escaping (Result<A, Error>) -> Void) -> Self
 }
 
 /// A Promise represents the outcome of an asynchronous operation
@@ -15,18 +15,17 @@ public protocol PromiseType {
 /// Interested parties can be informed of the completion by using one of the available callback
 /// registration methods (e.g. onComplete, onSuccess & onFailure) or by immediately composing/chaining
 /// subsequent actions (e.g. map, flatMap).
-public final class Promise<A>: PromiseType {
-
+public final class Promise<A: Sendable>: Sendable, PromiseType {
 	private let callbackExecutionSemaphore = DispatchSemaphore(value: 1)
-	private let callbacks = Atomic<[(Result<A, Error>) -> Void]>([])
+	private let _callbacks: Atomic<[(Result<A, Error>) -> Void]> = .init([])
 
-	public private(set) var result: Result<A, Error>? {
+	nonisolated(unsafe) public private(set) var result: Result<A, Error>? {
 		didSet {
 			guard let result = self.result else {
 				return assert(false, "Can only run callbacks on a completed promise")
 			}
 
-			callbacks.modify { callbacks in
+			_callbacks.modify { callbacks in
 				callbacks.forEach { $0(result) }
 				callbacks.removeAll()
 			}
@@ -39,7 +38,7 @@ public final class Promise<A>: PromiseType {
 	}
 
 	/// Async callback based initializer
-	public init(generator: (@escaping (Result<A, Error>) -> Void) -> Void) {
+	public init(generator: (@Sendable @escaping (Result<A, Error>) -> Void) -> Void) {
 		generator { result in
 			guard self.result == nil else {
 				return assert(false, "Attempted to complete a Promise that is already completed")
@@ -49,16 +48,16 @@ public final class Promise<A>: PromiseType {
 	}
 
 	/// Async throwing function wrapper
-	public convenience init(generator: @escaping () async throws -> A) {
+	public convenience init(generator: sending @Sendable @escaping () async throws -> A) {
 		self.init { resolve in
-			Task {
-				do {
-					let result = try await generator()
-					resolve(.success(result))
-				} catch {
-					resolve(.failure(error))
-				}
-			}
+//			Task {
+//				do {
+//					let result = try await generator()
+//					resolve(.success(result))
+//				} catch {
+//					resolve(.failure(error))
+//				}
+//			}
 		}
 	}
 
@@ -73,7 +72,7 @@ public final class Promise<A>: PromiseType {
 
 	/// End of chain callback, returns self and does not guarantee callback order
 	@discardableResult
-	public func onComplete(_ context: ExecutionContext, _ callback: @escaping (Result<A, Error>) -> Void) -> Self {
+	public func onComplete(_ context: ExecutionContext, _ callback: @Sendable @escaping (Result<A, Error>) -> Void) -> Self {
 		let wrappedCallback: (Result<A, Error>) -> Void = { [callbackExecutionSemaphore] result in
 			context.run {
 				callbackExecutionSemaphore.wait()
@@ -82,7 +81,7 @@ public final class Promise<A>: PromiseType {
 			}
 		}
 
-		callbacks.modify { callbacks in
+		_callbacks.modify { callbacks in
 			if let result = self.result {
 				wrappedCallback(result)
 			} else {

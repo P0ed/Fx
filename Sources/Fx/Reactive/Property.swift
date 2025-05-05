@@ -1,18 +1,18 @@
 public protocol PropertyType {
-	associatedtype A
+	associatedtype A: Sendable
 	var value: A { get }
 	var signal: Signal<A> { get }
 }
 
 @propertyWrapper
-public final class Property<A>: PropertyType {
-	private let getter: () -> A
+public final class Property<A: Sendable>: Sendable, PropertyType {
+	private let getter: @Sendable () -> A
 
 	public var value: A { getter() }
 	public let signal: Signal<A>
 
 	public init(value: A, signal: Signal<A>) {
-		var storage = value
+		nonisolated(unsafe) var storage = value
 		getter = { storage }
 		self.signal = Signal { sink in
 			signal.observe {
@@ -22,7 +22,7 @@ public final class Property<A>: PropertyType {
 		}
 	}
 
-	init(getter: @escaping () -> A, signal: Signal<A>) {
+	init(getter: @Sendable @escaping () -> A, signal: Signal<A>) {
 		self.getter = getter
 		self.signal = signal
 	}
@@ -36,9 +36,9 @@ public final class Property<A>: PropertyType {
 }
 
 @propertyWrapper
-public final class MutableProperty<A>: PropertyType {
-	private let getter: () -> A
-	private let setter: (A) -> ()
+public final class MutableProperty<A: Sendable>: Sendable, PropertyType {
+	private let getter: @Sendable () -> A
+	private let setter: @Sendable (A) -> ()
 
 	public var value: A {
 		get { getter() }
@@ -47,7 +47,7 @@ public final class MutableProperty<A>: PropertyType {
 	public let signal: Signal<A>
 
 	public init(_ initialValue: A) {
-		var value = initialValue
+		nonisolated(unsafe) var value = initialValue
 
 		let (signal, pipe) = Signal<A>.pipe()
 		self.signal = signal
@@ -77,16 +77,16 @@ public final class MutableProperty<A>: PropertyType {
 
 public extension PropertyType {
 
-	func observe(_ sink: @escaping (A) -> Void) -> Disposable {
+	func observe(_ sink: @Sendable @escaping (A) -> Void) -> Disposable {
 		sink(value)
 		return signal.observe(sink)
 	}
 
-	func map<B>(_ f: @escaping (A) -> B) -> Property<B> {
+	func map<B>(_ f: @Sendable @escaping (A) -> B) -> Property<B> {
 		Property(value: f(value), signal: signal.map(f))
 	}
 
-	func flatMap<B>(_ f: @escaping (A) -> Property<B>) -> Property<B> {
+	func flatMap<B>(_ f: @Sendable @escaping (A) -> Property<B>) -> Property<B> {
 		let disposable = SerialDisposable()
 		let y = f(value)
 		return Property(value: y.value, signal: Signal { sink in
@@ -100,7 +100,7 @@ public extension PropertyType {
 
 public extension Property {
 
-	func mapCombine<B, C>(_ other: Property<B>, _ f: @escaping (A, B) -> C) -> Property<C> {
+	func mapCombine<B, C>(_ other: Property<B>, _ f: @Sendable @escaping (A, B) -> C) -> Property<C> {
 		var (a, b) = (value, other.value)
 
 		return Property<C>(
@@ -154,8 +154,8 @@ public extension PropertyType where A: Equatable {
 	}
 }
 
-public extension Sequence where Iterator.Element: PropertyType {
-	func fold<R>(_ zero: R, _ f: @escaping (R, Iterator.Element.A) -> R) -> Property<R> {
+public extension Sequence where Iterator.Element: PropertyType & Sendable {
+	func fold<R>(_ zero: R, _ f: @Sendable @escaping (R, Iterator.Element.A) -> R) -> Property<R> {
 		reduce(.const(zero)) { result, element in
 			result.flatMap { resultValue in
 				element.map { elementValue in
@@ -170,7 +170,7 @@ public extension Sequence where Iterator.Element: PropertyType {
 	}
 }
 
-public extension PropertyType where A: OptionalType {
+public extension PropertyType where A: OptionalType, A.A: Sendable {
 	/// Lifts `Optional` outside of inner `Property`. `Property<A?>` becomes `Property<Property<A>?>`
 	/// Outside `Property` changes only on `Optional` case change from `.some` to `.none` and in reverse.
 	/// That way successive `.some` values gets combined in single stream of inner `Property` values,

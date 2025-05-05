@@ -1,16 +1,16 @@
 import Foundation.NSLock
 
-public final class Signal<A>: SignalType {
+public final class Signal<A: Sendable>: Sendable, SignalType {
 
 	private let atomicSinks: Atomic<Bag<(A) -> Void>> = Atomic(Bag())
 	private let disposable = SerialDisposable()
 
-	public init(generator: (@escaping (A) -> Void) -> Disposable?) {
+	public init(generator: (@Sendable @escaping (A) -> Void) -> Disposable?) {
 
 		let sendLock = NSLock()
 		sendLock.name = "com.github.P0ed.Fx"
 
-		let sink: (A) -> Void = { [weak self] value in
+		let sink: @Sendable (A) -> Void = { [weak self] value in
 			guard let welf = self else { return }
 
 			sendLock.lock()
@@ -42,8 +42,8 @@ public final class Signal<A>: SignalType {
 		}
 	}
 
-	public static func pipe() -> (signal: Signal<A>, put: (A) -> Void) {
-		var put: ((A) -> Void)!
+	public static func pipe() -> (signal: Signal<A>, put: @Sendable (A) -> Void) {
+		var put: (@Sendable (A) -> Void)!
 		let signal = Signal {
 			put = $0
 			return nil
@@ -56,17 +56,17 @@ public extension Signal {
 
 	var asVoid: Signal<Void> { map { _ in () } }
 
-	func observe(_ ctx: ExecutionContext, _ f: @escaping (A) -> Void) -> Disposable {
+	func observe(_ ctx: ExecutionContext, _ f: @Sendable @escaping (A) -> Void) -> Disposable {
 		observe { x in ctx.run { f(x) } }
 	}
 
-	func map<B>(_ f: @escaping (A) -> B) -> Signal<B> {
+	func map<B>(_ f: @Sendable @escaping (A) -> B) -> Signal<B> {
 		Signal<B> { sink in
 			observe(sink • f)
 		}
 	}
 
-	func filter(_ f: @escaping (A) -> Bool) -> Signal {
+	func filter(_ f: @Sendable @escaping (A) -> Bool) -> Signal {
 		Signal<A> { sink in
 			observe { value in
 				if f(value) {
@@ -144,7 +144,7 @@ public extension Signal {
 	}
 }
 
-public extension SignalType where A: OptionalType {
+public extension SignalType where A: OptionalType, A.A: Sendable {
 
 	func ignoringNils() -> Signal<A.A> {
 		Signal { sink in
@@ -157,7 +157,7 @@ public extension SignalType where A: OptionalType {
 	}
 }
 
-public extension SignalType where A: SignalType {
+public extension SignalType where A: SignalType, A.A: Sendable {
 
 	func flatten() -> Signal<A.A> {
 		Signal { sink in
@@ -172,7 +172,7 @@ public extension SignalType where A: SignalType {
 
 public extension Signal {
 
-	func flatMap<B>(_ f: @escaping (A) -> Signal<B>) -> Signal<B> {
+	func flatMap<B>(_ f: @Sendable @escaping (A) -> Signal<B>) -> Signal<B> {
 		map(f).flatten()
 	}
 }

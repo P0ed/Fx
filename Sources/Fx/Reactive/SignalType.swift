@@ -1,5 +1,5 @@
 public protocol SignalType {
-	associatedtype A
+	associatedtype A: Sendable
 
 	func observe(_ f: @escaping (A) -> Void) -> Disposable
 }

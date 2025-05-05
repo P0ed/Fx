@@ -1,5 +1,4 @@
-
-public final class Command<I, O> {
+public final class Command<I: Sendable, O: Sendable> {
 
 	private let f: (I) -> O
 	private let resulitsPipe = Signal<O>.pipe()

@@ -1,18 +1,18 @@
 import Foundation.NSThread
 import Dispatch
 
-public typealias ExecutionContextFunc = (@escaping () -> Void) -> Void
+public typealias ExecutionContextFunc = @Sendable (@Sendable @escaping () -> Void) -> Void
 
 /// The context in which something can be executed
 /// By default, an execution context can be assumed to be asynchronous unless stated otherwise
-public struct ExecutionContext {
+public struct ExecutionContext: Sendable {
 	private let run: ExecutionContextFunc
 
 	public init(run: @escaping ExecutionContextFunc) {
 		self.run = run
 	}
 
-	public func run(task: @escaping () -> Void) {
+	public func run(task: @Sendable @escaping () -> Void) {
 		run(task)
 	}
 }
@@ -21,7 +21,7 @@ public extension ExecutionContext {
 	/// Defines default threading behavior:
 	/// - if on the main thread, `DispatchQueue.main.context` is returned
 	/// - if off the main thread, `DispatchQueue.global().context` is returned
-	static var `default`: () -> ExecutionContext = { Thread.isMainThread ? .main : .global }
+	nonisolated(unsafe) static var `default`: () -> ExecutionContext = { Thread.isMainThread ? .main : .global }
 
 	/// Immediately executes the given task. No threading, no semaphores.
 	static let sync = ExecutionContext(run: { task in task() })

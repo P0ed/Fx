@@ -2,9 +2,9 @@ import Foundation
 
 /// An atomic variable.
 @propertyWrapper
-public final class Atomic<A> {
-	private var lock = UnfairLock()
-	private var _value: A
+public final class Atomic<A>: Sendable {
+	private let lock = UnfairLock()
+	nonisolated(unsafe) private var _value: A
 
 	/// Atomically gets or sets the value of the variable.
 	public var value: A {
@@ -48,7 +48,9 @@ public final class Atomic<A> {
 	public var wrappedValue: A { get { value } set { value = newValue } }
 }
 
-final class UnfairLock: Lock {
+extension os_unfair_lock_t: @unchecked @retroactive Sendable {}
+
+final class UnfairLock: Sendable, Lock {
 	private let _lock: os_unfair_lock_t
 
 	init() {

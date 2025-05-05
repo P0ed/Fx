@@ -1,11 +1,11 @@
 /// Represents something that can be “disposed,” usually associated with freeing
 /// resources or canceling work.
-public protocol Disposable: AnyObject {
+public protocol Disposable: Sendable, AnyObject {
 	func dispose()
 }
 
 /// A disposable that will not dispose on deinit
-public final class ManualDisposable: Disposable {
+public final class ManualDisposable: Sendable, Disposable {
 	private let action: Atomic<(() -> Void)?>
 
 	/// Initializes the disposable to run the given action upon disposal.
@@ -38,7 +38,7 @@ public final class ActionDisposable: Disposable {
 }
 
 /// A disposable that will dispose of any number of other disposables. Disposes on deinit.
-public final class CompositeDisposable: Disposable {
+public final class CompositeDisposable: Sendable, Disposable {
 	private let disposables: Atomic<Bag<Disposable>>
 
 	/// Initializes a CompositeDisposable containing the given sequence of
@@ -110,7 +110,7 @@ public final class CompositeDisposable: Disposable {
 }
 
 /// A disposable that will optionally dispose of another disposable. Disposes on deinit.
-public final class SerialDisposable: Disposable {
+public final class SerialDisposable: Sendable, Disposable {
 
 	private let atomicDisposable = Atomic(Disposable?.none)
 
