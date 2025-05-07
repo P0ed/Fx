@@ -5,18 +5,18 @@ import AppKit
 #endif
 
 public extension Timer {
-	static func once(_ interval: TimeInterval, _ function: @Sendable @escaping () -> Void) -> ActionDisposable {
+	static func once(_ interval: TimeInterval, _ function: @escaping () -> Void) -> ActionDisposable {
 		makeTimer(offset: interval, repeats: nil, function: function)
 	}
 
-	static func `repeat`(_ interval: TimeInterval, _ function: @Sendable @escaping () -> Void) -> ActionDisposable {
+	static func `repeat`(_ interval: TimeInterval, _ function: @escaping () -> Void) -> ActionDisposable {
 		makeTimer(offset: interval, repeats: interval, function: function)
 	}
 
-	static func makeTimer(offset: TimeInterval, repeats: TimeInterval?, function: @Sendable @escaping () -> Void) -> ActionDisposable {
+	static func makeTimer(offset: TimeInterval, repeats: TimeInterval?, function: @escaping () -> Void) -> ActionDisposable {
 		nonisolated(unsafe) var timer = nil as Timer?
 
-		let makeTimer: @Sendable () -> Void = { [date = Date().addingTimeInterval(offset), function] in
+		let makeTimer: () -> Void = { [date = Date().addingTimeInterval(offset)] in
 			timer = Timer(
 				fire: date,
 				interval: repeats ?? 0,
@@ -29,23 +29,21 @@ public extension Timer {
 
 		makeTimer()
 
-		let observer = observeDidBecomeActiveNotificationSignal { _ in
+		let observer = didBecomeActiveNotificationSignal.observe { _ in
 			guard timer?.isValid == false else { return }
 			makeTimer()
 		}
 
-		return observer • ActionDisposable {
-			timer?.invalidate()
-		}
+		return observer • ActionDisposable(action: { timer?.invalidate() })
 	}
 
-	private static func observeDidBecomeActiveNotificationSignal(handler: @Sendable @escaping (Notification) -> Void) -> ActionDisposable {
+	private static var didBecomeActiveNotificationSignal: Signal<Notification> {
 		#if os(iOS) || os(tvOS)
-			return NotificationCenter.default.addObserver(name: UIApplication.didBecomeActiveNotification, handler: handler)
+			return NotificationCenter.default.signal(forName: UIApplication.didBecomeActiveNotification)
 		#elseif os(macOS)
-			return NotificationCenter.default.addObserver(name: NSApplication.didBecomeActiveNotification, handler: handler)
+			return NotificationCenter.default.signal(forName: NSApplication.didBecomeActiveNotification)
 		#else
-			return ActionDisposable {}
+			return .empty
 		#endif
 	}
 }

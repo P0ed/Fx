@@ -27,11 +27,11 @@ public extension Fn {
 	}
 
 	/// Curried version of with function
-	static func with<A>(_ f: @Sendable @escaping (A) -> Void) -> @Sendable (A) -> A {
+	static func with<A>(_ f: @escaping (A) -> Void) -> (A) -> A {
 		{ x in Fx.with(x, f) }
 	}
 	/// Curried version of with function
-	static func with<A>(_ f: @Sendable @escaping (A) throws -> Void) -> @Sendable (A) throws -> A {
+	static func with<A>(_ f: @escaping (A) throws -> Void) -> (A) throws -> A {
 		{ x in try Fx.with(x, f) }
 	}
 
@@ -44,23 +44,23 @@ public extension Fn {
 		{ x in ctx.run { f(x) } }
 	}
 
-	/// Runs function in specified ExecutionContext and return promise of result
-	static func run<A>(in ctx: ExecutionContext, _ f: @Sendable @escaping () -> A) -> () -> Promise<A> {
-		flatRun(in: ctx, { Promise(value: f()) })
-	}
-	/// Runs function in specified ExecutionContext and return promise of result
-	static func run<A: Sendable, B>(in ctx: ExecutionContext, _ f: @Sendable @escaping (A) -> B) -> (A) -> Promise<B> {
-		flatRun(in: ctx, { x in Promise(value: f(x)) })
-	}
+//	/// Runs function in specified ExecutionContext and return promise of result
+//	static func run<A>(in ctx: ExecutionContext, _ f: @Sendable @escaping () -> A) -> () -> Promise<A> {
+//		flatRun(in: ctx, { Promise(value: f()) })
+//	}
+//	/// Runs function in specified ExecutionContext and return promise of result
+//	static func run<A: Sendable, B>(in ctx: ExecutionContext, _ f: @Sendable @escaping (A) -> B) -> (A) -> Promise<B> {
+//		flatRun(in: ctx, { x in Promise(value: f(x)) })
+//	}
 
-	/// Runs function in specified ExecutionContext and return promise of flattened result
-	static func flatRun<A>(in ctx: ExecutionContext, _ f: @Sendable @escaping () -> Promise<A>) -> () -> Promise<A> {
-		{ Promise { resolve in ctx.run { f().onComplete(.sync, resolve) } } }
-	}
-	/// Runs function in specified ExecutionContext and return promise of flattened result
-	static func flatRun<A: Sendable, B>(in ctx: ExecutionContext, _ f: @Sendable @escaping (A) -> Promise<B>) -> (A) -> Promise<B> {
-		{ x in Promise { resolve in ctx.run { f(x).onComplete(.sync, resolve) } } }
-	}
+//	/// Runs function in specified ExecutionContext and return promise of flattened result
+//	static func flatRun<A>(_ f: @isolated(any) @Sendable @escaping () -> Promise<A>) -> () -> Promise<A> {
+//		{ Promise { resolve in ctx.run { f().onComplete(.sync, resolve) } } }
+//	}
+//	/// Runs function in specified ExecutionContext and return promise of flattened result
+//	static func flatRun<A: Sendable, B>(_ f: @isolated(any) @Sendable @escaping (A) -> Promise<B>) -> (A) -> Promise<B> {
+//		{ x in Promise { resolve in ctx.run { f(x).onComplete(.sync, resolve) } } }
+//	}
 
 	/// Simple print sink
 	static func print<A>(_ x: A) -> () { Swift.print(x) }

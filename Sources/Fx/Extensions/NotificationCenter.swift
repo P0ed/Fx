@@ -8,11 +8,11 @@ public extension NotificationCenter {
 		object: Any? = nil,
 		queue: OperationQueue? = nil
 	) -> Signal<Notification> {
-		Signal<Notification> { sink in
+		Signal<Notification>(sendable: { sink in
 			addObserver(name: name, object: object, queue: queue) { notification in
 				sink(notification)
 			}
-		}
+		})
 	}
 
 	func addObserver(name: NSNotification.Name?, object: Any? = nil, queue: OperationQueue? = nil, handler: @Sendable @escaping (Notification) -> Void) -> ActionDisposable {

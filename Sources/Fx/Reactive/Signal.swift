@@ -39,7 +39,7 @@ public final class Signal<A>: SignalType {
 		atomicSinks.modify { _ = $0.insert(f) }
 	}
 
-	public func observe(_ f: @escaping (A) -> Void) -> Disposable {
+	public func observe(_ f: @escaping (A) -> Void) -> ActionDisposable {
 		var token: RemovalToken!
 		atomicSinks.modify {
 			token = $0.insert(f)
