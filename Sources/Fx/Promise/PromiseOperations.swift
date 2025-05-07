@@ -1,7 +1,6 @@
 import Foundation
 
 public extension PromiseType {
-
 	/// End of chain success callback, returns self and does not guarantee callback order
 	@discardableResult
 	func onSuccess(_ f: @escaping (A) -> Void) -> Self {
@@ -13,6 +12,15 @@ public extension PromiseType {
 		onComplete { r in r.fold(success: sink, failure: f) }
 	}
 
+	func flatMapResult<B: Sendable>(_ f: @escaping (Result<A, Error>) throws -> Promise<B>) -> Promise<B> {
+		Promise<B> { resolve in
+			onComplete { result in
+				Result { try f(result) }
+					.fold(success: id, failure: Promise<B>.init(error:))
+					.onComplete(resolve)
+			}
+		}
+	}
 	func mapResult<B>(_ f: @escaping (Result<A, Error>) throws -> B) -> Promise<B> {
 		Promise<B> { resolve in
 			onComplete { result in
@@ -20,10 +28,17 @@ public extension PromiseType {
 			}
 		}
 	}
+
+	func flatMap<B: Sendable>(_ f: @escaping (A) throws -> Promise<B>) -> Promise<B> {
+		flatMapResult { result in try f(result.get()) }
+	}
 	func map<B>(_ f: @escaping (A) throws -> B) -> Promise<B> {
 		mapResult { result in try f(result.get()) }
 	}
 
+	func flatMapError<M>(_ f: @escaping (Error) throws -> Promise<A>) -> Promise<A> where M == A {
+		flatMapResult { result in try result.fold(success: Promise.init(value:), failure: f) }
+	}
 	func mapError<M>(_ f: @escaping (Error) throws -> A) -> Promise<A> where M == A {
 		mapResult { result in
 			switch result {
@@ -31,10 +46,6 @@ public extension PromiseType {
 			case .failure(let err): return try f(err)
 			}
 		}
-	}
-
-	func flatMapError<M>(_ f: @escaping (Error) throws -> Promise<A>) -> Promise<A> where M == A {
-		flatMapResult { result in try result.fold(success: Promise.init(value:), failure: f) }
 	}
 	/// Adds side effect preserving callback order
 	func withResult<M>(_ f: @escaping (Result<M, Error>) -> Void) -> Promise<M> where M == A {
@@ -86,22 +97,6 @@ public extension PromiseType {
 //	}
 }
 
-public extension PromiseType {
-
-	func flatMapResult<B: Sendable>(_ f: @escaping (Result<A, Error>) throws -> Promise<B>) -> Promise<B> {
-		Promise<B> { resolve in
-			onComplete { result in
-				Result { try f(result) }
-					.fold(success: id, failure: Promise<B>.init(error:))
-					.onComplete(resolve)
-			}
-		}
-	}
-	func flatMap<B: Sendable>(_ f: @escaping (A) throws -> Promise<B>) -> Promise<B> {
-		flatMapResult { result in try f(result.get()) }
-	}
-}
-
 public extension PromiseType where A: Sendable {
 	/// End of chain callback, returns self and does not guarantee callback order
 	@discardableResult
@@ -128,7 +123,7 @@ public extension PromiseType where A: Sendable {
 	}
 
 	func isolatedFlatMapResult<B: Sendable>(_ f: @isolated(any) @Sendable @escaping (Result<A, Error>) async throws -> Promise<B>) -> Promise<B> {
-		Promise<B>.sendable({ resolve in
+		.sendable { resolve in
 			onComplete { result in
 				Task {
 					do {
@@ -139,10 +134,10 @@ public extension PromiseType where A: Sendable {
 					}
 				}
 			}
-		})
+		}
 	}
 	func isolatedMapResult<B: Sendable>(_ f: @isolated(any) @Sendable @escaping (Result<A, Error>) async throws -> B) -> Promise<B> {
-		Promise<B>.sendable({ resolve in
+		.sendable { resolve in
 			onComplete { result in
 				Task {
 					do {
@@ -153,7 +148,7 @@ public extension PromiseType where A: Sendable {
 					}
 				}
 			}
-		})
+		}
 	}
 	func isolatedMap<B: Sendable>(_ f: @isolated(any) @Sendable @escaping (A) async throws -> B) -> Promise<B> {
 		isolatedMapResult { result in try await f(result.get()) }
