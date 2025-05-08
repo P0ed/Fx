@@ -1,4 +1,5 @@
 import Dispatch
+import Foundation
 
 public protocol PromiseType {
 	associatedtype A
@@ -6,7 +7,7 @@ public protocol PromiseType {
 	var result: Result<A, Error>? { get }
 
 	@discardableResult
-	func onComplete(_ callback: @escaping (Result<A, Error>) -> Void) -> Self
+	func onComplete(_ callback: @escaping (sending Result<A, Error>) -> Void) -> Self
 }
 
 /// A Promise represents the outcome of an asynchronous operation
@@ -44,33 +45,35 @@ public final class Promise<A>: Sendable where A: Sendable {
 	}
 
 	/// Async callback based initializer
-	public static func sendable(_ generator: (@Sendable @escaping (Result<A, Error>) -> Void) -> Void) -> Promise where A: Sendable {
-		Promise { resolve in
+	public static func sendable(_ generator: (@Sendable @escaping (sending Result<A, Error>) -> Void) -> Void) -> Promise {
+		Promise { [isMain = Thread.isMainThread] resolve in
 			nonisolated(unsafe) let resolve = resolve
 			generator { result in
-				Task {
-					resolve(result)
+				if isMain {
+					Task { @MainActor in resolve(result) }
+				} else {
+					Task { resolve(result) }
 				}
 			}
 		}
 	}
 
 	/// Async throwing function wrapper
-	public convenience init(generator: sending @Sendable @escaping () async throws -> A) where A: Sendable {
-		self.init(generator: { resolve in
-//			Task {
-//				do {
-//					let result = try await generator()
-//					resolve(.success(result))
-//				} catch {
-//					resolve(.failure(error))
-//				}
-//			}
-		})
+	public static func async(_ generator: @Sendable @escaping () async throws -> sending A) -> Promise {
+		sendable { resolve in
+			Task {
+				do {
+					let result = try await generator()
+					resolve(.success(result))
+				} catch {
+					resolve(.failure(error))
+				}
+			}
+		}
 	}
 
 	/// Async value getter
-	public func get() async throws -> A where A: Sendable {
+	public func get() async throws -> sending A {
 		try await withCheckedThrowingContinuation { continuation in
 			onComplete { result in
 				continuation.resume(with: result)
@@ -80,7 +83,7 @@ public final class Promise<A>: Sendable where A: Sendable {
 
 	/// End of chain callback, returns self and does not guarantee callback order
 	@discardableResult
-	public func onComplete(_ callback: @escaping (Result<A, Error>) -> Void) -> Self {
+	public func onComplete(_ callback: @escaping (sending Result<A, Error>) -> Void) -> Self {
 		let wrappedCallback: (Result<A, Error>) -> Void = { [callbackExecutionSemaphore] result in
 			callbackExecutionSemaphore.wait()
 			callback(result)
@@ -141,4 +144,10 @@ public extension Promise {
 
 	var value: A? { result?.value }
 	var error: Error? { result?.error }
+}
+
+public extension Actor {
+	func run<A: Sendable>(_ operation: @Sendable (_ actor: isolated Self) throws -> A) async rethrows -> A {
+		try operation(self)
+	}
 }

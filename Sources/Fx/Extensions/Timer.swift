@@ -14,27 +14,31 @@ public extension Timer {
 	}
 
 	static func makeTimer(offset: TimeInterval, repeats: TimeInterval?, function: @escaping () -> Void) -> ActionDisposable {
-		nonisolated(unsafe) var timer = nil as Timer?
+		nonisolated(unsafe) var _timer = nil as DispatchSourceTimer?
 
-		let makeTimer: () -> Void = { [date = Date().addingTimeInterval(offset)] in
-			timer = Timer(
-				fire: date,
-				interval: repeats ?? 0,
-				repeats: repeats != nil,
-				block: { _ in function() }
-			)
+		let makeTimer: () -> Void = {
+			_timer?.cancel()
 
-			RunLoop.current.add(timer!, forMode: .default)
+			let timer = DispatchSource.makeTimerSource(queue: DispatchQueue.global())
+			timer.setEventHandler(handler: function)
+			_timer = timer
+
+			if let repeats {
+				timer.schedule(deadline: .now() + offset, repeating: repeats)
+			} else {
+				timer.schedule(deadline: .now() + offset, repeating: .never)
+			}
+			timer.resume()
 		}
 
 		makeTimer()
 
 		let observer = didBecomeActiveNotificationSignal.observe { _ in
-			guard timer?.isValid == false else { return }
+			guard _timer?.isCancelled == true else { return }
 			makeTimer()
 		}
 
-		return observer • ActionDisposable(action: { timer?.invalidate() })
+		return observer • ActionDisposable(action: { _timer?.cancel() })
 	}
 
 	private static var didBecomeActiveNotificationSignal: Signal<Notification> {
