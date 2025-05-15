@@ -2,12 +2,12 @@ import Dispatch
 import Foundation
 
 public protocol PromiseType {
-	associatedtype A
+	associatedtype A: Sendable
 
 	var result: Result<A, Error>? { get }
 
 	@discardableResult
-	func onComplete(_ callback: @escaping (sending Result<A, Error>) -> Void) -> Self
+	func onComplete(_ callback: @escaping (Result<A, Error>) -> Void) -> Self
 }
 
 /// A Promise represents the outcome of an asynchronous operation
@@ -17,7 +17,6 @@ public protocol PromiseType {
 /// registration methods (e.g. onComplete, onSuccess & onFailure) or by immediately composing/chaining
 /// subsequent actions (e.g. map, flatMap).
 public final class Promise<A>: Sendable where A: Sendable {
-	private let callbackExecutionSemaphore = DispatchSemaphore(value: 1)
 	private let callbacks: Atomic<[(Result<A, Error>) -> Void]> = .init([])
 
 	nonisolated(unsafe) public private(set) var result: Result<A, Error>?
@@ -34,8 +33,8 @@ public final class Promise<A>: Sendable where A: Sendable {
 		self.result = .some(result)
 
 		callbacks.modify { callbacks in
-			callbacks.forEach { $0(result) }
-			callbacks.removeAll()
+			for cb in callbacks { cb(result) }
+			callbacks = []
 		}
 	}
 
@@ -45,7 +44,7 @@ public final class Promise<A>: Sendable where A: Sendable {
 	}
 
 	/// Async callback based initializer
-	public static func sendable(_ generator: (@Sendable @escaping (sending Result<A, Error>) -> Void) -> Void) -> Promise {
+	public static func sendable(_ generator: (@Sendable @escaping (Result<A, Error>) -> Void) -> Void) -> Promise {
 		Promise { [isMain = Thread.isMainThread] resolve in
 			nonisolated(unsafe) let resolve = resolve
 			generator { result in
@@ -83,18 +82,12 @@ public final class Promise<A>: Sendable where A: Sendable {
 
 	/// End of chain callback, returns self and does not guarantee callback order
 	@discardableResult
-	public func onComplete(_ callback: @escaping (sending Result<A, Error>) -> Void) -> Self {
-		let wrappedCallback: (Result<A, Error>) -> Void = { [callbackExecutionSemaphore] result in
-			callbackExecutionSemaphore.wait()
-			callback(result)
-			callbackExecutionSemaphore.signal()
-		}
-
+	public func onComplete(_ callback: @escaping (Result<A, Error>) -> Void) -> Self {
 		callbacks.modify { callbacks in
 			if let result = self.result {
-				wrappedCallback(result)
+				callback(result)
 			} else {
-				callbacks.append(wrappedCallback)
+				callbacks.append({ result in callback(result) })
 			}
 		}
 
@@ -135,11 +128,11 @@ public extension Promise {
 	var isCompleted: Bool { result != nil }
 
 	var isSuccess: Bool {
-		result?.fold(success: const(true), failure: const(false)) ?? false
+		result?.fold(success: { _ in true }, failure: { _ in false }) ?? false
 	}
 
 	var isFailure: Bool {
-		result?.fold(success: const(false), failure: const(true)) ?? false
+		result?.fold(success: { _ in false }, failure: { _ in true }) ?? false
 	}
 
 	var value: A? { result?.value }

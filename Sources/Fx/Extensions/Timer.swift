@@ -19,7 +19,7 @@ public extension Timer {
 		let makeTimer: () -> Void = {
 			_timer?.cancel()
 
-			let timer = DispatchSource.makeTimerSource(queue: DispatchQueue.global())
+			let timer = DispatchSource.makeTimerSource(queue: Thread.isMainThread ? .main : .global())
 			timer.setEventHandler(handler: function)
 			_timer = timer
 
