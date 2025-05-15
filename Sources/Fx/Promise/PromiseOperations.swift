@@ -163,31 +163,13 @@ public extension PromiseType where A: Sendable {
 	func isolatedFlatMapError(_ f: @isolated(any) @Sendable @escaping (Error) throws -> Promise<A>) -> Promise<A> {
 		flatMapResult { result in try result.fold(success: Promise.init(value:), failure: f) }
 	}
-//	/// Adds side effect preserving callback order
-//	func withResult(_ f: @isolated(any) @Sendable @escaping (Result<A, Error>) -> Void) -> Promise<A> {
-//		mapResult { result in
-//			f(result)
-//			return try result.get()
-//		}
-//	}
-//	/// Adds side effect preserving callback order
-//	func with(_ f: @isolated(any) @Sendable @escaping (A) -> Void) -> Promise<A> {
-//		map { x in f(x); return x }
-//	}
-//	/// Adds side effect preserving callback order
-//	func withError(_ f: @isolated(any) @Sendable @escaping (Error) -> Void) -> Promise<A> {
-//		mapError { error in
-//			f(error)
-//			throw error
-//		}
-//	}
 
 	/// Returns an Promise that will complete with the result that this Promise completes with
 	/// after waiting for the given interval
 	func delay(_ interval: TimeInterval) -> Promise<A> {
-		.sendable { complete in
+		.sendable { [isMain = Thread.isMainThread] complete in
 			onComplete { result in
-				DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: DispatchTime.now() + interval) {
+				(isMain ? .main : DispatchQueue.global(qos: .userInitiated)).asyncAfter(deadline: DispatchTime.now() + interval) {
 					complete(result)
 				}
 			}
@@ -238,7 +220,7 @@ public extension PromiseType where A: Sendable {
 public extension DispatchQueue {
 	func promise<A: Sendable>(_ f: @Sendable @escaping () throws -> A) -> Promise<A> {
 		.sendable { resolve in
-			async { resolve(Result(catching: f)) }
+			self.async { resolve(Result(catching: f)) }
 		}
 	}
 }
