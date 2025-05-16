@@ -101,8 +101,8 @@ extension Promise: PromiseType {}
 
 public extension Promise {
 
-	static func pending() -> (Promise<A>, (sending Result<A, Error>) -> Void) {
-		var resolve: ((sending Result<A, Error>) -> Void)!
+	static func pending() -> (Promise<A>, (Result<A, Error>) -> Void) {
+		var resolve: ((Result<A, Error>) -> Void)!
 		let promise = Promise(generator: { resolve = $0 })
 		return (promise, resolve)
 	}
