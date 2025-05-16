@@ -14,10 +14,6 @@ let package = Package(
 			name: "Fx",
 			targets: ["Fx"]
 		),
-		.library(
-			name: "FxTestKit",
-			targets: ["FxTestKit"]
-		)
 	],
 	dependencies: [],
 	targets: [
@@ -25,13 +21,9 @@ let package = Package(
 			name: "Fx",
 			dependencies: []
 		),
-		.target(
-			name: "FxTestKit",
-			dependencies: ["Fx"]
-		),
 		.testTarget(
 			name: "FxTests",
-			dependencies: ["Fx", "FxTestKit"]
+			dependencies: ["Fx"]
 		)
 	]
 )

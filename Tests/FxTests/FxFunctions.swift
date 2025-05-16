@@ -1,5 +1,4 @@
 import Fx
-import FxTestKit
 import XCTest
 
 final class FunctionsTests: XCTestCase {
@@ -13,7 +12,7 @@ final class FunctionsTests: XCTestCase {
 
 	func testApplication() {
 		let mul = curry(*) as (Int) -> (Int) -> Int
-		let x = mul § 2 § 3
+		let x = mul(2) § 3
 		XCTAssertEqual(x, 6)
 	}
 }

@@ -2,7 +2,7 @@ import Dispatch
 import Foundation
 
 public protocol PromiseType {
-	associatedtype A: Sendable
+	associatedtype A
 
 	var result: Result<A, Error>? { get }
 
@@ -16,7 +16,7 @@ public protocol PromiseType {
 /// Interested parties can be informed of the completion by using one of the available callback
 /// registration methods (e.g. onComplete, onSuccess & onFailure) or by immediately composing/chaining
 /// subsequent actions (e.g. map, flatMap).
-public final class Promise<A>: Sendable where A: Sendable {
+public final class Promise<A>: Sendable {
 	private let callbacks: Atomic<[(Result<A, Error>) -> Void]> = .init([])
 
 	nonisolated(unsafe) public private(set) var result: Result<A, Error>?
@@ -44,21 +44,21 @@ public final class Promise<A>: Sendable where A: Sendable {
 	}
 
 	/// Async callback based initializer
-	public static func sendable(_ generator: (@Sendable @escaping (Result<A, Error>) -> Void) -> Void) -> Promise {
+	public static func sendable(_ generator: (@Sendable @escaping (Result<A, Error>) -> Void) -> Void) -> Promise where A: Sendable {
 		Promise { [isMain = Thread.isMainThread] resolve in
 			nonisolated(unsafe) let resolve = resolve
 			generator { result in
 				if isMain {
 					Task { @MainActor in resolve(result) }
 				} else {
-					Task { resolve(result) }
+					Task.detached { resolve(result) }
 				}
 			}
 		}
 	}
 
 	/// Async throwing function wrapper
-	public static func async(_ generator: @Sendable @escaping () async throws -> sending A) -> Promise {
+	public static func async(_ generator: @Sendable @escaping () async throws -> sending A) -> Promise where A: Sendable {
 		sendable { resolve in
 			Task {
 				do {
@@ -72,7 +72,7 @@ public final class Promise<A>: Sendable where A: Sendable {
 	}
 
 	/// Async value getter
-	public func get() async throws -> sending A {
+	public func get() async throws -> A where A: Sendable {
 		try await withCheckedThrowingContinuation { continuation in
 			onComplete { result in
 				continuation.resume(with: result)
@@ -87,7 +87,9 @@ public final class Promise<A>: Sendable where A: Sendable {
 			if let result = self.result {
 				callback(result)
 			} else {
-				callbacks.append({ result in callback(result) })
+				callbacks.append { result in
+					callback(result)
+				}
 			}
 		}
 
@@ -99,8 +101,8 @@ extension Promise: PromiseType {}
 
 public extension Promise {
 
-	static func pending() -> (Promise<A>, (Result<A, Error>) -> Void) {
-		var resolve: ((Result<A, Error>) -> Void)!
+	static func pending() -> (Promise<A>, (sending Result<A, Error>) -> Void) {
+		var resolve: ((sending Result<A, Error>) -> Void)!
 		let promise = Promise(generator: { resolve = $0 })
 		return (promise, resolve)
 	}

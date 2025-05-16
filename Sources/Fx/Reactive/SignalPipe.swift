@@ -1,4 +1,4 @@
-public final class SignalPipe<A: Sendable> {
+public final class SignalPipe<A> {
 	public let signal: Signal<A>
 	private let sendValue: (A) -> Void
 

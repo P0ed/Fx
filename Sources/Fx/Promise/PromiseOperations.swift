@@ -36,10 +36,10 @@ public extension PromiseType {
 		mapResult { result in try f(result.get()) }
 	}
 
-	func flatMapError<M>(_ f: @escaping (Error) throws -> Promise<A>) -> Promise<A> where M == A {
+	func flatMapError(_ f: @escaping (Error) throws -> Promise<A>) -> Promise<A> where A: Sendable {
 		flatMapResult { result in try result.fold(success: Promise.init(value:), failure: f) }
 	}
-	func mapError<M>(_ f: @escaping (Error) throws -> A) -> Promise<A> where M == A {
+	func mapError(_ f: @escaping (Error) throws -> A) -> Promise<A> where A: Sendable {
 		mapResult { result in
 			switch result {
 			case .success(let val): return val
@@ -59,10 +59,10 @@ public extension PromiseType {
 		map { x in f(x); return x }
 	}
 	/// Adds side effect preserving callback order
-	func withError<M>(_ f: @escaping (Error) -> Void) -> Promise<A> where M == A {
+	func withError(_ f: @escaping (Error) -> Void) -> Promise<A> where A: Sendable {
 		mapError { err in f(err); throw err }
 	}
-	func zip<B>(_ that: Promise<B>) -> Promise<(A, B)> {
+	func zip<B: Sendable>(_ that: Promise<B>) -> Promise<(A, B)> where A: Sendable {
 		flatMap { thisVal -> Promise<(A, B)> in
 			that.map { thatVal in
 				(thisVal, thatVal)
@@ -227,7 +227,7 @@ public extension DispatchQueue {
 
 public extension Sequence where Element: PromiseType, Element.A: Sendable {
 
-	func fold<R>(_ zero: R, _ f: @escaping (R, Iterator.Element.A) -> R) -> Promise<R> {
+	func fold<R: Sendable>(_ zero: R, _ f: @escaping (R, Iterator.Element.A) -> R) -> Promise<R> {
 		reduce(Promise<R>(value: zero)) { result, element in
 			result.flatMap { resultValue in
 				element.map { elementValue in
