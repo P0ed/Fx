@@ -4,7 +4,7 @@ public protocol PropertyType {
 	var signal: Signal<A> { get }
 }
 
-@propertyWrapper
+@propertyWrapper @dynamicMemberLookup
 public final class Property<A>: PropertyType {
 	@Readonly
 	public var value: A
@@ -32,6 +32,10 @@ public final class Property<A>: PropertyType {
 
 	public var wrappedValue: A { value }
 	public var projectedValue: Property { self }
+
+	public subscript<B>(dynamicMember keyPath: KeyPath<A, B>) -> Property<B> {
+		map(keyPath.closure)
+	}
 }
 
 @propertyWrapper
