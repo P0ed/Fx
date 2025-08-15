@@ -12,8 +12,10 @@ public func const<A>(_ x: A) -> () -> A {
 	{ x }
 }
 
-/// Takes value and returns void, does nothing but can be usefull as an adapter with function composition
+/// Takes value and returns void, doing nothing
 public func sink<A>(_ x: A) {}
+/// Takes any number of values and returns void, doing nothing
+public func ø<each A>(_ x: repeat each A) {}
 
 /// Converts (A, B) -> C func into (A) -> (B) -> C
 public func curry<A, B, C>(_ f: @escaping (A, B) -> C) -> (A) -> (B) -> C {
