@@ -1,45 +1,148 @@
 # Fx
 [![codecov](https://codecov.io/gh/P0ed/Fx/branch/master/graph/badge.svg?token=6exeUP7sRY)](https://codecov.io/gh/P0ed/Fx)
 
-This is a Swift framework providing a number of functions and types that I miss in Swift standard library.
+A Swift library providing functional programming utilities, reactive programming primitives, and asynchronous operations support.
 
+## Overview
 
-## Types:
-#### `Signal<A>`
-The Signal is a stream of values over time
-#### `Property<A>` and `MutableProperty<A>`
-The Property is a value + signal with changes
-#### `Promise<A>`
-The Promise is an async version of Result. Promises can be used instead of completion handlers to avoid nested closures.
-#### `Monoid`
-Any type that has empty value and can be comined.
+Fx is a lightweight, zero-dependency Swift library that brings functional programming concepts and reactive programming patterns to Swift ecosystem. It provides a comprehensive set of utilities for:
 
-## Operators:
-#### `§` — Function application `⌥+6`
-#### `•` — Function composition `⌥+8`
-#### `∑` — Prefix sum operator `⌥+W` 
+- **Functional Programming**: Higher-order functions, currying, composition, and more
+- **Reactive Programming**: Signals for event streams and reactive data flow
+- **Asynchronous Operations**: Promise-based async operations with modern Swift concurrency support
+- **Utility Extensions**: Convenient extensions for common Swift types
 
+## Features
 
-## Functions:
-#### `id`
-Identity function same as `{ $0 }`
-#### `const`
-A constant function. Takes a value and returns a function that returns that value no matter what it is fed.
-#### `weakify`
+### Functional Programming Utilities
+- **Core Functions**: `id`, `const`, `curry`, `flip`, `compose`
+- **Function Combinators**: Transform and combine functions with ease
+- **Utility Functions**: `with`, `modify`, `transform` for cleaner code
+
+### Reactive Programming
+- **Signal**: Type-safe event streams with operators like `map`, `filter`, `merge`
+- **Property**: Observable properties with automatic change notifications
+- **Command**: Reactive command pattern implementation
+- **Disposables**: Automatic resource management
+
+### Asynchronous Operations
+- **Promise**: Modern promise implementation with Swift concurrency support
+- **Result Integration**: Seamless integration with Swift's Result type
+- **Async/Await Support**: Bridge between callback-based and async/await patterns
+
+### Extensions & Utilities
+- **Optional Extensions**: Enhanced optional handling
+- **Collection Extensions**: Functional operations on sequences
+- **Timer Extensions**: Reactive timer utilities
+- **KVO Extensions**: Simplified Key-Value Observing
+
+## Installation
+
+### Swift Package Manager
+
+Add to your `Package.swift`:
+
 ```swift
-let f = weakify(self) { $0.handleEvent }
+.package(url: "https://github.com/P0ed/Fx.git", from: "4.0.0")
 ```
-equals to
+
+## Requirements
+
+- iOS 14.0+ / macOS 12.0+ / watchOS 8.0+ / tvOS 14.0+
+- Swift 6.1+
+- Xcode 16.0+
+
+## Key Features
+
+### Reactive Programming
+
+#### `Signal<A>` - Reactive Streams
 ```swift
-let f = { [weak self] in
-	guard let self = self else { return }
-	self.handleEvent($0)
+let numbers = Signal<Int> { sink in
+    // Emit values over time
+    return timer.observe(sink)
+}
+
+let doubled = numbers
+    .filter { $0 > 0 }
+    .map { $0 * 2 }
+    .throttled(0.1)
+```
+
+#### `Property<A>` & `MutableProperty<A>` - Reactive State
+```swift
+final class Model {
+    // Exposes readonly observable state
+    @MutableProperty
+    private(set) var count = 0
+}
+
+// Automatic UI updates
+let isEven: Property<Bool> = $count.map { $0 % 2 == 0 }
+isEven.observe { isEven in
+    button.isEnabled = isEven
 }
 ```
-#### `curry`
-Currying takes a function of >1 parameter and returns a function of one parameter which returns a function of one parameter, and so on. That is, given `(A, B) -> C`, currying returns `A -> B -> C`.
 
+### Functional Programming
 
-## Integration
-__⛔️ Carthage support is deprecated starting v3.0.0__. 
-Install using Swift Package Manager
+#### Essential Functions
+```swift
+// Function composition
+let nonEmpty = elements.filter(where: (!) • \.isEmpty • \.name)
+
+// Currying for partial application
+let add = curry(+)
+let inc = add(1)
+[1, 2, 3].map(inc) // [2, 3, 4]
+
+// Mutation without introducing a variable in current scope
+let newArray = modify(array) { $0.append(item) }
+```
+
+#### Operators
+- `§` — Function application `⌥+6`
+- `•` — Function composition `⌥+8`  
+- `∑` — Monoid sum operator `⌥+W`
+
+#### Sendable & Concurrency Support
+```swift
+// Thread-safe signals
+let signal = Signal<String>(sendable: generator)
+
+// Async/await integration  
+let result = try await promise.get()
+```
+
+## Core Types
+
+### Reactive Types
+- **`Signal<A>`** - Stream of values over time with operators like `map`, `filter`, `merge`, `combineLatest`
+- **`Property<A>`** - Current value + change notifications, perfect for UI binding
+- **`MutableProperty<A>`** - Mutable reactive property with property wrapper support
+
+### Functional Types
+- **`Result<A, Error>`** - Enhanced with functional operators
+- **`Monoid`** - Types that can be combined (strings, arrays, etc.)
+- **`IO<A>`** - Controlled side effects
+- **`Atomic<A>`** - Thread-safe value container
+
+### Utility Types
+- **`Disposable`** - Resource cleanup and subscription management
+- **`Weak<A>`** - Weak reference wrapper
+- **`Bag<A>`** - Efficient collection for callbacks
+
+### From Promises to Async/Await
+```swift
+// Old Promise-based approach
+func fetchData() -> Promise<Data> { ... }
+
+// Modern async/await (recommended)
+func fetchData() async throws -> Data { ... }
+
+// Bridge when needed
+let promise = Promise.async { try await fetchData() }
+
+// And backwards
+let data = try await promise.get()
+```
