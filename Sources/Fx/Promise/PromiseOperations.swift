@@ -191,7 +191,7 @@ public extension PromiseType where A: Sendable {
 			onComplete { result in lockResolve(result) }
 
 			let pendingRecover = DispatchWorkItem {
-				Task.detached {
+				Task {
 					do {
 						let val = try await recover()
 						lockResolve(.success(val))
