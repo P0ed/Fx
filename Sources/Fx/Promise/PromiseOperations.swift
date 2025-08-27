@@ -176,30 +176,34 @@ public extension PromiseType where A: Sendable {
 		}
 	}
 
-//	/// If promise is not resolved in given time it resolves with result of recover function
-//	func timeout(_ ctx: ExecutionContext, _ interval: TimeInterval, recover: @Sendable @escaping () throws -> A) -> Promise<A> {
-//		Promise { resolve in
-//			let disposable = SerialDisposable()
-//			let lockResolve: @Sendable (() throws -> A) -> Void = { [lock = Atomic(false)] result in
-//				lock.modify {
-//					if $0 { return }
-//					$0 = true
-//					disposable.dispose()
-//					resolve(Result(catching: result))
-//				}
-//			}
-//			onComplete { result in lockResolve(result.get) }
-//
-//			let pendingRecover = DispatchWorkItem { ctx.run { lockResolve(recover) } }
-//			DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + interval, execute: pendingRecover)
-//			disposable.innerDisposable = ActionDisposable(action: pendingRecover.cancel)
-//		}
-//	}
-//
-//	/// If promise is not resolved in given time it resolves with result of recover function
-//	func timeout(_ interval: TimeInterval, recover: @Sendable @escaping () throws -> A) -> Promise<A> {
-//		timeout(.default(), interval, recover: recover)
-//	}
+	/// If promise is not resolved in given time it resolves with result of recover function
+	func timeout(_ interval: TimeInterval, recover: @isolated(any) @Sendable @escaping () throws -> A) -> Promise<A> {
+		.sendable { resolve in
+			let disposable = SerialDisposable()
+			let lockResolve: @Sendable (Result<A, Error>) -> Void = { [lock = Atomic(false)] result in
+				lock.modify {
+					if $0 { return }
+					$0 = true
+					disposable.dispose()
+					resolve(result)
+				}
+			}
+			onComplete { result in lockResolve(result) }
+
+			let pendingRecover = DispatchWorkItem {
+				Task.detached {
+					do {
+						let val = try await recover()
+						lockResolve(.success(val))
+					} catch {
+						lockResolve(.failure(error))
+					}
+				}
+			}
+			DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + interval, execute: pendingRecover)
+			disposable.innerDisposable = ActionDisposable(action: pendingRecover.cancel)
+		}
+	}
 
 	/// Makes `times` attempts (at least once) until the promise succeeds
 	static func retry(_ times: Int, _ task: @Sendable @escaping () -> Promise<A>) -> Promise<A> {
