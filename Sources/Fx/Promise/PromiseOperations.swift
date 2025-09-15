@@ -71,30 +71,6 @@ public extension PromiseType {
 	}
 
 	func asVoid() -> Promise<Void> { map { _ in () } }
-
-//	/// Blocks the current thread until the promise is completed and then returns the result
-//	func forced() -> Result<A, Error> {
-//		forced(.distantFuture)!
-//	}
-//
-//	/// Blocks the current thread until the promise is completed, but no longer than the given timeout
-//	/// If the promise did not complete before the timeout, `nil` is returned, otherwise the result of the promise is returned
-//	func forced(_ timeout: DispatchTime) -> Result<A, Error>? {
-//		if let result = result {
-//			return result
-//		}
-//
-//		let sema = DispatchSemaphore(value: 0)
-//		nonisolated(unsafe) var res: Result<A, Error>? = nil
-//		onComplete(.global) {
-//			res = $0
-//			sema.signal()
-//		}
-//
-//		let _ = sema.wait(timeout: timeout)
-//
-//		return res
-//	}
 }
 
 public extension PromiseType where A: Sendable {
