@@ -78,23 +78,31 @@ public extension PromiseType where A: Sendable {
 	@discardableResult
 	func isolatedOnComplete(_ callback: @isolated(any) @Sendable @escaping (Result<A, Error>) -> Void) -> Self {
 		onComplete { result in
-			Task {
-				await callback(result)
-			}
+			Task { await callback(result) }
 		}
 	}
 	/// End of chain success callback, returns self and does not guarantee callback order
 	@discardableResult
 	func isolatedOnSuccess(_ f: @isolated(any) @Sendable @escaping (A) -> Void) -> Self {
 		onComplete { result in
-			result.fold(success: f, failure: sink)
+			Task {
+				switch result {
+				case .success(let x): await f(x)
+				case .failure: break
+				}
+			}
 		}
 	}
 	/// End of chain failure callback, returns self and does not guarantee callback order
 	@discardableResult
 	func isolatedOnFailure(_ f: @isolated(any) @Sendable @escaping (Error) -> Void) -> Self {
 		onComplete { result in
-			result.fold(success: sink, failure: f)
+			Task {
+				switch result {
+				case .success: break
+				case .failure(let e): await f(e)
+				}
+			}
 		}
 	}
 
@@ -134,10 +142,20 @@ public extension PromiseType where A: Sendable {
 	}
 
 	func isolatedMapError(_ f: @isolated(any) @Sendable @escaping (Error) throws -> A) -> Promise<A> {
-		mapResult { result in try result.fold(success: id, failure: f) }
+		isolatedMapResult { result in
+			switch result {
+			case .success(let x): return x
+			case .failure(let e): return try await f(e)
+			}
+		}
 	}
 	func isolatedFlatMapError(_ f: @isolated(any) @Sendable @escaping (Error) throws -> Promise<A>) -> Promise<A> {
-		flatMapResult { result in try result.fold(success: Promise.init(value:), failure: f) }
+		isolatedFlatMapResult { result in
+			switch result {
+			case .success(let x): return Promise(value: x)
+			case .failure(let e): return try await f(e)
+			}
+		}
 	}
 
 	/// Returns an Promise that will complete with the result that this Promise completes with
