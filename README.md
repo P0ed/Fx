@@ -105,11 +105,6 @@ let newArray = modify(array) { $0.append(item) }
 - `•` — Function composition `⌥+8`  
 - `∑` — Monoid sum operator `⌥+W`
 
-#### Sendable & Concurrency Support
-```swift
-// Thread-safe signals
-let signal = Signal<String>(sendable: generator)
-
 // Async/await integration  
 let result = try await promise.get()
 ```

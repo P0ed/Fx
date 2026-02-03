@@ -1,6 +1,4 @@
-@preconcurrency import Foundation
-
-extension Notification: @unchecked @retroactive Sendable {}
+import Foundation
 
 public extension NotificationCenter {
 	func signal(
@@ -8,11 +6,11 @@ public extension NotificationCenter {
 		object: Any? = nil,
 		queue: OperationQueue? = nil
 	) -> Signal<Notification> {
-		Signal<Notification>(sendable: { sink in
+		Signal<Notification> { sink in
 			addObserver(name: name, object: object, queue: queue) { notification in
 				sink(notification)
 			}
-		})
+		}
 	}
 
 	func addObserver(name: NSNotification.Name?, object: Any? = nil, queue: OperationQueue? = nil, handler: @Sendable @escaping (Notification) -> Void) -> ActionDisposable {

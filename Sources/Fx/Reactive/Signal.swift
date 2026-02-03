@@ -5,24 +5,9 @@ public final class Signal<A>: SignalType {
 	private let atomicSinks: Atomic<Bag<(A) -> Void>> = Atomic(Bag())
 	private let disposable = SerialDisposable()
 
-	public init(generator: (@escaping (A) -> Void) -> Disposable?) {
+	public init(generator: (@Sendable @escaping (A) -> Void) -> Disposable?) {
 		let sendLock = NSLock()
 		sendLock.name = "com.github.P0ed.Fx.signal.generator"
-
-		disposable.innerDisposable = generator { [weak atomicSinks] value in
-			guard let atomicSinks else { return }
-
-			sendLock.lock()
-			for sink in atomicSinks.value {
-				sink(value)
-			}
-			sendLock.unlock()
-		}
-	}
-
-	public init(sendable generator: (@Sendable @escaping (A) -> Void) -> Disposable?) where A: Sendable {
-		let sendLock = NSLock()
-		sendLock.name = "com.github.P0ed.Fx.signal.sendable"
 
 		disposable.innerDisposable = generator { [weak atomicSinks] value in
 			guard let atomicSinks else { return }
