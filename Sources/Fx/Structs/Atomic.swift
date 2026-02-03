@@ -48,10 +48,8 @@ public final class Atomic<A>: Sendable {
 	public var wrappedValue: A { get { value } set { value = newValue } }
 }
 
-extension os_unfair_lock_t: @unchecked @retroactive Sendable {}
-
 final class UnfairLock: Sendable, Lock {
-	private let _lock: os_unfair_lock_t
+	private nonisolated(unsafe) let _lock: os_unfair_lock_t
 
 	init() {
 		_lock = .allocate(capacity: 1)
