@@ -14,7 +14,7 @@ public struct IO<A> {
 		self.set = set
 	}
 
-	public var wrappedValue: A { get { value } set { value = newValue } }
+	public var wrappedValue: A { get { value } nonmutating set { value = newValue } }
 
 	public init(_ io: IO) {
 		self = io
