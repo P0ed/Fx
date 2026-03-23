@@ -98,7 +98,7 @@ public extension PropertyType {
 
 public extension Property {
 
-	func mapCombine<B, C>(_ other: Property<B>, _ f: @Sendable @escaping (A, B) -> C) -> Property<C> {
+	func mapCombine<B, C>(_ other: Property<B>, _ f: @escaping (A, B) -> C) -> Property<C> {
 		nonisolated(unsafe) var (a, b) = (value, other.value)
 
 		return Property<C>(
@@ -153,7 +153,7 @@ public extension PropertyType where A: Equatable {
 }
 
 public extension Sequence where Iterator.Element: PropertyType & Sendable {
-	func fold<R>(_ zero: R, _ f: @Sendable @escaping (R, Iterator.Element.A) -> R) -> Property<R> {
+	func fold<R>(_ zero: R, _ f: @escaping (R, Iterator.Element.A) -> R) -> Property<R> {
 		reduce(.const(zero)) { result, element in
 			result.flatMap { resultValue in
 				element.map { elementValue in
