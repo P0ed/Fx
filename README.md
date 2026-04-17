@@ -119,7 +119,7 @@ let result = try await promise.get()
 ### Functional Types
 - **`Result<A, Error>`** - Enhanced with functional operators
 - **`Monoid`** - Types that can be combined (strings, arrays, etc.)
-- **`IO<A>`** - Controlled side effects
+- **`IO<A>`** - `get`/`set` abstraction
 - **`Atomic<A>`** - Thread-safe value container
 
 ### Utility Types
